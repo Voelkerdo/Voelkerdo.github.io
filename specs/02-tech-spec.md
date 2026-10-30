@@ -112,7 +112,14 @@ interface TileDef { id: string; title: string; subtitle?: string; icon: string; 
 ## 7. Theming
 - Basis: `sap_horizon` bzw. `sap_horizon_dark` über `setTheme()` aus `@ui5/webcomponents-base`.
 - Modus: folgt initial `prefers-color-scheme`, manueller Umschalter überschreibt; Wahl wird in `localStorage` gemerkt (mit try/catch) (AC-09.1).
-- Akzent-Theme (AC-07.1): Überschreiben ausgewählter UI5-CSS-Variablen (z. B. `--sapBrandColor`, `--sapShell_Background`) in `theme.css` für beide Modi (AC-09.2). Konkrete Farben werden in Task-Phase festgelegt.
+- Akzent-Theme (AC-07.1): Überschreiben ausgewählter UI5-CSS-Variablen (z. B. `--sapBrandColor`, `--sapShell_Background`) in `theme.css` für beide Modi (AC-09.2).
+- Akzentpalette **„Sunset Coral“** (TD-9) – Verlauf von Koralle zu Amber:
+
+| Token | Hell | Dunkel | Verwendung |
+|---|---|---|---|
+| `--accent-1` | `#E11D48` | `#FB7185` | Primärakzent: Brand-Farbe, Emphasized Buttons, KPI-Zahlen, Fokus |
+| `--accent-2` | `#F59E0B` | `#FBBF24` | Verlaufsende: Logo, Hero-Überschrift, Glow |
+| `--on-accent` | `#FFFFFF` | `#12171C` | Text auf Akzentflächen |
 
 ## 8. Teststrategie
 - **Nachvollziehbarkeit:** Jeder Test nennt im Namen die AC-ID, z. B. `it('AC-02.2 opens repo link in new tab', …)`. So ist jedes Akzeptanzkriterium einem Test zugeordnet.
@@ -153,6 +160,7 @@ Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 | TD-6 | Animationen | Motion (Shared Layout) | Tile-to-App-Transition ohne eigene FLIP-Logik |
 | TD-7 | Repo-Struktur | Code, Tests und Configs in `assets/`, Specs in `specs/` | Wunsch Dominik; klare Trennung von Spezifikation und Umsetzung |
 | TD-8 | Linter | Oxlint statt ESLint | `typescript-eslint` unterstützt TypeScript 7 noch nicht (Peer-Dependency `<6.1`); Oxlint ist der aktuelle Vite-Standard. Erkannt in T-01. |
+| TD-9 | Akzentfarben | Palette „Sunset Coral“ (Koralle → Amber) | Wahl Dominik aus drei Vorschlägen in T-04; auffälligster Kontrast zum Fiori-Standard |
 
 ## 12. Offene Fragen
 _Keine._
