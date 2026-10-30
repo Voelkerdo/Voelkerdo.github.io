@@ -6,6 +6,7 @@
 - Tasks werden in Reihenfolge abgearbeitet; jeder Task endet mit grünem `npm run verify` und **einem** Commit `feat(T-XX): … [REQ-YY]`.
 - Status: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt.
 - Jeder Task nennt die Akzeptanzkriterien, die er erfüllt. Für jedes automatisierbare AC entsteht im selben Task ein Test.
+- Durch einen Change Request (CR) überholte Tasks werden durchgestrichen, nicht gelöscht; ihre IDs werden nicht neu vergeben.
 
 ## Übersicht
 | Task | Titel | Erfüllt | Status |
@@ -15,14 +16,20 @@
 | T-03 | Datenmodell & Platzhalter-Inhalte | AC-01.3, AC-02.3/02.4, AC-03.1–03.3, AC-04.2, AC-05.1 | [x] |
 | T-04 | Theming & Theme-Modus | AC-07.1, AC-09.1, AC-09.2 | [x] |
 | T-05 | Launchpad-Shell & Routing | AC-06.2, AC-06.3, AC-06.7, AC-06.9, AC-06.10, AC-07.4 | [x] |
-| T-06 | Tile-Komponente | AC-01.3, AC-06.5, AC-07.3 | [ ] |
-| T-07 | Launchpad-Startseite | AC-01.1, AC-01.2, AC-01.4 | [ ] |
-| T-08 | App-Rahmen & Tile-to-App-Transition | AC-06.1, AC-06.4, AC-06.6, AC-08.3 | [ ] |
-| T-09 | Projects-App | AC-02.1, AC-02.2 | [ ] |
-| T-10 | Skills-App | AC-03.1, AC-03.2 | [ ] |
-| T-11 | Career-App | AC-04.1 | [ ] |
-| T-12 | Contact-App | AC-05.1, AC-05.2 | [ ] |
-| T-13 | Responsive-Feinschliff | AC-08.1 | [ ] |
+| ~~T-06~~ | ~~Tile-Komponente~~ | entfällt (CR-1) | – |
+| ~~T-07~~ | ~~Launchpad-Startseite~~ | entfällt (CR-1) | – |
+| ~~T-08~~ | ~~App-Rahmen & Tile-to-App-Transition~~ | entfällt (CR-1) | – |
+| ~~T-09~~ | ~~Projects-App~~ | ersetzt durch T-17 (CR-1) | – |
+| ~~T-10~~ | ~~Skills-App~~ | ersetzt durch T-18 (CR-1) | – |
+| ~~T-11~~ | ~~Career-App~~ | ersetzt durch T-19 (CR-1) | – |
+| ~~T-12~~ | ~~Contact-App~~ | ersetzt durch T-20 (CR-1) | – |
+| T-15 | CR-1: Shell & Daten umbauen | AC-01.3, AC-01.6, AC-06.2, AC-06.11, TD-10, TD-11 | [ ] |
+| T-16 | Overview Page mit Bento-Grid | AC-01.1, AC-01.4, AC-06.5, AC-07.2, AC-07.3, AC-08.3 | [ ] |
+| T-17 | Projects-Card | AC-02.1, AC-02.2 | [ ] |
+| T-18 | Skills-Card | AC-03.1, AC-03.2 | [ ] |
+| T-19 | Career-Card | AC-04.1 | [ ] |
+| T-20 | Contact- & GitHub-Card | AC-01.2, AC-05.1, AC-05.2 | [ ] |
+| T-13 | Responsive-Feinschliff | AC-01.6, AC-08.1 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [ ] |
 
 ## Details
@@ -60,43 +67,44 @@
 - Routen `/`, `/projects`, `/skills`, `/career`, `/contact` (vorerst Platzhalter-Seiten), `*` → `/`.
 - **Tests (E2E):** Direkt-Link `#/skills` öffnet die App; Back-Button und Logo führen zu `/`; Browser-Back funktioniert; About-Dialog zeigt den Hinweis.
 
-### T-06 Tile-Komponente
-- Eigene `Tile`-Komponente im Fiori-Tile-Look: Titel, Untertitel, Icon, KPI.
-- Rendert als `<button>` (interne Route) bzw. `<a target="_blank">` (externer Link, z. B. GitHub).
-- Hover/Fokus-Animation: Anheben, leichter Tilt, Akzent-Glow; sichtbarer Fokus-Ring.
-- **Tests:** Rendert Titel/KPI; externer Link hat `target="_blank"` + `rel="noopener noreferrer"`; per Tastatur fokussier- und auslösbar.
+### ~~T-06 bis T-12~~ – überholt durch CR-1
+Tile-Komponente, Launchpad-Startseite, App-Rahmen mit Tile-to-App-Transition und die vier Detail-Apps entfallen (D-7, D-8). Die Inhalte werden stattdessen in T-15 bis T-20 als Cards umgesetzt.
 
-### T-07 Launchpad-Startseite
-- `Hero`: Name, Positionierung, GitHub-CTA.
-- `TileGrid`: Tiles für Projects, Skills, Career, Contact + GitHub-Tile.
-- Gestaffeltes Einblenden der Tiles beim Laden.
-- **Tests:** Hero-Inhalte und GitHub-CTA sichtbar; alle fünf Tiles vorhanden; GitHub-Tile verlinkt auf das Profil.
+### T-15 CR-1: Shell & Daten umbauen
+- `react-router` entfernen (TD-11); `App.tsx` rendert Shell + Overview Page direkt.
+- `LaunchpadShell` → `AppShell`: Zurück-Button und App-Titel-Logik entfernen; Titel fest „Overview“ (AC-06.2).
+- Klick auf Logo/Name scrollt zum Seitenanfang (AC-06.11).
+- `apps/` (Platzhalter-Apps, Routen) löschen.
+- `data/tiles.ts` → `data/cards.ts` mit `CardDef` inkl. `size` (AC-01.6); KPIs weiterhin aus den Daten (AC-01.3).
+- **Tests:** Shell-E2E-Tests an CR-1 anpassen (kein Back-Button, Titel „Overview“, Logo scrollt nach oben); Tests für Routen/Back entfernen; Datentests auf Cards und Größen umstellen.
 
-### T-08 App-Rahmen & Tile-to-App-Transition
-- `AppPage` auf Basis von `DynamicPage` mit Titelbereich.
-- Shared-Layout-Animation (`layoutId`) Tile ↔ App, inkl. Rückwärts-Animation beim Schließen.
-- `useReducedMotion()`: nur Überblenden, wenn Reduced Motion aktiv ist.
-- **Tests (E2E):** Klick auf Tile öffnet die passende App; Schließen führt zurück zum Launchpad; mit emuliertem `reduced-motion` funktioniert die Navigation weiterhin.
+### T-16 Overview Page mit Bento-Grid
+- `Hero`: Name, Positionierung, GitHub-CTA (AC-01.1).
+- `BentoGrid` mit `grid-template-areas` laut Tech Spec §6.
+- `AnimatedCard`: UI5 `Card` + `CardHeader` (Titel, Untertitel, Icon, KPI), umhüllt von Motion: gestaffeltes Einblenden (AC-01.4), Hover/Fokus mit Anheben, Tilt, Koralle-Glow (AC-07.3), Reduced Motion nur Überblenden (AC-08.3).
+- Cards zunächst mit Header und leerem Inhalt; Inhalte folgen in T-17 bis T-20.
+- **Tests:** Hero-Inhalte und CTA; fünf Cards mit Titel und KPI; Card-Größen im Desktop-Layout (Projects breiter als Career usw.); Hover/Fokus-Klasse bzw. Transform; mit `reduced-motion` keine Bewegung.
 
-### T-09 Projects-App
-- Cards mit Name, Beschreibung, Technologie-Tags, Repo-Link (neuer Tab).
-- **Tests:** Je Projekt eine Card mit allen Feldern; Link-Attribute korrekt.
+### T-17 Projects-Card
+- Liste der Projekte: Name als Link (neuer Tab), Beschreibung, Technologie-Tags.
+- **Tests:** Je Projekt ein Eintrag mit allen Feldern; Link-Attribute `target="_blank"`, `rel="noopener noreferrer"`.
 
-### T-10 Skills-App
-- Ein `Panel` je Skill-Gruppe, Skills als `Tag`.
+### T-18 Skills-Card
+- Je Gruppe ein Label + Tags.
 - **Tests:** Vier Gruppen in der richtigen Reihenfolge; alle Skills aus dem Intent sichtbar.
 
-### T-11 Career-App
+### T-19 Career-Card
 - `Timeline` mit Stationen, neueste zuerst.
 - **Tests:** Sortierung absteigend nach Startdatum; Zeitraum, Rolle, Firma, Highlights sichtbar.
 
-### T-12 Contact-App
-- Liste der Kanäle mit Icons; GitHub hervorgehoben; optional `mailto:`.
-- **Tests:** GitHub-Eintrag ist hervorgehoben; kein `<form>` vorhanden.
+### T-20 Contact- & GitHub-Card
+- Contact: Liste der Kanäle mit Icons; GitHub hervorgehoben; optional `mailto:`.
+- GitHub: interaktiver Card-Header öffnet das Profil in neuem Tab.
+- **Tests:** GitHub-Eintrag hervorgehoben; kein `<form>`; GitHub-Card öffnet `github.com/Voelkerdo`.
 
 ### T-13 Responsive-Feinschliff
-- Tile-Grid und Apps ab 360 px Breite ohne horizontales Scrollen.
-- **Tests (E2E):** Bei 360 px Viewport auf allen Routen `scrollWidth <= clientWidth`.
+- Bento-Grid: 4 → 2 → 1 Spalten laut Tech Spec §6; ab 360 px kein horizontales Scrollen.
+- **Tests (E2E):** Bei 360 px, 800 px und 1280 px Viewport `scrollWidth <= clientWidth` und erwartete Spaltenanzahl.
 
 ### T-14 Manuelle Abnahme
 - Production-Build lokal per `npm run preview`.

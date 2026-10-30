@@ -11,7 +11,7 @@
 | UI-Komponenten | `@ui5/webcomponents-react` (inkl. `@ui5/webcomponents`, `-fiori`, `-icons`) | 2.28.x |
 | Theme | SAP Horizon (`sap_horizon` / `sap_horizon_dark`) + eigene Akzentfarben | – |
 | Animationen | Motion (`motion/react`) | 14.x |
-| Routing | React Router, Hash-Routing | 8.x |
+| ~~Routing~~ | ~~React Router~~ – entfällt (TD-11, CR-1) | – |
 | Unit-/Komponententests | Vitest + Testing Library (jsdom) | 5.x / 16.x |
 | E2E-Tests | Playwright (Chromium) | 1.x |
 | Linting / Formatierung | Oxlint + Prettier | 1.x / 3.x |
@@ -20,17 +20,21 @@
 ## 2. Architektur
 Reine Single-Page-Application ohne Backend. Alle Inhalte sind statische TypeScript-Daten, die zur Build-Zeit eingebunden werden (D-1). Der Production-Build in `assets/dist/` ist ein rein statischer Ordner und damit bei jedem Hoster deploybar.
 
+Es gibt genau eine Seite, die Overview Page – kein Routing (TD-11).
+
 ```
 App
 ├─ ThemeProvider (UI5)
-└─ HashRouter
-   └─ LaunchpadShell               ← Header (ShellBar) + Avatar-Menü, immer sichtbar
-      ├─ "/"          LaunchpadPage  ← Hero + TileGrid
-      ├─ "/projects"  ProjectsApp
-      ├─ "/skills"    SkillsApp
-      ├─ "/career"    CareerApp
-      ├─ "/contact"   ContactApp
-      └─ "*"          → Redirect auf "/"
+└─ ThemeModeProvider
+   └─ AppShell                       ← Header (ShellBar) + Avatar-Menü, immer sichtbar
+      └─ OverviewPage
+         ├─ Hero
+         └─ BentoGrid
+            ├─ ProjectsCard   (groß)
+            ├─ CareerCard     (hoch)
+            ├─ ContactCard    (klein)
+            ├─ GitHubCard     (klein)
+            └─ SkillsCard     (breit)
 ```
 
 ## 3. Projektstruktur
@@ -43,21 +47,23 @@ assets/
 ├─ index.html
 src/
 ├─ main.tsx                 # Einstieg, UI5-Theme-Setup
-├─ App.tsx                  # Provider + Routen
+├─ App.tsx                  # Provider + Shell + Overview Page
 ├─ shell/
-│  ├─ LaunchpadShell.tsx    # ShellBar, Back-Button, Avatar, UserMenu, About-Dialog
+│  ├─ AppShell.tsx          # ShellBar, Avatar, UserMenu
+│  ├─ AboutDialog.tsx
+│  ├─ ThemeModeProvider.tsx
 │  └─ useThemeMode.ts       # System-Theme + manueller Umschalter
-├─ launchpad/
-│  ├─ LaunchpadPage.tsx     # Hero + TileGrid
+├─ overview/
+│  ├─ OverviewPage.tsx      # Hero + BentoGrid
 │  ├─ Hero.tsx
-│  ├─ TileGrid.tsx
-│  └─ Tile.tsx              # eigene Fiori-Tile-Komponente
-├─ apps/
-│  ├─ AppPage.tsx           # gemeinsamer Rahmen (DynamicPage + Transition)
-│  ├─ ProjectsApp.tsx
-│  ├─ SkillsApp.tsx
-│  ├─ CareerApp.tsx
-│  └─ ContactApp.tsx
+│  ├─ BentoGrid.tsx         # CSS-Grid mit Card-Größen
+│  ├─ AnimatedCard.tsx      # UI5 Card + Motion (Einblenden, Hover/Fokus)
+│  └─ cards/
+│     ├─ ProjectsCard.tsx
+│     ├─ SkillsCard.tsx
+│     ├─ CareerCard.tsx
+│     ├─ ContactCard.tsx
+│     └─ GitHubCard.tsx
 ├─ data/
 │  ├─ types.ts              # Datenmodelle
 │  ├─ profile.ts            # Name, Positionierung, GitHub-URL, Avatar
@@ -65,7 +71,7 @@ src/
 │  ├─ skills.ts
 │  ├─ career.ts
 │  ├─ contact.ts
-│  └─ tiles.ts              # Tile-Definitionen (leitet KPIs aus den Daten ab)
+│  └─ cards.ts              # Card-Definitionen inkl. Größe (leitet KPIs aus den Daten ab)
 ├─ motion/
 │  └─ transitions.ts        # Animations-Varianten, reduced-motion-Handling
 └─ styles/
@@ -83,31 +89,40 @@ interface Project  { id: string; name: string; description: string; technologies
 interface SkillGroup { id: 'backend' | 'frontend' | 'frameworks' | 'sap'; title: string; skills: string[] }
 interface CareerStation { id: string; from: string; to?: string; role: string; company: string; highlights: string[] }
 interface ContactChannel { id: string; label: string; url: string; icon: string; primary?: boolean }
-interface TileDef { id: string; title: string; subtitle?: string; icon: string; kpi?: string; route?: string; href?: string }
+type CardSize = 'large' | 'wide' | 'tall' | 'small'
+interface CardDef { id: string; title: string; subtitle?: string; icon: string; kpi?: string; size: CardSize; href?: string }
 ```
 - Platzhalter-Inhalte (REQ-02/04/05) sind mit `// TODO(content): …` markiert, damit sie per Suche auffindbar sind.
-- Die KPIs der Tiles (AC-01.3) werden aus den Daten berechnet (z. B. `projects.length`), nicht doppelt gepflegt.
+- Die KPIs der Cards (AC-01.3) werden aus den Daten berechnet (z. B. `projects.length`), nicht doppelt gepflegt.
 
 ## 5. Komponenten-Mapping
 | Element | Umsetzung | Anforderung |
 |---|---|---|
-| Shell-Header | `ShellBar` (Titel, Logo, `startButton`-Slot für Back, `profile`-Slot für Avatar) | AC-06.2, AC-06.7 |
+| Shell-Header | `ShellBar` (Branding mit Logo/Name, Titel „Overview“, `profile`-Slot für Avatar) | AC-06.2, AC-06.11 |
 | Benutzermenü | `UserMenu` (fiori) mit Eintrag „About“ und Theme-Umschalter | AC-06.9, AC-09.1 |
 | About | `Dialog` | AC-07.4 |
-| Tile | **eigene Komponente** im Fiori-Tile-Look (Header, Subheader, Icon, KPI) – UI5 Web Components bieten kein Launchpad-Tile | AC-01.2, AC-01.3, AC-07.3 |
-| App-Rahmen | `DynamicPage` mit `DynamicPageTitle` | AC-06.6 |
-| Projekte | `Card` + `CardHeader`, `Tag` für Technologien, `Link` (target `_blank`) | REQ-02 |
-| Skills | `Panel` je Gruppe + `Tag` | REQ-03 |
-| Werdegang | `Timeline` + `TimelineItem` (fiori) | REQ-04 |
-| Kontakt | `List` / `ListItemStandard` mit Icons, GitHub hervorgehoben | REQ-05 |
+| Card (alle) | UI5 `Card` + `CardHeader` (`titleText`, `subtitleText`, Icon im `avatar`-Slot, KPI als `additionalText`) – umhüllt von Motion (TD-10) | AC-01.2, AC-01.3, AC-07.3 |
+| Bento-Grid | CSS Grid mit `grid-template-areas`, siehe §6 | AC-01.6, AC-08.1 |
+| Projects-Card | `List` mit je einem Eintrag pro Projekt: `Link` (target `_blank`), Beschreibung, `Tag`s für Technologien | REQ-02 |
+| Skills-Card | je Gruppe ein `Label` + `Tag`s | REQ-03 |
+| Career-Card | `Timeline` + `TimelineItem` (fiori) | REQ-04 |
+| Contact-Card | `List` / `ListItemStandard` mit Icons, GitHub hervorgehoben | REQ-05 |
+| GitHub-Card | `CardHeader` mit `interactive` – öffnet das Profil in neuem Tab | AC-01.2 |
 
-## 6. Navigation & Animationen
-- **Routing:** `HashRouter`; jede App hat eine Route (AC-06.3). Der Back-Button navigiert zu `/` (nicht `history.back()`), damit er auch bei Direkt-Links korrekt funktioniert (AC-06.7).
-- **Tile-to-App-Transition (AC-06.1, AC-06.4):** Shared-Layout-Animation mit Motion – Tile und App-Container teilen sich eine `layoutId` (`tile-<id>`). `AnimatePresence` steuert Öffnen und Schließen.
-- **Gestaffeltes Einblenden (AC-01.4):** Motion-Variants mit `staggerChildren` auf dem TileGrid.
+## 6. Layout & Animationen
+- **Bento-Grid (AC-01.6, AC-08.1):** CSS Grid, Card-Größe über `grid-area`:
+
+| Breite | Spalten | `grid-template-areas` |
+|---|---|---|
+| ≥ 1024 px | 4 | `"projects projects career contact"` `"projects projects career github"` `"skills skills skills skills"` |
+| 600–1023 px | 2 | `"projects projects"` `"career contact"` `"career github"` `"skills skills"` |
+| < 600 px | 1 | alle Cards untereinander |
+
+- **Kein Routing (TD-11):** Ein Klick auf Logo/Name scrollt per `window.scrollTo({ top: 0 })` nach oben (AC-06.11).
+- **Gestaffeltes Einblenden (AC-01.4):** Motion-Variants mit `staggerChildren` auf dem BentoGrid.
 - **Hover/Fokus (AC-07.3):** Anheben + leichter Tilt + Akzent-Glow über `whileHover` / `whileFocus`.
 - **Reduced Motion (AC-08.3):** `useReducedMotion()`; wenn aktiv, nur Opacity-Übergänge ohne Bewegung.
-- **Tastatur (AC-06.5):** Tiles sind `<button>`- bzw. `<a>`-Elemente mit sichtbarem Fokus-Ring; Enter/Space öffnen die App.
+- **Tastatur (AC-06.5):** Alle Links und die interaktive GitHub-Card sind per Tab erreichbar und haben einen sichtbaren Fokus-Ring; die Hover-Animation greift auch bei Fokus innerhalb der Card (`:focus-within`).
 
 ## 7. Theming
 - Basis: `sap_horizon` bzw. `sap_horizon_dark` über `setTheme()` aus `@ui5/webcomponents-base`.
@@ -123,8 +138,8 @@ interface TileDef { id: string; title: string; subtitle?: string; icon: string; 
 
 ## 8. Teststrategie
 - **Nachvollziehbarkeit:** Jeder Test nennt im Namen die AC-ID, z. B. `it('AC-02.2 opens repo link in new tab', …)`. So ist jedes Akzeptanzkriterium einem Test zugeordnet.
-- **Unit/Komponente (Vitest + Testing Library):** Daten-Integrität (z. B. KPIs aus Daten), Rendering der Apps, Links/Attribute, Theme-Logik.
-- **E2E (Playwright):** Navigation Tile → App → Back, Direkt-Links, Browser-Back, Tastaturbedienung, Viewport 360 px ohne horizontales Scrollen, Reduced Motion, Theme-Umschalter.
+- **Unit/Komponente (Vitest + Testing Library):** Daten-Integrität (z. B. KPIs aus Daten), Rendering der Cards, Links/Attribute, Theme-Logik.
+- **E2E (Playwright):** Shell und Avatar-Menü, Bento-Layout (Card-Größen), Tastaturbedienung, Viewport 360 px ohne horizontales Scrollen, Reduced Motion, Theme-Umschalter.
 - **Nicht automatisiert in v1:** Lighthouse-Scores (AC-08.2) und Ladezeit (AC-01.5) werden manuell gegen den Production-Build geprüft; der „Wow“-Effekt per Augenschein.
 
 ## 9. Qualitätstor (`npm run verify`)
@@ -139,12 +154,12 @@ Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 ## 10. Nachvollziehbarkeit (Traceability)
 | Anforderung | Umsetzung (Abschnitt) | Testart |
 |---|---|---|
-| REQ-01 Launchpad-Startseite | 3, 5, 6 | Unit + E2E |
+| REQ-01 Overview Page | 3, 5, 6 | Unit + E2E |
 | REQ-02 Projekte | 4, 5 | Unit |
 | REQ-03 Skills | 4, 5 | Unit |
 | REQ-04 Werdegang | 4, 5 | Unit |
 | REQ-05 Kontakt | 4, 5 | Unit |
-| REQ-06 Shell & Navigation | 2, 5, 6 | E2E |
+| REQ-06 Fiori-Shell | 2, 5, 6 | E2E |
 | REQ-07 Wow-Effekt | 5, 6, 7 | Unit (About) + manuell |
 | REQ-08 Responsiveness & Qualität | 6, 8 | E2E + manuell |
 | REQ-09 Dark/Light Mode | 7 | Unit + E2E |
@@ -155,12 +170,14 @@ Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 | TD-1 | Sprache | TypeScript (strict) | Wunsch Dominik; typsichere Datenmodelle |
 | TD-2 | Tests | Vitest + Playwright, `npm run verify` nach jeder Code-Änderung | Wunsch Dominik; jedes AC prüfbar |
 | TD-3 | Package Manager | npm | Wunsch Dominik |
-| TD-4 | Tiles | Eigene Komponente statt UI5-Komponente | UI5 Web Components enthalten kein Launchpad-Tile; volle Kontrolle über Animationen |
-| TD-5 | Routing | Hash-Routing | Hosting noch offen – funktioniert überall ohne Server-Konfiguration |
-| TD-6 | Animationen | Motion (Shared Layout) | Tile-to-App-Transition ohne eigene FLIP-Logik |
+| TD-4 | ~~Tiles~~ | ~~Eigene Komponente statt UI5-Komponente~~ | Abgelöst durch TD-10 (CR-1) |
+| TD-5 | ~~Routing~~ | ~~Hash-Routing~~ | Abgelöst durch TD-11 (CR-1) |
+| TD-6 | Animationen | Motion | Gestaffeltes Einblenden, Hover/Fokus und Reduced Motion mit wenig Code. (Ursprünglich für die Tile-to-App-Transition, die mit CR-1 entfällt.) |
 | TD-7 | Repo-Struktur | Code, Tests und Configs in `assets/`, Specs in `specs/` | Wunsch Dominik; klare Trennung von Spezifikation und Umsetzung |
 | TD-8 | Linter | Oxlint statt ESLint | `typescript-eslint` unterstützt TypeScript 7 noch nicht (Peer-Dependency `<6.1`); Oxlint ist der aktuelle Vite-Standard. Erkannt in T-01. |
 | TD-9 | Akzentfarben | Palette „Sunset Coral“ (Koralle → Amber) | Wahl Dominik aus drei Vorschlägen in T-04; auffälligster Kontrast zum Fiori-Standard |
+| TD-10 | Cards | UI5 `Card` + `CardHeader`, umhüllt von Motion | UI5 bringt die Card fertig mit – mehr echtes UI5, weniger Eigenbau (CR-1) |
+| TD-11 | Routing | Kein Router; React Router wird entfernt | Nur noch eine Seite (D-8); weniger Abhängigkeiten (CR-1) |
 
 ## 12. Offene Fragen
 _Keine._
