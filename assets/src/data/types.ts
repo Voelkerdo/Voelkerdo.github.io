@@ -54,3 +54,14 @@ export interface CardDef {
   kpi?: string
   size: CardSize
 }
+
+export interface NotificationDef {
+  id: string
+  title: string
+  text: string
+  /** Relative time label, e.g. "Just now" */
+  time: string
+  importance?: 'High'
+  /** Opened in a new tab when the notification is clicked */
+  href?: string
+}

@@ -13,7 +13,9 @@ import '@ui5/webcomponents-icons/dist/dark-mode.js'
 import '@ui5/webcomponents-icons/dist/light-mode.js'
 import { useState, type ReactNode } from 'react'
 import { profile } from '../data/profile.ts'
+import { notifications } from '../data/notifications.ts'
 import { AboutDialog } from './AboutDialog.tsx'
+import { NotificationsPopover } from './NotificationsPopover.tsx'
 import { useThemeMode } from './useThemeMode.ts'
 
 const initials = profile.name
@@ -30,6 +32,10 @@ export function AppShell({ children }: { children: ReactNode }) {
   const { mode, toggleMode } = useThemeMode()
   const [menuOpener, setMenuOpener] = useState<HTMLElement | null>(null)
   const [aboutOpen, setAboutOpen] = useState(false)
+  const [notificationsOpener, setNotificationsOpener] = useState<HTMLElement | null>(null)
+  // Only for this visit: opening the list clears the badge, closing it marks the items read (AC-10.3)
+  const [badgeVisible, setBadgeVisible] = useState(true)
+  const [notificationsRead, setNotificationsRead] = useState(false)
 
   return (
     <div className="app-shell">
@@ -62,6 +68,12 @@ export function AppShell({ children }: { children: ReactNode }) {
           />
         }
         onProfileClick={(event) => setMenuOpener(event.detail.targetRef)}
+        showNotifications
+        notificationsCount={badgeVisible ? String(notifications.length) : undefined}
+        onNotificationsClick={(event) => {
+          setNotificationsOpener(event.detail.targetRef)
+          setBadgeVisible(false)
+        }}
       />
 
       <UserMenu
@@ -101,6 +113,15 @@ export function AppShell({ children }: { children: ReactNode }) {
       </UserMenu>
 
       <AboutDialog open={aboutOpen} onClose={() => setAboutOpen(false)} />
+
+      <NotificationsPopover
+        opener={notificationsOpener}
+        read={notificationsRead}
+        onClose={() => {
+          setNotificationsOpener(null)
+          setNotificationsRead(true)
+        }}
+      />
 
       <div className="app-content">{children}</div>
     </div>
