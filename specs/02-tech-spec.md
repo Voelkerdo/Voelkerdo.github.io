@@ -18,7 +18,7 @@
 | Package Manager | npm | – |
 
 ## 2. Architektur
-Reine Single-Page-Application ohne Backend. Alle Inhalte sind statische TypeScript-Daten, die zur Build-Zeit eingebunden werden (D-1). Der Production-Build in `dist/` ist ein rein statischer Ordner und damit bei jedem Hoster deploybar.
+Reine Single-Page-Application ohne Backend. Alle Inhalte sind statische TypeScript-Daten, die zur Build-Zeit eingebunden werden (D-1). Der Production-Build in `assets/dist/` ist ein rein statischer Ordner und damit bei jedem Hoster deploybar.
 
 ```
 App
@@ -34,7 +34,13 @@ App
 ```
 
 ## 3. Projektstruktur
+Specs und Code sind getrennt (TD-7): `specs/` enthält ausschließlich die Spezifikation, `assets/` alles Ausführbare – Code, Tests, Configs, `package.json`.
+
 ```
+specs/                      # Intent, PRD, Tech Spec, Tasks
+assets/
+├─ package.json, vite.config.ts, tsconfig*.json, eslint/prettier/playwright/vitest-Config
+├─ index.html
 src/
 ├─ main.tsx                 # Einstieg, UI5-Theme-Setup
 ├─ App.tsx                  # Provider + Routen
@@ -68,8 +74,9 @@ tests/
 ├─ unit/                    # *.test.tsx (Vitest)
 └─ e2e/                     # *.spec.ts (Playwright)
 ```
+(`src/` und `tests/` liegen innerhalb von `assets/`.)
 
-## 4. Datenmodell (`src/data/types.ts`)
+## 4. Datenmodell (`assets/src/data/types.ts`)
 ```ts
 interface Profile  { name: string; tagline: string; githubUrl: string; avatarUrl?: string; siteRepoUrl: string }
 interface Project  { id: string; name: string; description: string; technologies: string[]; repoUrl: string }
@@ -114,7 +121,7 @@ interface TileDef { id: string; title: string; subtitle?: string; icon: string; 
 - **Nicht automatisiert in v1:** Lighthouse-Scores (AC-08.2) und Ladezeit (AC-01.5) werden manuell gegen den Production-Build geprüft; der „Wow“-Effekt per Augenschein.
 
 ## 9. Qualitätstor (`npm run verify`)
-Nach **jeder** Quellcode-Änderung wird ausgeführt:
+Nach **jeder** Quellcode-Änderung wird in `assets/` ausgeführt:
 1. `typecheck` – `tsc --noEmit`
 2. `lint` – ESLint
 3. `test` – Vitest (einmaliger Lauf)
@@ -144,6 +151,7 @@ Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 | TD-4 | Tiles | Eigene Komponente statt UI5-Komponente | UI5 Web Components enthalten kein Launchpad-Tile; volle Kontrolle über Animationen |
 | TD-5 | Routing | Hash-Routing | Hosting noch offen – funktioniert überall ohne Server-Konfiguration |
 | TD-6 | Animationen | Motion (Shared Layout) | Tile-to-App-Transition ohne eigene FLIP-Logik |
+| TD-7 | Repo-Struktur | Code, Tests und Configs in `assets/`, Specs in `specs/` | Wunsch Dominik; klare Trennung von Spezifikation und Umsetzung |
 
 ## 12. Offene Fragen
 _Keine._
