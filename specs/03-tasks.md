@@ -33,6 +33,7 @@
 | T-19 | Career-Card | AC-04.1 | [x] |
 | T-20 | Contact- & GitHub-Card | AC-01.2, AC-05.1, AC-05.2 | [x] |
 | T-24 | CR-5: Nur SAP-Skills, Top 5 mit „Show all“ | AC-03.2, AC-03.7, AC-03.9 | [x] |
+| T-25 | CR-6: GitHub-Card entfernen, Contact hoch | AC-01.2, AC-01.3, AC-01.6 | [ ] |
 | T-13 | Responsive-Feinschliff | AC-01.6, AC-08.1 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [ ] |
 
@@ -130,6 +131,11 @@ Tile-Komponente, Launchpad-Startseite, App-Rahmen mit Tile-to-App-Transition und
 - `SkillsCard`: anfangs Top 5; Umschalter „Show all (7)“ / „Show less“ mit `aria-expanded`; Auf-/Zuklappen animiert, neue Balken füllen sich; Reduced Motion ohne Animation.
 - KPI der Skills-Card zählt alle gezeigten Skills (7) (AC-01.3).
 - **Tests:** Unit – 7 Skills, Stufen laut AC-03.7, Sortierung, KPI 7. E2E – anfangs 5 Zeilen, „Show all (7)“ zeigt 7 und die neuen Balken füllen sich, „Show less“ zeigt wieder 5, Tastaturbedienung und `aria-expanded`.
+
+### T-25 CR-6: GitHub-Card entfernen, Contact hoch
+- `GitHubCard.tsx` löschen; `cards.ts` ohne `github`, Contact mit Größe `tall`; `CardSize` ohne `small`.
+- Bento-Areas laut Tech Spec §6 (4 und 2 Spalten).
+- **Tests:** 5 Cards; Layout-Test auf neues Raster (Contact reicht von About bis Skills); GitHub-CTA weiterhin über Contact-Card und Avatar-Menü erreichbar; Tastatur-Test ohne GitHub-Card.
 
 ### T-13 Responsive-Feinschliff
 - Bento-Grid: 4 → 2 → 1 Spalten laut Tech Spec §6; ab 360 px kein horizontales Scrollen.

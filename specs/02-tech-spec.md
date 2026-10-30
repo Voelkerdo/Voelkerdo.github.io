@@ -32,8 +32,7 @@ App
             ├─ ProfileCard    (breit)
             ├─ ProjectsCard   (groß)
             ├─ CareerCard     (hoch)
-            ├─ ContactCard    (klein)
-            ├─ GitHubCard     (klein)
+            ├─ ContactCard    (hoch)
             └─ SkillsCard     (breit)
 ```
 
@@ -90,7 +89,7 @@ type SkillLevel = 'Expert' | 'Advanced' | 'Intermediate' | 'Familiar'
 interface Skill { name: string; level: SkillLevel }
 interface CareerStation { id: string; from: string; to?: string; role: string; company: string; highlights: string[] }
 interface ContactChannel { id: string; label: string; url: string; icon: string; primary?: boolean }
-type CardSize = 'large' | 'wide' | 'tall' | 'small'
+type CardSize = 'large' | 'wide' | 'tall'
 interface CardDef { id: string; title: string; subtitle?: string; icon: string; kpi?: string; size: CardSize; href?: string }
 ```
 - Platzhalter-Inhalte (REQ-02/04/05) sind mit `// TODO(content): …` markiert, damit sie per Suche auffindbar sind.
@@ -111,16 +110,16 @@ interface CardDef { id: string; title: string; subtitle?: string; icon: string; 
 | Skills-Card | eine Liste (anfangs `VISIBLE_SKILLS` Einträge, Umschalter als `Button` design `Transparent` mit `aria-expanded`): je Skill Name + `ProgressIndicator` (`value` aus `LEVEL_PERCENT`, `displayValue` = Stufe), Balkenfarbe = Akzent (TD-12) | REQ-03 |
 | Career-Card | `Timeline` + `TimelineItem` (fiori) | REQ-04 |
 | Contact-Card | `List` / `ListItemStandard` mit Icons, GitHub hervorgehoben | REQ-05 |
-| GitHub-Card | `CardHeader` mit `interactive` – öffnet das Profil in neuem Tab; Inhalt: kurzer Einladungstext + `Button` (Emphasized) „Follow @Voelkerdo“ | AC-01.2 |
+| ~~GitHub-Card~~ | entfällt (D-13, CR-6) | – |
 
 ## 6. Layout & Animationen
 - **Bento-Grid (AC-01.6, AC-08.1):** CSS Grid, Card-Größe über `grid-area`:
 
 | Breite | Spalten | `grid-template-areas` |
 |---|---|---|
-| ≥ 1024 px | 4 | `"about about career contact"` `"projects projects career github"` `"projects projects skills skills"` |
-| 600–1023 px | 2 | `"about about"` `"projects projects"` `"career contact"` `"career github"` `"skills skills"` |
-| < 600 px | 1 | alle Cards untereinander in der Reihenfolge About, Projects, Career, Contact, GitHub, Skills |
+| ≥ 1024 px | 4 | `"about about career contact"` `"projects projects career contact"` `"projects projects skills skills"` |
+| 600–1023 px | 2 | `"about about"` `"projects projects"` `"career contact"` `"skills skills"` |
+| < 600 px | 1 | alle Cards untereinander in der Reihenfolge About, Projects, Career, Contact, Skills |
 
 - **Abstände nach Fiori (AC-01.9, D-9):** Breakpoints und Werte folgen dem SAPUI5 Responsive Padding:
 
@@ -139,7 +138,7 @@ interface CardDef { id: string; title: string; subtitle?: string; icon: string; 
 - **Show all / Show less (AC-03.9):** Zusätzliche Zeilen erscheinen per `AnimatePresence` mit Höhen- und Opacity-Animation; ihre Balken nutzen dieselbe Füll-Logik und starten, sobald sie gerendert sind. Bei Reduced Motion ohne Animation.
 - **Hover/Fokus (AC-07.3):** Anheben + leichter Tilt + Akzent-Glow über `whileHover` / `whileFocus`.
 - **Reduced Motion (AC-08.3):** `useReducedMotion()`; wenn aktiv, nur Opacity-Übergänge ohne Bewegung.
-- **Tastatur (AC-06.5):** Alle Links und die interaktive GitHub-Card sind per Tab erreichbar und haben einen sichtbaren Fokus-Ring; die Hover-Animation greift auch bei Fokus innerhalb der Card (`:focus-within`).
+- **Tastatur (AC-06.5):** Alle Links, Listeneinträge und Buttons in den Cards sind per Tab erreichbar und haben einen sichtbaren Fokus-Ring; die Hover-Animation greift auch bei Fokus innerhalb der Card (`:focus-within`).
 
 ## 7. Theming
 - Basis: `sap_horizon` bzw. `sap_horizon_dark` über `setTheme()` aus `@ui5/webcomponents-base`.
