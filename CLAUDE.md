@@ -21,3 +21,21 @@ Dieses Projekt wird spec-driven entwickelt. Die Specs in `specs/` sind die Quell
 - Platzhalter-Inhalte mit `// TODO(content): …` markieren.
 - Specs auf Deutsch, Website-Inhalte auf Englisch.
 - Antworten an den User auf Deutsch.
+
+## Change-Request-Ablauf (CR-N)
+1. **Impact-Analyse:** betroffene Ebenen (Intent → PRD → Tech Spec → Tasks → Code) als Tabelle zeigen; per `grep` in `specs/` und `assets/` prüfen.
+2. **Klären:** offene Punkte als Fragen (gern mit Optionen/Skizze); Inhalte (Texte, Stufen …) liefert Dominik.
+3. **Specs anpassen**, Status `review (CR-N)`:
+   - Gestrichene ACs/Decisions/Tasks werden ~~durchgestrichen~~ mit Verweis, nie gelöscht; IDs werden nie neu vergeben.
+   - Präzisierte ACs bekommen `_(präzisiert in …)_`.
+   - Neue Entscheidung `D-N` im PRD, Eintrag `CR-N` in der Änderungshistorie (PRD §7), neue Tasks `T-N` vor T-14 einreihen.
+4. **Freigabe** durch Dominik → Status `approved`, Commit `docs(cr-N): … [D-N]`.
+5. **Umsetzung** Task für Task: Status `[~]` → Code + Tests → `npm run verify` → Screenshot-Check → `[x]` → Commit `feat(T-N): … [REQ-…, CR-N]`.
+- Fehler nach Abschluss eines Tasks: Commit `fix(T-N): …`; falls ein AC unscharf war, AC präzisieren (Spec im selben Commit).
+- Abweichungen, die sich bei der Umsetzung zeigen (z. B. UI5-Verhalten), erst in der Spec festhalten, dann umsetzen.
+
+## Arbeitsweise mit Dominik
+- Einen Task nach dem anderen umsetzen, Ergebnis (inkl. Screenshot-Pfad) zeigen und auf Freigabe warten.
+- Geschmacksfragen (Farben, Texte, Layout) als Optionen vorlegen, nicht selbst entscheiden.
+- Dominiks Mac hat „Bewegung reduzieren“ aktiv → er sieht Animationen nur mit DevTools-Emulation oder auf anderen Geräten.
+- Mobile-Test im WLAN: `npm run dev -- --host` (nicht fest in der Config, D: bewusst).
