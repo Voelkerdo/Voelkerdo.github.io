@@ -1,6 +1,5 @@
 import { career } from './career.ts'
 import { contactChannels } from './contact.ts'
-import { profile } from './profile.ts'
 import { projects } from './projects.ts'
 import { skills } from './skills.ts'
 import type { CardDef, CareerStation, Skill } from './types.ts'
@@ -58,15 +57,7 @@ export function buildCards(now: Date = new Date()): CardDef[] {
       subtitle: 'Get in touch',
       icon: 'email',
       kpi: String(contactChannels.length),
-      size: 'small',
-    },
-    {
-      id: 'github',
-      title: 'GitHub',
-      subtitle: `@${profile.githubUsername}`,
-      icon: 'chain-link',
-      size: 'small',
-      href: profile.githubUrl,
+      size: 'tall',
     },
   ]
 }

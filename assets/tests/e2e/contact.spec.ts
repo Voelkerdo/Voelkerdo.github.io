@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test'
 
 const items = (page: Page) => page.locator('[data-card-id="contact"] ui5-li')
 
-test.describe('contact and GitHub cards', () => {
+test.describe('contact card', () => {
   test('AC-05.1 contact card lists the channels with GitHub first and highlighted', async ({
     page,
   }) => {
@@ -61,12 +61,13 @@ test.describe('contact and GitHub cards', () => {
     await expect(page.locator('form, ui5-input, ui5-textarea, input, textarea')).toHaveCount(0)
   })
 
-  test('AC-01.2 the GitHub card invites to follow and opens the profile', async ({ page }) => {
+  test('AC-01.2 without a GitHub card, GitHub stays reachable via contact card and avatar menu', async ({
+    page,
+  }) => {
     await page.goto('/')
-    const card = page.locator('[data-card-id="github"]')
-    await expect(card.getByText('Explore my repositories')).toBeVisible()
-    const popupPromise = page.waitForEvent('popup')
-    await card.getByTestId('github-follow').click()
-    expect((await popupPromise).url()).toContain('github.com/Voelkerdo')
+    await expect(page.locator('[data-card-id="github"]')).toHaveCount(0)
+    await expect(page.locator('[data-card-id="contact"] [data-channel-id="github"]')).toBeVisible()
+    await page.getByTestId('shell-avatar').click()
+    await expect(page.locator('ui5-user-menu').getByText('Visit GitHub')).toBeVisible()
   })
 })

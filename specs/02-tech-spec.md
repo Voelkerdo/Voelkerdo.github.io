@@ -90,7 +90,7 @@ interface Skill { name: string; level: SkillLevel }
 interface CareerStation { id: string; from: string; to?: string; role: string; company: string; highlights: string[] }
 interface ContactChannel { id: string; label: string; url: string; icon: string; primary?: boolean }
 type CardSize = 'large' | 'wide' | 'tall'
-interface CardDef { id: string; title: string; subtitle?: string; icon: string; kpi?: string; size: CardSize; href?: string }
+interface CardDef { id: string; title: string; subtitle?: string; icon: string; kpi?: string; size: CardSize }
 ```
 - Platzhalter-Inhalte (REQ-02/04/05) sind mit `// TODO(content): …` markiert, damit sie per Suche auffindbar sind.
 - Die Balkenlänge je Stufe (AC-03.5) ist eine Konstante `LEVEL_PERCENT` in `data/skills.ts` (Expert 100, Advanced 75, Intermediate 50, Familiar 25).

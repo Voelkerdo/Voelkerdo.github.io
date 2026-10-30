@@ -43,7 +43,7 @@ export interface ContactChannel {
 }
 
 /** Card size in the bento grid (AC-01.6) */
-export type CardSize = 'large' | 'wide' | 'tall' | 'small'
+export type CardSize = 'large' | 'wide' | 'tall'
 
 export interface CardDef {
   id: string
@@ -53,6 +53,4 @@ export interface CardDef {
   icon: string
   kpi?: string
   size: CardSize
-  /** External link, e.g. the GitHub profile */
-  href?: string
 }

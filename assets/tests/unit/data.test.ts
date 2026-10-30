@@ -18,10 +18,9 @@ describe('data', () => {
     expect(cards.contact.kpi).toBe(String(contactChannels.length))
   })
 
-  it('AC-01.3 profile and GitHub cards have no KPI', () => {
+  it('AC-01.3 the profile card has no KPI', () => {
     const cards = Object.fromEntries(buildCards().map((c) => [c.id, c]))
     expect(cards.about.kpi).toBeUndefined()
-    expect(cards.github.kpi).toBeUndefined()
   })
 
   it('AC-01.8 the profile card comes first', () => {
@@ -150,14 +149,18 @@ describe('data', () => {
       projects: 'large',
       skills: 'wide',
       career: 'tall',
-      contact: 'small',
-      github: 'small',
+      contact: 'tall',
     })
   })
 
-  it('AC-01.2 GitHub card links to the profile', () => {
-    const github = buildCards().find((t) => t.id === 'github')
-    expect(github?.href).toBe('https://github.com/Voelkerdo')
+  it('AC-01.2 there is one card per content area and no separate GitHub card', () => {
+    expect(buildCards().map((c) => c.id)).toEqual([
+      'about',
+      'projects',
+      'skills',
+      'career',
+      'contact',
+    ])
   })
 
   it('AC-02.3 / AC-04.2 / AC-05.1 ids are unique', () => {

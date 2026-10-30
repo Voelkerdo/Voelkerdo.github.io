@@ -51,12 +51,12 @@ test.describe('overview page', () => {
 
   test('AC-01.2 / AC-01.3 cards with title and KPI in the header', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('.bento-cell')).toHaveCount(6)
+    await expect(page.locator('.bento-cell')).toHaveCount(5)
     expect(await headerProps(page, 'projects')).toEqual({ title: 'Projects', kpi: '3' })
     expect(await headerProps(page, 'skills')).toEqual({ title: 'Skills', kpi: '7' })
     expect((await headerProps(page, 'career')).title).toBe('Career')
     expect(await headerProps(page, 'contact')).toEqual({ title: 'Contact', kpi: '3' })
-    expect(await headerProps(page, 'github')).toEqual({ title: 'GitHub', kpi: undefined })
+    await expect(card(page, 'github')).toHaveCount(0)
   })
 
   test('AC-01.4 cards fade in and end fully visible', async ({ page }) => {
@@ -68,27 +68,26 @@ test.describe('overview page', () => {
     await page.setViewportSize({ width: 1280, height: 900 })
     await page.goto('/')
     await waitForCards(page)
-    const [about, projects, career, contact, github, skills] = await Promise.all(
-      ['about', 'projects', 'career', 'contact', 'github', 'skills'].map((id) => box(page, id)),
+    const [about, projects, career, contact, skills] = await Promise.all(
+      ['about', 'projects', 'career', 'contact', 'skills'].map((id) => box(page, id)),
     )
     const near = (a: number, b: number) => expect(Math.abs(a - b)).toBeLessThanOrEqual(2)
     const bottom = (b: { y: number; height: number }) => b.y + b.height
     const right = (b: { x: number; width: number }) => b.x + b.width
-    // Row 1: about (wide) | career (tall) | contact (small)
+    // Row 1: about (wide) | career (tall) | contact (tall)
     near(about.y, career.y)
     near(about.y, contact.y)
     expect(about.width).toBeGreaterThan(contact.width * 1.8)
     expect(career.x).toBeGreaterThan(right(about) - 1)
     expect(contact.x).toBeGreaterThan(right(career) - 1)
-    // Row 2: projects (large) starts below about; career spans down to the bottom of github
+    // Row 2: projects (large) starts below about; career and contact both span rows 1 and 2
     near(projects.x, about.x)
     near(projects.width, about.width)
     expect(projects.y).toBeGreaterThan(bottom(about) - 1)
-    near(github.x, contact.x)
-    near(github.y, projects.y)
-    near(bottom(career), bottom(github))
-    // Row 3: skills (wide) sits below career/github, next to projects, which spans rows 2 and 3
-    expect(skills.y).toBeGreaterThan(bottom(github) - 1)
+    near(bottom(career), bottom(contact))
+    expect(bottom(contact)).toBeGreaterThan(projects.y)
+    // Row 3: skills (wide) sits below career and contact, next to projects, which spans rows 2 and 3
+    expect(skills.y).toBeGreaterThan(bottom(contact) - 1)
     near(skills.x, career.x)
     near(right(skills), right(contact))
     near(bottom(projects), bottom(skills))
@@ -132,16 +131,26 @@ test.describe('overview page', () => {
   test('AC-06.5 keyboard focus inside a card activates it', async ({ page }) => {
     await page.goto('/')
     await waitForCards(page)
-    const githubHeaderFocused = () =>
-      card(page, 'github')
-        .locator('ui5-card-header')
-        .evaluate((el) => document.activeElement === el)
-    // Tab through the page like a keyboard user until the interactive GitHub card is reached
-    for (let i = 0; i < 30 && !(await githubHeaderFocused()); i++) {
+    // Tab through the page like a keyboard user until the focus lands inside a card
+    const focusedCardId = () =>
+      page.evaluate(() => {
+        // Follow the focus into shadow roots of UI5 components
+        let el: Element | null = document.activeElement
+        while (el?.shadowRoot?.activeElement) el = el.shadowRoot.activeElement
+        const host = (node: Element | null): Element | null =>
+          node?.closest('[data-card-id]') ??
+          (node?.getRootNode() instanceof ShadowRoot
+            ? host((node.getRootNode() as ShadowRoot).host)
+            : null)
+        return host(el)?.getAttribute('data-card-id') ?? null
+      })
+    let id: string | null = null
+    for (let i = 0; i < 30 && !id; i++) {
       await page.keyboard.press('Tab')
+      id = await focusedCardId()
     }
-    expect(await githubHeaderFocused()).toBe(true)
-    await expect(card(page, 'github').locator('.bento-card')).toHaveAttribute('data-active', 'true')
+    expect(id).not.toBeNull()
+    await expect(card(page, id!).locator('.bento-card')).toHaveAttribute('data-active', 'true')
   })
 
   test('AC-08.3 with reduced motion cards only fade and do not move on hover', async ({ page }) => {

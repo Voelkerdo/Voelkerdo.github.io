@@ -1,4 +1,3 @@
-import '@ui5/webcomponents-icons/dist/chain-link.js'
 import '@ui5/webcomponents-icons/dist/email.js'
 import '@ui5/webcomponents-icons/dist/history.js'
 import '@ui5/webcomponents-icons/dist/person-placeholder.js'
@@ -10,7 +9,6 @@ import { AnimatedCard } from './AnimatedCard.tsx'
 import { BentoGrid } from './BentoGrid.tsx'
 import { CareerCard } from './cards/CareerCard.tsx'
 import { ContactCard } from './cards/ContactCard.tsx'
-import { GitHubCard } from './cards/GitHubCard.tsx'
 import { ProfileCard } from './cards/ProfileCard.tsx'
 import { ProjectsCard } from './cards/ProjectsCard.tsx'
 import { SkillsCard } from './cards/SkillsCard.tsx'
@@ -24,7 +22,6 @@ const content: Record<string, ReactNode> = {
   skills: <SkillsCard />,
   career: <CareerCard />,
   contact: <ContactCard />,
-  github: <GitHubCard />,
 }
 
 export function OverviewPage() {

@@ -47,8 +47,6 @@ export function AnimatedCard({ def, children }: { def: CardDef; children?: React
               subtitleText={def.subtitle}
               additionalText={def.kpi}
               avatar={<Icon name={def.icon} />}
-              interactive={Boolean(def.href)}
-              onClick={def.href ? () => window.open(def.href, '_blank', 'noopener') : undefined}
             />
           }
         >
