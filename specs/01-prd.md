@@ -3,7 +3,7 @@
 > Status: approved · Abgeleitet aus: [00-intent.md](00-intent.md)
 
 ## 1. Produktüberblick
-Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwickler im SAP-Umfeld. Die Website ist selbst das Showcase: Sie sieht aus wie eine **SAP-Fiori-Anwendung** und zeigt alle Inhalte auf einer **Overview Page** – animierte Cards in unterschiedlichen Größen in einem Bento-Grid. Ziel ist der Effekt „Das ist UI5?!“ und ein Besuch auf Dominiks GitHub-Profil.
+Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwickler im SAP-Umfeld. Die Website ist selbst das Showcase: Sie sieht aus wie eine **SAP-Fiori-Anwendung** und zeigt alle Inhalte ausschließlich in Cards auf einer **Overview Page** nach Fiori Design Guidelines – animierte Cards in unterschiedlichen Größen in einem Bento-Grid. Ziel ist der Effekt „Das ist UI5?!“ und ein Besuch auf Dominiks GitHub-Profil.
 
 ## 2. Personas
 | ID | Persona | Bedürfnis |
@@ -17,13 +17,15 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 ### REQ-01 Overview Page (Startseite)
 **Story:** Als Besucher will ich in den ersten Sekunden verstehen, wer Dominik ist, alles Wichtige auf einen Blick sehen und beeindruckt sein.
 **Akzeptanzkriterien:**
-- AC-01.1 Die Startseite ist eine Overview Page: oben ein Hero-Bereich mit Name, Positionierung (eine Zeile) und GitHub-CTA; darunter Cards in einem Bento-Grid (D-7).
+- ~~AC-01.1 Hero-Bereich mit Name, Positionierung und GitHub-CTA über den Cards~~ – gestrichen (D-9, CR-2); ersetzt durch AC-01.8.
 - AC-01.2 Es gibt je eine Card pro Inhaltsbereich: **Projects**, **Skills**, **Career**, **Contact**, plus eine **GitHub**-Card, die direkt auf das Profil verlinkt.
-- AC-01.3 Jede Card hat – wie eine Fiori-OVP-Card – einen Header mit Titel, Untertitel, Icon und einer Kennzahl, die aus den Daten berechnet wird (z. B. Anzahl Projekte, Anzahl Skills, Jahre Erfahrung).
+- AC-01.3 Jede Card hat – wie eine Fiori-OVP-Card – einen Header mit Titel, Untertitel und Icon. Die Inhalts-Cards (Projects, Skills, Career, Contact) zeigen zusätzlich eine Kennzahl, die aus den Daten berechnet wird (z. B. Anzahl Projekte, Anzahl Skills, Jahre Erfahrung). _(präzisiert in CR-2)_
 - AC-01.4 Beim Laden erscheinen die Cards mit einer gestaffelten Einblend-Animation.
 - AC-01.5 Die Startseite ist innerhalb von 2 s nach Aufruf vollständig dargestellt (lokal, Production-Build).
-- AC-01.6 Cards haben unterschiedliche Größen (D-7): Projects **groß**, Skills **breit**, Career **hoch**, Contact und GitHub **klein**.
-- AC-01.7 Alle Inhalte stehen vollständig in den Cards; es gibt keine Detail-Seiten (D-8).
+- AC-01.6 Cards haben unterschiedliche Größen (D-7): Projects **groß**, About me und Skills **breit**, Career **hoch**, Contact und GitHub **klein**. _(ergänzt in CR-2)_
+- AC-01.7 Alle Inhalte stehen vollständig in den Cards; es gibt keine Detail-Seiten (D-8) und keine Inhalte außerhalb von Cards (D-9).
+- AC-01.8 Die erste Card ist eine Profil-Card **„About me“** mit Avatar, Name und Positionierung (eine Zeile) (D-9).
+- AC-01.9 Abstände folgen den Fiori Design Guidelines für die Overview Page (D-9): 1rem zwischen den Cards, 1rem unter der ShellBar, seitlicher Rand responsiv 1rem (S) / 2rem (M, L) / 3rem (XL); die Cards nutzen die volle Fensterbreite.
 
 ### REQ-02 Git-Projekte
 **Story:** Als Entwickler will ich Dominiks Projekte sehen und direkt ins Repo springen.
@@ -100,6 +102,7 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 | D-6 | Braucht die Anwendung einen Footer? | Nein – das Fiori Launchpad hat keinen. Der „Built with …“-Hinweis wandert ins About im Avatar-Menü. |
 | D-7 | Tiles oder Cards? | Cards wie auf einer Fiori **Overview Page**, angeordnet als **Bento-Grid** mit unterschiedlichen Größen. Cards lassen sich inhaltlich besser gestalten als Tiles. (CR-1) |
 | D-8 | Öffnen Cards eigene Seiten? | Nein – alle Inhalte stehen vollständig in den Cards. Keine Detail-Apps, keine App-Routen, kein Zurück-Button. (CR-1) |
+| D-9 | Hero-Bereich oder nur Cards? | Nur Cards, möglichst nah an der Fiori-Overview-Page (Abstände laut Guideline). Name und Positionierung wandern in eine eigene Profil-Card „About me“; der GitHub-CTA ist durch GitHub-Card und Avatar-Menü abgedeckt. (CR-2) |
 
 ## 6. Offene Fragen
 _Keine._
@@ -108,3 +111,4 @@ _Keine._
 | ID | Datum | Änderung | Betroffen |
 |---|---|---|---|
 | CR-1 | 2026-10-30 | Overview Page mit Cards im Bento-Grid statt Launchpad mit Tiles; keine Detail-Apps mehr. | REQ-01, REQ-02–05 (Darstellung), REQ-06, REQ-07, AC-08.1, D-2, D-5, D-7, D-8 |
+| CR-2 | 2026-10-30 | Hero-Bereich entfernt, Inhalte nur in Cards, neue Profil-Card „About me“, Abstände nach Fiori Design Guidelines. | AC-01.1, AC-01.3, AC-01.6, AC-01.7, AC-01.8, AC-01.9, D-9 |

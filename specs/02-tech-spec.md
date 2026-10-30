@@ -28,8 +28,8 @@ App
 └─ ThemeModeProvider
    └─ AppShell                       ← Header (ShellBar) + Avatar-Menü, immer sichtbar
       └─ OverviewPage
-         ├─ Hero
          └─ BentoGrid
+            ├─ ProfileCard    (breit)
             ├─ ProjectsCard   (groß)
             ├─ CareerCard     (hoch)
             ├─ ContactCard    (klein)
@@ -54,11 +54,11 @@ src/
 │  ├─ ThemeModeProvider.tsx
 │  └─ useThemeMode.ts       # System-Theme + manueller Umschalter
 ├─ overview/
-│  ├─ OverviewPage.tsx      # Hero + BentoGrid
-│  ├─ Hero.tsx
+│  ├─ OverviewPage.tsx      # BentoGrid mit allen Cards
 │  ├─ BentoGrid.tsx         # CSS-Grid mit Card-Größen
 │  ├─ AnimatedCard.tsx      # UI5 Card + Motion (Einblenden, Hover/Fokus)
 │  └─ cards/
+│     ├─ ProfileCard.tsx
 │     ├─ ProjectsCard.tsx
 │     ├─ SkillsCard.tsx
 │     ├─ CareerCard.tsx
@@ -102,7 +102,8 @@ interface CardDef { id: string; title: string; subtitle?: string; icon: string; 
 | Benutzermenü | `UserMenu` (fiori) mit Eintrag „About“ und Theme-Umschalter | AC-06.9, AC-09.1 |
 | About | `Dialog` | AC-07.4 |
 | Card (alle) | UI5 `Card` + `CardHeader` (`titleText`, `subtitleText`, Icon im `avatar`-Slot, KPI als `additionalText`) – umhüllt von Motion (TD-10) | AC-01.2, AC-01.3, AC-07.3 |
-| Bento-Grid | CSS Grid mit `grid-template-areas`, siehe §6 | AC-01.6, AC-08.1 |
+| Bento-Grid | CSS Grid mit `grid-template-areas`, siehe §6 | AC-01.6, AC-01.9, AC-08.1 |
+| Profil-Card | `Avatar` (Initialen bzw. Bild, Farbe Accent1) + Name + Positionierung | AC-01.8 |
 | Projects-Card | `List` mit je einem Eintrag pro Projekt: `Link` (target `_blank`), Beschreibung, `Tag`s für Technologien | REQ-02 |
 | Skills-Card | je Gruppe ein `Label` + `Tag`s | REQ-03 |
 | Career-Card | `Timeline` + `TimelineItem` (fiori) | REQ-04 |
@@ -114,9 +115,20 @@ interface CardDef { id: string; title: string; subtitle?: string; icon: string; 
 
 | Breite | Spalten | `grid-template-areas` |
 |---|---|---|
-| ≥ 1024 px | 4 | `"projects projects career contact"` `"projects projects career github"` `"skills skills skills skills"` |
-| 600–1023 px | 2 | `"projects projects"` `"career contact"` `"career github"` `"skills skills"` |
-| < 600 px | 1 | alle Cards untereinander |
+| ≥ 1024 px | 4 | `"about about career contact"` `"projects projects career github"` `"projects projects skills skills"` |
+| 600–1023 px | 2 | `"about about"` `"projects projects"` `"career contact"` `"career github"` `"skills skills"` |
+| < 600 px | 1 | alle Cards untereinander in der Reihenfolge About, Projects, Career, Contact, GitHub, Skills |
+
+- **Abstände nach Fiori (AC-01.9, D-9):** Breakpoints und Werte folgen dem SAPUI5 Responsive Padding:
+
+| Größe | Breite | Seitenrand links/rechts | Abstand zwischen Cards | Abstand oben |
+|---|---|---|---|---|
+| S | < 600 px | 1rem | 1rem | 1rem |
+| M | 600–1023 px | 2rem | 1rem | 1rem |
+| L | 1024–1439 px | 2rem | 1rem | 1rem |
+| XL | ≥ 1440 px | 3rem | 1rem | 1rem |
+
+  Keine maximale Seitenbreite – die Overview Page nutzt die volle Fensterbreite. Werte als CSS-Variablen (`--page-padding-inline`, `--card-gap`) in `theme.css`.
 
 - **Kein Routing (TD-11):** Ein Klick auf Logo/Name scrollt per `window.scrollTo({ top: 0 })` nach oben (AC-06.11).
 - **Gestaffeltes Einblenden (AC-01.4):** Motion-Variants mit `staggerChildren` auf dem BentoGrid.

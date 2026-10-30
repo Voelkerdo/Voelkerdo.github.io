@@ -25,6 +25,7 @@
 | ~~T-12~~ | ~~Contact-App~~ | ersetzt durch T-20 (CR-1) | – |
 | T-15 | CR-1: Shell & Daten umbauen | AC-01.3, AC-01.6, AC-06.2, AC-06.11, TD-10, TD-11 | [x] |
 | T-16 | Overview Page mit Bento-Grid | AC-01.1, AC-01.4, AC-06.5, AC-07.2, AC-07.3, AC-08.3 | [x] |
+| T-21 | CR-2: Hero entfernen, Profil-Card, Fiori-Abstände | AC-01.3, AC-01.6, AC-01.7, AC-01.8, AC-01.9 | [ ] |
 | T-17 | Projects-Card | AC-02.1, AC-02.2 | [ ] |
 | T-18 | Skills-Card | AC-03.1, AC-03.2 | [ ] |
 | T-19 | Career-Card | AC-04.1 | [ ] |
@@ -84,6 +85,13 @@ Tile-Komponente, Launchpad-Startseite, App-Rahmen mit Tile-to-App-Transition und
 - `AnimatedCard`: UI5 `Card` + `CardHeader` (Titel, Untertitel, Icon, KPI), umhüllt von Motion: gestaffeltes Einblenden (AC-01.4), Hover/Fokus mit Anheben, Tilt, Koralle-Glow (AC-07.3), Reduced Motion nur Überblenden (AC-08.3).
 - Cards zunächst mit Header und leerem Inhalt; Inhalte folgen in T-17 bis T-20.
 - **Tests:** Hero-Inhalte und CTA; fünf Cards mit Titel und KPI; Card-Größen im Desktop-Layout (Projects breiter als Career usw.); Hover/Fokus-Klasse bzw. Transform; mit `reduced-motion` keine Bewegung.
+
+### T-21 CR-2: Hero entfernen, Profil-Card, Fiori-Abstände
+- `Hero.tsx` löschen; `OverviewPage` rendert nur noch das BentoGrid (AC-01.7).
+- `cards.ts`: Profil-Card `about` („About me“, Größe `wide`, ohne KPI) als erste Card; GitHub-Card ohne KPI (AC-01.3, AC-01.6).
+- `ProfileCard`: `Avatar` mit Initialen, Name, Positionierung (AC-01.8).
+- Bento-Areas und Abstände laut Tech Spec §6: CSS-Variablen für Seitenrand und Card-Abstand, keine Max-Breite (AC-01.9).
+- **Tests:** Hero-Test entfernen; kein `<h1>`/Inhalt außerhalb von Cards; Profil-Card zeigt Avatar, Name, Positionierung; Layout-Test auf 6 Cards und neues Raster; Abstände bei 375 px, 800 px, 1280 px und 1600 px (Seitenrand 16/32/32/48 px, Card-Abstand 16 px).
 
 ### T-17 Projects-Card
 - Liste der Projekte: Name als Link (neuer Tab), Beschreibung, Technologie-Tags.
