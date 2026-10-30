@@ -25,6 +25,20 @@ if (typeof window.ResizeObserver === 'undefined') {
   }
 }
 
+if (typeof window.IntersectionObserver === 'undefined') {
+  window.IntersectionObserver = class {
+    readonly root = null
+    readonly rootMargin = ''
+    readonly thresholds = []
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+    takeRecords() {
+      return []
+    }
+  } as unknown as typeof IntersectionObserver
+}
+
 afterEach(() => {
   cleanup()
 })

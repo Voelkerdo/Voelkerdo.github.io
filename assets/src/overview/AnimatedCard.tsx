@@ -2,6 +2,7 @@ import { Card, CardHeader, Icon } from '@ui5/webcomponents-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { useState, type ReactNode } from 'react'
 import type { CardDef } from '../data/types.ts'
+import { CardEntryContext } from '../motion/cardEntry.ts'
 import {
   entryVariants,
   LIFT,
@@ -14,6 +15,7 @@ export function AnimatedCard({ def, children }: { def: CardDef; children?: React
   const reduceMotion = useReducedMotion()
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
+  const [entered, setEntered] = useState(false)
   const active = hovered || focused
 
   return (
@@ -21,6 +23,9 @@ export function AnimatedCard({ def, children }: { def: CardDef; children?: React
       className={`bento-cell bento-${def.id}`}
       data-card-id={def.id}
       variants={reduceMotion ? reducedEntryVariants : entryVariants}
+      onAnimationComplete={(definition) => {
+        if (definition === 'visible') setEntered(true)
+      }}
     >
       {/* Separate element for hover/focus so its own animate prop does not break the parent stagger */}
       <motion.div
@@ -47,7 +52,7 @@ export function AnimatedCard({ def, children }: { def: CardDef; children?: React
             />
           }
         >
-          {children}
+          <CardEntryContext.Provider value={entered}>{children}</CardEntryContext.Provider>
         </Card>
       </motion.div>
     </motion.div>

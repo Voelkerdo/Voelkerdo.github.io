@@ -75,6 +75,48 @@ test.describe('skills card', () => {
     await expect.poll(() => fillPercent(page), { timeout: 5000 }).toEqual(expectedPercents)
   })
 
+  test('AC-03.6 the fill animation runs while the card is visible', async ({ page }) => {
+    // Record, frame by frame, the first bar's fill and the card's opacity from the very start
+    await page.addInitScript(() => {
+      const samples: [number, number][] = []
+      ;(window as unknown as { __samples: typeof samples }).__samples = samples
+      const tick = () => {
+        const cell = document.querySelector('[data-card-id="skills"]')
+        const bar = cell?.querySelector('.skill-bar')?.shadowRoot?.querySelector('[part="bar"]')
+        if (cell && bar) {
+          const fill =
+            bar.getBoundingClientRect().width / bar.parentElement!.getBoundingClientRect().width
+          samples.push([Number(getComputedStyle(cell).opacity), fill])
+        }
+        if (samples.length < 600) requestAnimationFrame(tick)
+      }
+      requestAnimationFrame(tick)
+    })
+    await page.setViewportSize({ width: 1280, height: 1000 })
+    await page.goto('/')
+    await expect.poll(() => fillPercent(page).then((p) => p[0]), { timeout: 5000 }).toBe(100)
+    const samples = await page.evaluate(
+      () => (window as unknown as { __samples: [number, number][] }).__samples,
+    )
+    const firstFullyVisible = samples.find(([opacity]) => opacity === 1)!
+    // When the card is fully visible the bar has barely started …
+    expect(firstFullyVisible[1]).toBeLessThan(0.1)
+    // … and it then visibly grows in several steps
+    const visibleSteps = new Set(
+      samples.filter(([opacity]) => opacity === 1).map(([, fill]) => Math.round(fill * 10)),
+    )
+    expect(visibleSteps.size).toBeGreaterThan(5)
+  })
+
+  test('AC-03.6 bars below the fold wait until they are scrolled into view', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 700 })
+    await page.goto('/')
+    await page.waitForTimeout(2000)
+    expect(new Set(await fillPercent(page))).toEqual(new Set([0]))
+    await skillsCard(page).scrollIntoViewIfNeeded()
+    await expect.poll(() => fillPercent(page), { timeout: 5000 }).toEqual(expectedPercents)
+  })
+
   test('AC-03.6 bars animate with a staggered transition', async ({ page }) => {
     await page.goto('/')
     const timings = await bars(page).evaluateAll((els) =>

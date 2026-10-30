@@ -43,7 +43,7 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-03.3 Skills liegen als Daten vor, nicht hartcodiert im Markup.
 - AC-03.4 Jeder Skill hat eine Stufe: **Expert**, **Advanced**, **Intermediate** oder **Familiar** (D-10).
 - AC-03.5 Jeder Skill wird als Fortschrittsbalken dargestellt. Die Länge ergibt sich aus der Stufe (Expert 100 %, Advanced 75 %, Intermediate 50 %, Familiar 25 %); am Balken steht der Stufenname statt einer Prozentzahl (Fiori-Standarddarstellung: Text über dem Balken). _(präzisiert in T-22)_
-- AC-03.6 Beim Laden der Seite füllen sich die Balken gestaffelt von leer auf ihren Wert. Bei `prefers-reduced-motion` stehen sie sofort auf ihrem Wert (AC-08.3).
+- AC-03.6 Die Balken füllen sich gestaffelt von leer auf ihren Wert, und zwar erst, wenn die Skills-Card fertig eingeblendet ist und im sichtbaren Bereich liegt – die Animation muss für Besucher sichtbar sein. Bei `prefers-reduced-motion` stehen sie sofort auf ihrem Wert (AC-08.3). _(präzisiert nach T-23: vorher lief die Animation unsichtbar während des Einblendens ab)_
 - AC-03.7 Initiale Stufen (Vorgabe Dominik): ABAP Advanced · Node.js Intermediate · SAP UI5 Familiar · JavaScript Familiar · HTML5 Advanced · ABAP RAP Intermediate · ABAP Programming Model for Fiori Advanced · SAP OData (SEGW) Expert · SAP Adobe Forms Expert · User- & Berechtigungsmanagement Advanced.
 - AC-03.8 Die Skills stehen als **eine Liste** untereinander – Name links, Fortschrittsbalken daneben, ohne Kategorien. Sortiert absteigend nach Stufe; bei gleicher Stufe in der Reihenfolge der Datendatei (D-11).
 
