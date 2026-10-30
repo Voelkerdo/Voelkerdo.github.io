@@ -7,7 +7,7 @@ import type { CardDef, CareerStation, SkillGroup } from './types.ts'
 
 /** Number of distinct skills across all groups (a skill may appear in several groups). */
 export function countSkills(groups: SkillGroup[]): number {
-  return new Set(groups.flatMap((g) => g.skills)).size
+  return new Set(groups.flatMap((g) => g.skills.map((s) => s.name))).size
 }
 
 /** Full years since the earliest career station started. */

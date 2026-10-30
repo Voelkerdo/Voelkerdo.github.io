@@ -3,7 +3,7 @@ import { career } from '../../src/data/career.ts'
 import { contactChannels } from '../../src/data/contact.ts'
 import { profile } from '../../src/data/profile.ts'
 import { projects } from '../../src/data/projects.ts'
-import { skillGroups } from '../../src/data/skills.ts'
+import { LEVEL_PERCENT, skillGroups } from '../../src/data/skills.ts'
 import { buildCards, countSkills, yearsOfExperience } from '../../src/data/cards.ts'
 
 const ids = (items: { id: string }[]) => items.map((i) => i.id)
@@ -31,8 +31,15 @@ describe('data', () => {
   it('AC-01.3 counts distinct skills and full years of experience', () => {
     expect(
       countSkills([
-        { id: 'backend', title: 'A', skills: ['X', 'Y'] },
-        { id: 'sap', title: 'B', skills: ['Y'] },
+        {
+          id: 'backend',
+          title: 'A',
+          skills: [
+            { name: 'X', level: 'Expert' },
+            { name: 'Y', level: 'Familiar' },
+          ],
+        },
+        { id: 'sap', title: 'B', skills: [{ name: 'Y', level: 'Familiar' }] },
       ]),
     ).toBe(2)
     const stations = [{ id: 'a', from: '2020-11', role: 'r', company: 'c', highlights: [] }]
@@ -56,7 +63,7 @@ describe('data', () => {
   })
 
   it('AC-03.2 skills contain the initial content from the intent', () => {
-    const byId = Object.fromEntries(skillGroups.map((g) => [g.id, g.skills]))
+    const byId = Object.fromEntries(skillGroups.map((g) => [g.id, g.skills.map((s) => s.name)]))
     expect(byId.backend).toEqual(['ABAP', 'Node.js'])
     expect(byId.frontend).toEqual(['SAP UI5', 'JavaScript', 'HTML5'])
     expect(byId.frameworks).toEqual([
@@ -67,6 +74,33 @@ describe('data', () => {
       'SAP Adobe Forms',
     ])
     expect(byId.sap).toEqual(['User & Authorization Management'])
+  })
+
+  it('AC-03.5 levels map to bar lengths', () => {
+    expect(LEVEL_PERCENT).toEqual({ Expert: 100, Advanced: 75, Intermediate: 50, Familiar: 25 })
+  })
+
+  it('AC-03.4 / AC-03.7 every skill has the level provided by Dominik', () => {
+    const levels = Object.fromEntries(
+      skillGroups.flatMap((g) => g.skills.map((s) => [`${g.id}/${s.name}`, s.level])),
+    )
+    expect(levels).toEqual({
+      'backend/ABAP': 'Advanced',
+      'backend/Node.js': 'Intermediate',
+      'frontend/SAP UI5': 'Familiar',
+      'frontend/JavaScript': 'Familiar',
+      'frontend/HTML5': 'Advanced',
+      'frameworks/SAP UI5': 'Familiar',
+      'frameworks/ABAP RAP': 'Intermediate',
+      'frameworks/ABAP Programming Model for Fiori': 'Advanced',
+      'frameworks/SAP OData (SEGW)': 'Expert',
+      'frameworks/SAP Adobe Forms': 'Expert',
+      'sap/User & Authorization Management': 'Advanced',
+    })
+  })
+
+  it('AC-01.3 the skills KPI still counts 10 distinct skills', () => {
+    expect(countSkills(skillGroups)).toBe(10)
   })
 
   it('AC-04.2 career stations use YYYY-MM dates', () => {

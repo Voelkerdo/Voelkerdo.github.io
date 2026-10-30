@@ -28,7 +28,7 @@
 | T-21 | CR-2: Hero entfernen, Profil-Card, Fiori-Abstände | AC-01.3, AC-01.6, AC-01.7, AC-01.8, AC-01.9 | [x] |
 | T-17 | Projects-Card | AC-02.1, AC-02.2 | [x] |
 | T-18 | Skills-Card | AC-03.1, AC-03.2 | [x] |
-| T-22 | CR-3: Skills als animierte Fortschrittsbalken | AC-03.4, AC-03.5, AC-03.6, AC-03.7, AC-08.3 | [ ] |
+| T-22 | CR-3: Skills als animierte Fortschrittsbalken | AC-03.4, AC-03.5, AC-03.6, AC-03.7, AC-08.3 | [x] |
 | T-19 | Career-Card | AC-04.1 | [ ] |
 | T-20 | Contact- & GitHub-Card | AC-01.2, AC-05.1, AC-05.2 | [ ] |
 | T-13 | Responsive-Feinschliff | AC-01.6, AC-08.1 | [ ] |

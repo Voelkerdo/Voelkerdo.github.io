@@ -17,10 +17,17 @@ export interface Project {
 
 export type SkillGroupId = 'backend' | 'frontend' | 'frameworks' | 'sap'
 
+export type SkillLevel = 'Expert' | 'Advanced' | 'Intermediate' | 'Familiar'
+
+export interface Skill {
+  name: string
+  level: SkillLevel
+}
+
 export interface SkillGroup {
   id: SkillGroupId
   title: string
-  skills: string[]
+  skills: Skill[]
 }
 
 export interface CareerStation {
