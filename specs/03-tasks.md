@@ -35,7 +35,7 @@
 | T-24 | CR-5: Nur SAP-Skills, Top 5 mit „Show all“ | AC-03.2, AC-03.7, AC-03.9 | [x] |
 | T-25 | CR-6: GitHub-Card entfernen, Contact hoch | AC-01.2, AC-01.3, AC-01.6 | [x] |
 | T-13 | Responsive-Feinschliff | AC-01.6, AC-08.1 | [x] |
-| T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [ ] |
+| T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
 
@@ -146,3 +146,21 @@ Tile-Komponente, Launchpad-Startseite, App-Rahmen mit Tile-to-App-Transition und
 - Lighthouse: Performance ≥ 90, Accessibility ≥ 90 (AC-08.2); Startseite < 2 s (AC-01.5).
 - „Wow-Test“: Seite Kollegen/Freunden/Familie zeigen (Intent-Erfolgskriterium).
 - Ergebnisse werden hier dokumentiert.
+
+#### Ergebnisse (2026-10-30, Production-Build lokal per `vite preview`, Lighthouse 13.6, Chrome for Testing)
+| Prüfung | Ziel | Mobile | Desktop | Ergebnis |
+|---|---|---|---|---|
+| Performance (AC-08.2) | ≥ 90 | 99 | 99 | ✅ |
+| Accessibility (AC-08.2) | ≥ 90 | 95 | 95 | ✅ |
+| Best Practices | – | 100 | 100 | (informativ) |
+| SEO | – | 91 | 91 | (informativ) |
+| Vollständig dargestellt (AC-01.5): alle Cards eingeblendet | < 2 s | – | 0,97–1,02 s (5 Läufe) | ✅ |
+
+Kennzahlen Desktop: FCP 0,2 s · LCP 0,9 s · TBT 0 ms · CLS 0,039. Mobile (gedrosselt): FCP 0,8 s · LCP 0,8 s · TBT 120 ms · CLS 0.
+
+Offene Hinweise aus Lighthouse (kein AC verletzt):
+- `aria-prohibited-attr`: UI5 `CardHeader` rendert im Icon-Bereich ein `aria-label` ohne Rolle – UI5-intern, nicht in unserem Code.
+- `heading-order`: Die Card-Titel (UI5, `aria-level` 3) stehen vor der `<h1>` in der Profil-Card.
+- `robots-txt`: Es gibt keine `robots.txt`; der Preview-Server liefert stattdessen die Startseite aus.
+
+- **Wow-Test (Intent-Erfolgskriterium):** offen – Dominik zeigt die Seite Kollegen, Freunden und Familie.
