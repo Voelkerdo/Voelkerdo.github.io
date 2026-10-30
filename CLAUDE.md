@@ -16,6 +16,7 @@ Dieses Projekt wird spec-driven entwickelt. Die Specs in `specs/` sind die Quell
 - Commit-Messages referenzieren Requirement-/Task-IDs (z. B. `feat(T-04): ... [REQ-02]`).
 - Nichts Ausführbares in `specs/` oder im Repo-Root ablegen – alles gehört nach `assets/`.
 - Nach jeder Quellcode-Änderung `npm run verify` (in `assets/`) ausführen (typecheck, lint, Vitest, Playwright). Erst wenn alles grün ist, gilt die Änderung als fertig.
+- Eigene Hilfs-Server (Screenshots, Diagnose) nur mit eigenem Cache starten: `VITE_CACHE_DIR=node_modules/.vite-tmp npx vite --port 5175`. Den Dev-Server des Users (Port 5173) nie stoppen oder dessen Cache (`node_modules/.vite`) verändern.
 - Testnamen beginnen mit der AC-ID (z. B. `AC-02.2 …`).
 - Platzhalter-Inhalte mit `// TODO(content): …` markieren.
 - Specs auf Deutsch, Website-Inhalte auf Englisch.

@@ -151,6 +151,8 @@ Nach **jeder** Quellcode-Änderung wird in `assets/` ausgeführt:
 
 Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 
+**Isolierter Vite-Cache:** Der E2E-Server von Playwright nutzt einen eigenen Dependency-Cache (`node_modules/.vite-e2e`, über `VITE_CACHE_DIR`). So überschreibt ein Testlauf nie den Cache eines parallel laufenden `npm run dev` (sonst Fehler „504 Outdated Optimize Dep“ und weiße Seite). Erkannt nach T-16.
+
 ## 10. Nachvollziehbarkeit (Traceability)
 | Anforderung | Umsetzung (Abschnitt) | Testart |
 |---|---|---|
