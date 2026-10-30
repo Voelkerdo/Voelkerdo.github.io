@@ -26,7 +26,7 @@
 | T-15 | CR-1: Shell & Daten umbauen | AC-01.3, AC-01.6, AC-06.2, AC-06.11, TD-10, TD-11 | [x] |
 | T-16 | Overview Page mit Bento-Grid | AC-01.1, AC-01.4, AC-06.5, AC-07.2, AC-07.3, AC-08.3 | [x] |
 | T-21 | CR-2: Hero entfernen, Profil-Card, Fiori-Abstände | AC-01.3, AC-01.6, AC-01.7, AC-01.8, AC-01.9 | [x] |
-| T-17 | Projects-Card | AC-02.1, AC-02.2 | [ ] |
+| T-17 | Projects-Card | AC-02.1, AC-02.2 | [x] |
 | T-18 | Skills-Card | AC-03.1, AC-03.2 | [ ] |
 | T-19 | Career-Card | AC-04.1 | [ ] |
 | T-20 | Contact- & GitHub-Card | AC-01.2, AC-05.1, AC-05.2 | [ ] |
