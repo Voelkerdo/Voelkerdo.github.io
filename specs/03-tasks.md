@@ -28,6 +28,7 @@
 | T-21 | CR-2: Hero entfernen, Profil-Card, Fiori-Abstände | AC-01.3, AC-01.6, AC-01.7, AC-01.8, AC-01.9 | [x] |
 | T-17 | Projects-Card | AC-02.1, AC-02.2 | [x] |
 | T-18 | Skills-Card | AC-03.1, AC-03.2 | [x] |
+| T-22 | CR-3: Skills als animierte Fortschrittsbalken | AC-03.4, AC-03.5, AC-03.6, AC-03.7, AC-08.3 | [ ] |
 | T-19 | Career-Card | AC-04.1 | [ ] |
 | T-20 | Contact- & GitHub-Card | AC-01.2, AC-05.1, AC-05.2 | [ ] |
 | T-13 | Responsive-Feinschliff | AC-01.6, AC-08.1 | [ ] |
@@ -100,6 +101,12 @@ Tile-Komponente, Launchpad-Startseite, App-Rahmen mit Tile-to-App-Transition und
 ### T-18 Skills-Card
 - Je Gruppe ein Label + Tags.
 - **Tests:** Vier Gruppen in der richtigen Reihenfolge; alle Skills aus dem Intent sichtbar.
+
+### T-22 CR-3: Skills als animierte Fortschrittsbalken
+- Datenmodell: `Skill { name, level }`, `SkillLevel`, `LEVEL_PERCENT` (Tech Spec §4); `skills.ts` mit den Stufen aus AC-03.7.
+- `countSkills` zählt weiterhin eindeutige Skill-Namen (AC-01.3).
+- `SkillsCard`: je Skill Name + `ProgressIndicator` mit Stufenname; Balkenfarbe Akzent; gestaffeltes Füllen beim Laden, Reduced Motion ohne Animation (Tech Spec §6).
+- **Tests:** Unit – Stufen laut AC-03.7, SAP UI5 in beiden Gruppen gleich, `LEVEL_PERCENT`-Mapping, KPI unverändert 10. E2E – Balken zeigen Stufennamen und Endwert; Balken starten leer und füllen sich; mit `reduced-motion` sofort am Endwert; AC-03.1/03.2 bleiben grün.
 
 ### T-19 Career-Card
 - `Timeline` mit Stationen, neueste zuerst.

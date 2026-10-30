@@ -86,13 +86,16 @@ tests/
 ```ts
 interface Profile  { name: string; tagline: string; githubUsername: string; githubUrl: string; avatarUrl?: string; siteRepoUrl: string }
 interface Project  { id: string; name: string; description: string; technologies: string[]; repoUrl: string }
-interface SkillGroup { id: 'backend' | 'frontend' | 'frameworks' | 'sap'; title: string; skills: string[] }
+type SkillLevel = 'Expert' | 'Advanced' | 'Intermediate' | 'Familiar'
+interface Skill { name: string; level: SkillLevel }
+interface SkillGroup { id: 'backend' | 'frontend' | 'frameworks' | 'sap'; title: string; skills: Skill[] }
 interface CareerStation { id: string; from: string; to?: string; role: string; company: string; highlights: string[] }
 interface ContactChannel { id: string; label: string; url: string; icon: string; primary?: boolean }
 type CardSize = 'large' | 'wide' | 'tall' | 'small'
 interface CardDef { id: string; title: string; subtitle?: string; icon: string; kpi?: string; size: CardSize; href?: string }
 ```
 - Platzhalter-Inhalte (REQ-02/04/05) sind mit `// TODO(content): …` markiert, damit sie per Suche auffindbar sind.
+- Die Balkenlänge je Stufe (AC-03.5) ist eine Konstante `LEVEL_PERCENT` in `data/skills.ts` (Expert 100, Advanced 75, Intermediate 50, Familiar 25).
 - Die KPIs der Cards (AC-01.3) werden aus den Daten berechnet (z. B. `projects.length`), nicht doppelt gepflegt.
 
 ## 5. Komponenten-Mapping
@@ -105,7 +108,7 @@ interface CardDef { id: string; title: string; subtitle?: string; icon: string; 
 | Bento-Grid | CSS Grid mit `grid-template-areas`, siehe §6 | AC-01.6, AC-01.9, AC-08.1 |
 | Profil-Card | `Avatar` (Initialen bzw. Bild, Farbe Accent1) + Name + Positionierung | AC-01.8 |
 | Projects-Card | `List` mit je einem Eintrag pro Projekt: `Link` (target `_blank`), Beschreibung, `Tag`s für Technologien | REQ-02 |
-| Skills-Card | je Gruppe ein `Label` + `Tag`s | REQ-03 |
+| Skills-Card | je Gruppe ein `Label`; je Skill Name + `ProgressIndicator` (`value` aus `LEVEL_PERCENT`, `displayValue` = Stufe), Balkenfarbe = Akzent (TD-12) | REQ-03 |
 | Career-Card | `Timeline` + `TimelineItem` (fiori) | REQ-04 |
 | Contact-Card | `List` / `ListItemStandard` mit Icons, GitHub hervorgehoben | REQ-05 |
 | GitHub-Card | `CardHeader` mit `interactive` – öffnet das Profil in neuem Tab | AC-01.2 |
@@ -132,6 +135,7 @@ interface CardDef { id: string; title: string; subtitle?: string; icon: string; 
 
 - **Kein Routing (TD-11):** Ein Klick auf Logo/Name scrollt per `window.scrollTo({ top: 0 })` nach oben (AC-06.11).
 - **Gestaffeltes Einblenden (AC-01.4):** Motion-Variants mit `staggerChildren` auf dem BentoGrid.
+- **Skill-Balken (AC-03.6):** Die Balken starten mit `value=0` und springen nach dem ersten Rendern auf ihren Zielwert; die eingebaute Breiten-Transition des `ProgressIndicator` (`::part(bar)`) übernimmt die Animation, Dauer ca. 0,8 s, gestaffelt per `transition-delay`. Bei Reduced Motion wird direkt der Zielwert gerendert und die Transition per CSS abgeschaltet.
 - **Hover/Fokus (AC-07.3):** Anheben + leichter Tilt + Akzent-Glow über `whileHover` / `whileFocus`.
 - **Reduced Motion (AC-08.3):** `useReducedMotion()`; wenn aktiv, nur Opacity-Übergänge ohne Bewegung.
 - **Tastatur (AC-06.5):** Alle Links und die interaktive GitHub-Card sind per Tab erreichbar und haben einen sichtbaren Fokus-Ring; die Hover-Animation greift auch bei Fokus innerhalb der Card (`:focus-within`).
@@ -192,6 +196,7 @@ Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 | TD-9 | Akzentfarben | Palette „Sunset Coral“ (Koralle → Amber) | Wahl Dominik aus drei Vorschlägen in T-04; auffälligster Kontrast zum Fiori-Standard |
 | TD-10 | Cards | UI5 `Card` + `CardHeader`, umhüllt von Motion | UI5 bringt die Card fertig mit – mehr echtes UI5, weniger Eigenbau (CR-1) |
 | TD-11 | Routing | Kein Router; React Router wird entfernt | Nur noch eine Seite (D-8); weniger Abhängigkeiten (CR-1) |
+| TD-12 | Skill-Balken | UI5 `ProgressIndicator` statt eigener Balken oder Chart-Bibliothek | Fiori-Standardkomponente mit eingebauter Breiten-Animation und `displayValue` für den Stufennamen; keine neue Abhängigkeit (CR-3) |
 
 ## 12. Offene Fragen
 _Keine._

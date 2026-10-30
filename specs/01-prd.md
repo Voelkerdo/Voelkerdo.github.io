@@ -41,6 +41,10 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-03.1 Die Skills-Card zeigt die Skills gruppiert in: Backend, Frontend, Frameworks, weitere SAP-Erfahrung.
 - AC-03.2 Initialer Inhalt laut Intent: ABAP, Node.js · SAP UI5, JavaScript, HTML5 · SAP UI5, ABAP RAP, ABAP Programming Model for Fiori, SAP OData (SEGW), SAP Adobe Forms · User- & Berechtigungsmanagement.
 - AC-03.3 Skills liegen als Daten vor, nicht hartcodiert im Markup.
+- AC-03.4 Jeder Skill hat eine Stufe: **Expert**, **Advanced**, **Intermediate** oder **Familiar** (D-10).
+- AC-03.5 Jeder Skill wird als Fortschrittsbalken dargestellt. Die Länge ergibt sich aus der Stufe (Expert 100 %, Advanced 75 %, Intermediate 50 %, Familiar 25 %); im Balken steht der Stufenname statt einer Prozentzahl.
+- AC-03.6 Beim Laden der Seite füllen sich die Balken gestaffelt von leer auf ihren Wert. Bei `prefers-reduced-motion` stehen sie sofort auf ihrem Wert (AC-08.3).
+- AC-03.7 Initiale Stufen (Vorgabe Dominik): ABAP Advanced · Node.js Intermediate · SAP UI5 Familiar · JavaScript Familiar · HTML5 Advanced · ABAP RAP Intermediate · ABAP Programming Model for Fiori Advanced · SAP OData (SEGW) Expert · SAP Adobe Forms Expert · User- & Berechtigungsmanagement Advanced. SAP UI5 hat in beiden Gruppen dieselbe Stufe.
 
 ### REQ-04 Werdegang (Career)
 **Story:** Als Besucher will ich Dominiks beruflichen Weg nachvollziehen.
@@ -103,6 +107,7 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 | D-7 | Tiles oder Cards? | Cards wie auf einer Fiori **Overview Page**, angeordnet als **Bento-Grid** mit unterschiedlichen Größen. Cards lassen sich inhaltlich besser gestalten als Tiles. (CR-1) |
 | D-8 | Öffnen Cards eigene Seiten? | Nein – alle Inhalte stehen vollständig in den Cards. Keine Detail-Apps, keine App-Routen, kein Zurück-Button. (CR-1) |
 | D-9 | Hero-Bereich oder nur Cards? | Nur Cards, möglichst nah an der Fiori-Overview-Page (Abstände laut Guideline). Name und Positionierung wandern in eine eigene Profil-Card „About me“; der GitHub-CTA ist durch GitHub-Card und Avatar-Menü abgedeckt. (CR-2) |
+| D-10 | Wie werden Skills dargestellt? | Als animierte Fortschrittsbalken mit benannten Stufen statt Prozentwerten – visuell stark, aber ohne Schein-Präzision. (CR-3) |
 
 ## 6. Offene Fragen
 _Keine._
@@ -112,3 +117,4 @@ _Keine._
 |---|---|---|---|
 | CR-1 | 2026-10-30 | Overview Page mit Cards im Bento-Grid statt Launchpad mit Tiles; keine Detail-Apps mehr. | REQ-01, REQ-02–05 (Darstellung), REQ-06, REQ-07, AC-08.1, D-2, D-5, D-7, D-8 |
 | CR-2 | 2026-10-30 | Hero-Bereich entfernt, Inhalte nur in Cards, neue Profil-Card „About me“, Abstände nach Fiori Design Guidelines. | AC-01.1, AC-01.3, AC-01.6, AC-01.7, AC-01.8, AC-01.9, D-9 |
+| CR-3 | 2026-10-30 | Skills als animierte Fortschrittsbalken mit Stufen statt als Tags. | AC-03.4, AC-03.5, AC-03.6, AC-03.7, D-10 |
