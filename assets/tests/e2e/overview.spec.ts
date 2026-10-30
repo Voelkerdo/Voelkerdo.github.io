@@ -165,4 +165,20 @@ test.describe('overview page', () => {
     const transform = await inner.evaluate((el) => getComputedStyle(el).transform)
     expect(['none', 'matrix(1, 0, 0, 1, 0, 0)']).toContain(transform)
   })
+
+  test.describe('on touch devices', () => {
+    test.use({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } })
+
+    test('AC-07.3 tapping inside a card does not lift it', async ({ page }) => {
+      await page.goto('/')
+      await waitForCards(page)
+      const toggle = page.getByTestId('skills-toggle')
+      await toggle.scrollIntoViewIfNeeded()
+      await toggle.tap()
+      const inner = card(page, 'skills').locator('.bento-card')
+      await page.waitForTimeout(400)
+      await expect(inner).toHaveAttribute('data-active', 'false')
+      expect(await inner.evaluate((el) => getComputedStyle(el).transform)).toBe('none')
+    })
+  })
 })

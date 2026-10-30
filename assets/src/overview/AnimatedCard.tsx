@@ -11,6 +11,20 @@ import {
   REST,
 } from '../motion/transitions.ts'
 
+/**
+ * True if the focus came from the keyboard. Follows the focus into shadow roots of UI5
+ * components, because the event target is only the host element (AC-07.3, AC-06.5).
+ */
+function isKeyboardFocus(target: EventTarget): boolean {
+  let el = target as Element
+  while (el.shadowRoot?.activeElement) el = el.shadowRoot.activeElement
+  try {
+    return el.matches(':focus-visible')
+  } catch {
+    return true
+  }
+}
+
 export function AnimatedCard({ def, children }: { def: CardDef; children?: ReactNode }) {
   const reduceMotion = useReducedMotion()
   const [hovered, setHovered] = useState(false)
@@ -35,7 +49,7 @@ export function AnimatedCard({ def, children }: { def: CardDef; children?: React
         transition={liftTransition}
         onHoverStart={() => setHovered(true)}
         onHoverEnd={() => setHovered(false)}
-        onFocusCapture={() => setFocused(true)}
+        onFocusCapture={(event) => setFocused(isKeyboardFocus(event.target))}
         onBlurCapture={() => setFocused(false)}
       >
         <Card

@@ -1,6 +1,6 @@
 import { Button, ProgressIndicator, Text } from '@ui5/webcomponents-react'
-import { AnimatePresence, motion, useInView, useReducedMotion } from 'motion/react'
-import { useRef, useState, type CSSProperties } from 'react'
+import { useInView, useReducedMotion } from 'motion/react'
+import { useRef, useState, type CSSProperties, type TransitionEvent } from 'react'
 import { LEVEL_PERCENT, sortedSkills, VISIBLE_SKILLS } from '../../data/skills.ts'
 import type { Skill } from '../../data/types.ts'
 import { useCardEntered } from '../../motion/cardEntry.ts'
@@ -10,7 +10,7 @@ const STAGGER_MS = 60
 const skillList = sortedSkills()
 const topSkills = skillList.slice(0, VISIBLE_SKILLS)
 const moreSkills = skillList.slice(VISIBLE_SKILLS)
-const LIST_ID = 'skill-list'
+const MORE_ID = 'skill-list-more'
 
 function SkillRow({
   skill,
@@ -26,37 +26,19 @@ function SkillRow({
   const delay = { '--bar-delay': `${delayIndex * STAGGER_MS}ms` } as CSSProperties
 
   return (
-    <>
+    <li className="skill" data-skill={skill.name}>
       <Text className="skill-name">{skill.name}</Text>
       <ProgressIndicator
         className="skill-bar"
         style={delay}
-        value={filled ? LEVEL_PERCENT[skill.level] : 0}
+        // Empty while not started, so the bar animates again on every expand (AC-03.9);
+        // with reduced motion always at its value (AC-08.3)
+        value={filled && (start || reduceMotion) ? LEVEL_PERCENT[skill.level] : 0}
         displayValue={skill.level}
         accessibleName={`${skill.name}: ${skill.level}`}
         data-level={skill.level}
       />
-    </>
-  )
-}
-
-/** Extra row that fills its bar once it has finished expanding (AC-03.9) */
-function ExpandingSkillRow({ skill, delayIndex }: { skill: Skill; delayIndex: number }) {
-  const reduceMotion = useReducedMotion() ?? false
-  const [expanded, setExpanded] = useState(false)
-
-  return (
-    <motion.li
-      className="skill"
-      data-skill={skill.name}
-      initial={reduceMotion ? false : { height: 0, opacity: 0 }}
-      animate={{ height: 'auto', opacity: 1 }}
-      exit={reduceMotion ? undefined : { height: 0, opacity: 0 }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
-      onAnimationComplete={() => setExpanded(true)}
-    >
-      <SkillRow skill={skill} delayIndex={delayIndex} start={expanded} />
-    </motion.li>
+    </li>
   )
 }
 
@@ -66,34 +48,57 @@ export function SkillsCard() {
   const entered = useCardEntered()
   const inView = useInView(listRef, { once: true, amount: 0.3 })
   const [showAll, setShowAll] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   // Start only when visitors can actually see the bars (AC-03.6)
   const start = entered && inView
 
+  const toggle = () => {
+    setShowAll((value) => !value)
+    setExpanded(false)
+  }
+
+  // The extra rows are always rendered; only their wrapper animates open (AC-03.9)
+  const onMoreTransitionEnd = (event: TransitionEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget && showAll) setExpanded(true)
+  }
+
   return (
     <div className={`skills${reduceMotion ? ' no-bar-animation' : ''}`}>
-      <ul ref={listRef} id={LIST_ID} className="skill-list" aria-label="Skills by level">
+      <ul ref={listRef} className="skill-list" aria-label="Top skills by level">
         {topSkills.map((skill, index) => (
-          <li key={skill.name} className="skill" data-skill={skill.name}>
-            <SkillRow skill={skill} delayIndex={index} start={start} />
-          </li>
+          <SkillRow key={skill.name} skill={skill} delayIndex={index} start={start} />
         ))}
-        <AnimatePresence initial={false}>
-          {showAll &&
-            moreSkills.map((skill, index) => (
-              <ExpandingSkillRow key={skill.name} skill={skill} delayIndex={index} />
-            ))}
-        </AnimatePresence>
       </ul>
       {moreSkills.length > 0 && (
-        <Button
-          design="Transparent"
-          className="skills-toggle"
-          data-testid="skills-toggle"
-          accessibilityAttributes={{ expanded: showAll, controls: LIST_ID }}
-          onClick={() => setShowAll((value) => !value)}
-        >
-          {showAll ? 'Show less' : `Show all (${skillList.length})`}
-        </Button>
+        <>
+          <div
+            id={MORE_ID}
+            className="skill-more"
+            data-open={showAll}
+            inert={!showAll}
+            onTransitionEnd={onMoreTransitionEnd}
+          >
+            <ul className="skill-list skill-more-list" aria-label="More skills">
+              {moreSkills.map((skill, index) => (
+                <SkillRow
+                  key={skill.name}
+                  skill={skill}
+                  delayIndex={index}
+                  start={showAll && (reduceMotion || expanded)}
+                />
+              ))}
+            </ul>
+          </div>
+          <Button
+            design="Transparent"
+            className="skills-toggle"
+            data-testid="skills-toggle"
+            accessibilityAttributes={{ expanded: showAll, controls: MORE_ID }}
+            onClick={toggle}
+          >
+            {showAll ? 'Show less' : `Show all (${skillList.length})`}
+          </Button>
+        </>
       )}
     </div>
   )

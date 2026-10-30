@@ -135,10 +135,10 @@ interface CardDef { id: string; title: string; subtitle?: string; icon: string; 
 - **Kein Routing (TD-11):** Ein Klick auf Logo/Name scrollt per `window.scrollTo({ top: 0 })` nach oben (AC-06.11).
 - **Gestaffeltes Einblenden (AC-01.4):** Motion-Variants mit `staggerChildren` auf dem BentoGrid.
 - **Skill-Balken (AC-03.6):** Die Balken starten mit `value=0` und springen auf ihren Zielwert, sobald (a) die Einblend-Animation der Card abgeschlossen ist (`onAnimationComplete` in `AnimatedCard`, weitergegeben per React-Context) und (b) die Card zu mindestens 30 % im Viewport liegt (`useInView` aus Motion, einmalig); die eingebaute Breiten-Transition des `ProgressIndicator` (`::part(bar)`) übernimmt die Animation, Dauer ca. 0,8 s, gestaffelt per `transition-delay`. Bei Reduced Motion wird direkt der Zielwert gerendert und die Transition per CSS abgeschaltet.
-- **Show all / Show less (AC-03.9):** Zusätzliche Zeilen erscheinen per `AnimatePresence` mit Höhen- und Opacity-Animation; ihre Balken nutzen dieselbe Füll-Logik und starten, sobald sie gerendert sind. Bei Reduced Motion ohne Animation.
-- **Hover/Fokus (AC-07.3):** Anheben + leichter Tilt + Akzent-Glow über `whileHover` / `whileFocus`.
+- **Show all / Show less (AC-03.9):** Die zusätzlichen Zeilen sind von Anfang an gerendert, aber eingeklappt (`inert`, unsichtbar). Das Aufklappen ist eine CSS-Transition von `grid-template-rows: 0fr` auf `1fr` – kein Neuaufbau von UI5-Komponenten beim Antippen. Nach dem `transitionend` füllen sich die neuen Balken; beim Zuklappen leeren sie sich, damit sie beim nächsten Aufklappen erneut animieren. Bei Reduced Motion ohne Transition. _(geändert nach T-24: vorher Mount per `AnimatePresence`, auf dem iPhone ruckelig)_
+- **Hover/Fokus (AC-07.3):** Anheben + leichter Tilt + Akzent-Glow bei Maus-Hover (`onHoverStart`, Motion ignoriert Touch) und bei Tastatur-Fokus (`:focus-visible` des fokussierten Elements, auch im Shadow DOM). Antippen und Mausklicks lösen keine Animation aus.
 - **Reduced Motion (AC-08.3):** `useReducedMotion()`; wenn aktiv, nur Opacity-Übergänge ohne Bewegung.
-- **Tastatur (AC-06.5):** Alle Links, Listeneinträge und Buttons in den Cards sind per Tab erreichbar und haben einen sichtbaren Fokus-Ring; die Hover-Animation greift auch bei Fokus innerhalb der Card (`:focus-within`).
+- **Tastatur (AC-06.5):** Alle Links, Listeneinträge und Buttons in den Cards sind per Tab erreichbar und haben einen sichtbaren Fokus-Ring; die Hover-Animation greift auch bei Tastatur-Fokus innerhalb der Card (AC-07.3).
 
 ## 7. Theming
 - Basis: `sap_horizon` bzw. `sap_horizon_dark` über `setTheme()` aus `@ui5/webcomponents-base`.

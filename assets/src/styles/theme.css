@@ -263,9 +263,40 @@ body {
   list-style: none;
 }
 
-/* Expanding rows animate their height; hide overflow while they grow (AC-03.9) */
-li.skill {
+/*
+ * Extra skills are always rendered; the wrapper animates from 0fr to 1fr so expanding does
+ * not create UI5 components on tap (AC-03.9). Hidden rows become invisible after collapsing.
+ */
+.skill-more {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease-out;
+}
+
+.skill-more[data-open='true'] {
+  grid-template-rows: 1fr;
+}
+
+.skill-more > .skill-more-list {
+  min-height: 0;
   overflow: hidden;
+  visibility: hidden;
+  transition: visibility 0s linear 0.3s;
+}
+
+.skill-more[data-open='true'] > .skill-more-list {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* Gap to the top skills; inside the clipped list so it opens together with the rows */
+.skill-more-list > .skill:first-child {
+  margin-top: 0.5rem;
+}
+
+.no-bar-animation .skill-more,
+.no-bar-animation .skill-more > .skill-more-list {
+  transition: none;
 }
 
 .skills-toggle {

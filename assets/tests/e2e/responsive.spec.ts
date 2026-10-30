@@ -40,7 +40,7 @@ test.describe('responsive layout', () => {
         .toBe(columns)
       // Expand everything that can grow before measuring
       await page.getByTestId('skills-toggle').click()
-      await expect(page.locator('[data-card-id="skills"] .skill-name')).toHaveCount(7)
+      await expect(page.locator('[data-card-id="skills"] .skill-name:visible')).toHaveCount(7)
       const { scrollWidth, clientWidth } = await page.evaluate(() => ({
         scrollWidth: document.documentElement.scrollWidth,
         clientWidth: document.documentElement.clientWidth,

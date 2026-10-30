@@ -80,7 +80,7 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 **Akzeptanzkriterien:**
 - AC-07.1 Die Anwendung sieht insgesamt aus wie eine Fiori-Anwendung (Shell, Layout, Komponenten). Der Wow-Effekt entsteht durch die Cards mit Infos über Dominik und ihre Animationen, ergänzt um ein eigenes Akzent-Theme (Farben) auf Basis von UI5-Theming.
 - AC-07.2 Signature-Element ist die Overview Page im Bento-Grid mit animierten Cards (D-7).
-- AC-07.3 Cards reagieren auf Hover/Fokus mit einer Animation (z. B. Anheben, Tilt, Glow).
+- AC-07.3 Cards reagieren auf Maus-Hover und Tastatur-Fokus mit einer Animation (z. B. Anheben, Tilt, Glow). Antippen auf Touch-Geräten und Mausklicks lösen sie nicht aus. _(präzisiert nach T-24: Antippen von „Show all“ hob die Card an und kippte sie während des Aufklappens – ruckelig auf dem iPhone)_
 - AC-07.4 Ein dezenter Hinweis „Built with React & SAP UI5 Web Components“ inkl. Link zum Repo dieser Website (im About-Dialog, AC-06.9).
 
 ### REQ-08 Responsiveness & Qualität

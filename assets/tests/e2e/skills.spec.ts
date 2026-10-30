@@ -22,7 +22,8 @@ const expectedPercents = expected.map(([, level]) => PERCENT[level])
 const allPercents = all.map(([, level]) => PERCENT[level])
 
 const skillsCard = (page: Page) => page.locator('[data-card-id="skills"]')
-const bars = (page: Page) => skillsCard(page).locator('.skill-bar')
+// Hidden rows of the collapsed list are rendered but not visible (AC-03.9)
+const bars = (page: Page) => skillsCard(page).locator('.skill-bar:visible')
 const toggle = (page: Page) => skillsCard(page).getByTestId('skills-toggle')
 // aria-expanded is rendered on the native button inside the UI5 button
 const ariaExpanded = (page: Page) =>
@@ -44,7 +45,9 @@ const fillPercent = (page: Page) =>
 test.describe('skills card', () => {
   test('AC-03.8 skills form one list sorted by level, without categories', async ({ page }) => {
     await page.goto('/')
-    await expect(skillsCard(page).locator('.skill-name')).toHaveText(expected.map(([name]) => name))
+    await expect(skillsCard(page).locator('.skill-name:visible')).toHaveText(
+      expected.map(([name]) => name),
+    )
     await expect(skillsCard(page).locator('[data-skill-group], .skill-group-title')).toHaveCount(0)
   })
 
@@ -135,13 +138,17 @@ test.describe('skills card', () => {
     expect(await ariaExpanded(page)).toBe('false')
 
     await toggle(page).click()
-    await expect(skillsCard(page).locator('.skill-name')).toHaveText(all.map(([name]) => name))
+    await expect(skillsCard(page).locator('.skill-name:visible')).toHaveText(
+      all.map(([name]) => name),
+    )
     await expect(toggle(page)).toHaveText('Show less')
     expect(await ariaExpanded(page)).toBe('true')
     await expect.poll(() => fillPercent(page), { timeout: 5000 }).toEqual(allPercents)
 
     await toggle(page).click()
-    await expect(skillsCard(page).locator('.skill-name')).toHaveText(expected.map(([name]) => name))
+    await expect(skillsCard(page).locator('.skill-name:visible')).toHaveText(
+      expected.map(([name]) => name),
+    )
     await expect(toggle(page)).toHaveText('Show all (7)')
   })
 
@@ -157,13 +164,43 @@ test.describe('skills card', () => {
     await expect.poll(() => fillPercent(page), { timeout: 5000 }).toEqual(allPercents)
   })
 
+  test('AC-03.9 expanding does not create new UI5 components', async ({ page }) => {
+    await page.goto('/')
+    const indicators = skillsCard(page).locator('ui5-progress-indicator')
+    await expect(indicators).toHaveCount(all.length)
+    const before = await indicators.evaluateAll((els) =>
+      els.map((el) => el.id || el.outerHTML.length),
+    )
+    await toggle(page).click()
+    await expect(bars(page)).toHaveCount(all.length)
+    // Same elements as before: the extra rows were only hidden, not mounted on tap
+    expect(
+      await indicators.evaluateAll((els) => els.map((el) => el.id || el.outerHTML.length)),
+    ).toHaveLength(before.length)
+    expect(await indicators.evaluateAll((els) => els.every((el) => el.isConnected))).toBe(true)
+  })
+
+  test('AC-03.9 bars animate again on every expand', async ({ page }) => {
+    await page.goto('/')
+    await skillsCard(page).scrollIntoViewIfNeeded()
+    await toggle(page).click()
+    await expect.poll(() => fillPercent(page), { timeout: 5000 }).toEqual(allPercents)
+    await toggle(page).click()
+    await expect(bars(page)).toHaveCount(expected.length)
+    await toggle(page).click()
+    await expect(bars(page)).toHaveCount(all.length)
+    const early = (await fillPercent(page)).slice(5)
+    expect(early.every((value, i) => value < allPercents[5 + i])).toBe(true)
+    await expect.poll(() => fillPercent(page), { timeout: 5000 }).toEqual(allPercents)
+  })
+
   test('AC-03.9 the toggle works with the keyboard', async ({ page }) => {
     await page.goto('/')
     await toggle(page).focus()
     await page.keyboard.press('Enter')
-    await expect(skillsCard(page).locator('.skill-name')).toHaveCount(all.length)
+    await expect(skillsCard(page).locator('.skill-name:visible')).toHaveCount(all.length)
     await page.keyboard.press('Space')
-    await expect(skillsCard(page).locator('.skill-name')).toHaveCount(expected.length)
+    await expect(skillsCard(page).locator('.skill-name:visible')).toHaveCount(expected.length)
   })
 
   test('AC-03.9 / AC-08.3 with reduced motion the list expands without animation', async ({
