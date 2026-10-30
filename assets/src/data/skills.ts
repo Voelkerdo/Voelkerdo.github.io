@@ -1,5 +1,8 @@
 import type { Skill, SkillLevel } from './types.ts'
 
+/** Number of skills shown before "Show all" (AC-03.9) */
+export const VISIBLE_SKILLS = 5
+
 /** Bar length per level (AC-03.5) */
 export const LEVEL_PERCENT: Record<SkillLevel, number> = {
   Expert: 100,
@@ -8,13 +11,11 @@ export const LEVEL_PERCENT: Record<SkillLevel, number> = {
   Familiar: 25,
 }
 
-// All skills from the intent, each once, with the levels provided by Dominik (AC-03.2, AC-03.7)
+// SAP skills from the intent, each once, with the levels provided by Dominik (AC-03.2, AC-03.7).
+// General web technologies (HTML5, Node.js, JavaScript) are intentionally not shown (D-12).
 export const skills: Skill[] = [
   { name: 'ABAP', level: 'Advanced' },
-  { name: 'Node.js', level: 'Intermediate' },
   { name: 'SAP UI5', level: 'Familiar' },
-  { name: 'JavaScript', level: 'Familiar' },
-  { name: 'HTML5', level: 'Advanced' },
   { name: 'ABAP RAP', level: 'Intermediate' },
   { name: 'ABAP Programming Model for Fiori', level: 'Advanced' },
   { name: 'SAP OData (SEGW)', level: 'Expert' },

@@ -6,17 +6,13 @@ import { useEffect, useState } from 'react'
  * visible; with reduced motion they are filled from the start (AC-03.6, AC-08.3).
  */
 export function useBarFill(reduceMotion: boolean, start: boolean): boolean {
-  const [filled, setFilled] = useState(reduceMotion)
+  const [filled, setFilled] = useState(false)
 
   useEffect(() => {
-    if (reduceMotion) {
-      setFilled(true)
-      return
-    }
-    if (!start) return
+    if (reduceMotion || !start) return
     const frame = requestAnimationFrame(() => setFilled(true))
     return () => cancelAnimationFrame(frame)
   }, [reduceMotion, start])
 
-  return filled
+  return reduceMotion || filled
 }

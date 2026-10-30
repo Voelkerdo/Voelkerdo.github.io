@@ -3,7 +3,7 @@ import { career, formatPeriod, sortedCareer } from '../../src/data/career.ts'
 import { contactChannels } from '../../src/data/contact.ts'
 import { profile } from '../../src/data/profile.ts'
 import { projects } from '../../src/data/projects.ts'
-import { LEVEL_PERCENT, skills, sortedSkills } from '../../src/data/skills.ts'
+import { LEVEL_PERCENT, skills, sortedSkills, VISIBLE_SKILLS } from '../../src/data/skills.ts'
 import { buildCards, countSkills, yearsOfExperience } from '../../src/data/cards.ts'
 
 const ids = (items: { id: string }[]) => items.map((i) => i.id)
@@ -52,13 +52,10 @@ describe('data', () => {
     }
   })
 
-  it('AC-03.2 skills contain all 10 skills from the intent, each once', () => {
+  it('AC-03.2 skills contain the SAP skills from the intent, each once', () => {
     expect(skills.map((s) => s.name)).toEqual([
       'ABAP',
-      'Node.js',
       'SAP UI5',
-      'JavaScript',
-      'HTML5',
       'ABAP RAP',
       'ABAP Programming Model for Fiori',
       'SAP OData (SEGW)',
@@ -66,6 +63,10 @@ describe('data', () => {
       'User & Authorization Management',
     ])
     expect(isUnique(skills.map((s) => s.name))).toBe(true)
+    // General web technologies are intentionally not shown (D-12)
+    for (const general of ['HTML5', 'Node.js', 'JavaScript']) {
+      expect(skills.map((s) => s.name)).not.toContain(general)
+    }
   })
 
   it('AC-03.5 levels map to bar lengths', () => {
@@ -75,10 +76,7 @@ describe('data', () => {
   it('AC-03.4 / AC-03.7 every skill has the level provided by Dominik', () => {
     expect(Object.fromEntries(skills.map((s) => [s.name, s.level]))).toEqual({
       ABAP: 'Advanced',
-      'Node.js': 'Intermediate',
       'SAP UI5': 'Familiar',
-      JavaScript: 'Familiar',
-      HTML5: 'Advanced',
       'ABAP RAP': 'Intermediate',
       'ABAP Programming Model for Fiori': 'Advanced',
       'SAP OData (SEGW)': 'Expert',
@@ -92,20 +90,21 @@ describe('data', () => {
       'SAP OData (SEGW)',
       'SAP Adobe Forms',
       'ABAP',
-      'HTML5',
       'ABAP Programming Model for Fiori',
       'User & Authorization Management',
-      'Node.js',
       'ABAP RAP',
       'SAP UI5',
-      'JavaScript',
     ])
     // Sorting must not change the source list
     expect(skills[0].name).toBe('ABAP')
   })
 
-  it('AC-01.3 the skills KPI counts 10 skills', () => {
-    expect(countSkills(skills)).toBe(10)
+  it('AC-03.9 the top 5 skills are visible before "Show all"', () => {
+    expect(VISIBLE_SKILLS).toBe(5)
+  })
+
+  it('AC-01.3 the skills KPI counts all 7 skills', () => {
+    expect(countSkills(skills)).toBe(7)
   })
 
   it('AC-04.1 career stations are sorted newest first', () => {

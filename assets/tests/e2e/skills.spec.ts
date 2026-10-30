@@ -1,18 +1,17 @@
 import { expect, test, type Page } from '@playwright/test'
 
-// Expected order (AC-03.8) and levels (AC-03.7)
-const expected = [
+// Expected order (AC-03.8) and levels (AC-03.7) of all skills
+const all = [
   ['SAP OData (SEGW)', 'Expert'],
   ['SAP Adobe Forms', 'Expert'],
   ['ABAP', 'Advanced'],
-  ['HTML5', 'Advanced'],
   ['ABAP Programming Model for Fiori', 'Advanced'],
   ['User & Authorization Management', 'Advanced'],
-  ['Node.js', 'Intermediate'],
   ['ABAP RAP', 'Intermediate'],
   ['SAP UI5', 'Familiar'],
-  ['JavaScript', 'Familiar'],
 ]
+// Only the top 5 are visible before "Show all" (AC-03.9)
+const expected = all.slice(0, 5)
 const PERCENT: Record<string, number> = {
   Expert: 100,
   Advanced: 75,
@@ -20,9 +19,16 @@ const PERCENT: Record<string, number> = {
   Familiar: 25,
 }
 const expectedPercents = expected.map(([, level]) => PERCENT[level])
+const allPercents = all.map(([, level]) => PERCENT[level])
 
 const skillsCard = (page: Page) => page.locator('[data-card-id="skills"]')
 const bars = (page: Page) => skillsCard(page).locator('.skill-bar')
+const toggle = (page: Page) => skillsCard(page).getByTestId('skills-toggle')
+// aria-expanded is rendered on the native button inside the UI5 button
+const ariaExpanded = (page: Page) =>
+  toggle(page).evaluate((el) =>
+    el.shadowRoot!.querySelector('button')!.getAttribute('aria-expanded'),
+  )
 
 // Width of the filled bar relative to its track, in percent
 const fillPercent = (page: Page) =>
@@ -117,6 +123,57 @@ test.describe('skills card', () => {
     expect(new Set(await fillPercent(page))).toEqual(new Set([0]))
     await skillsCard(page).scrollIntoViewIfNeeded()
     await expect.poll(() => fillPercent(page), { timeout: 5000 }).toEqual(expectedPercents)
+  })
+
+  test('AC-03.9 "Show all" reveals all skills and their bars fill, "Show less" hides them', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    await skillsCard(page).scrollIntoViewIfNeeded()
+    await expect.poll(() => fillPercent(page), { timeout: 5000 }).toEqual(expectedPercents)
+    await expect(toggle(page)).toHaveText('Show all (7)')
+    expect(await ariaExpanded(page)).toBe('false')
+
+    await toggle(page).click()
+    await expect(skillsCard(page).locator('.skill-name')).toHaveText(all.map(([name]) => name))
+    await expect(toggle(page)).toHaveText('Show less')
+    expect(await ariaExpanded(page)).toBe('true')
+    await expect.poll(() => fillPercent(page), { timeout: 5000 }).toEqual(allPercents)
+
+    await toggle(page).click()
+    await expect(skillsCard(page).locator('.skill-name')).toHaveText(expected.map(([name]) => name))
+    await expect(toggle(page)).toHaveText('Show all (7)')
+  })
+
+  test('AC-03.9 newly revealed bars start empty and then fill', async ({ page }) => {
+    await page.goto('/')
+    await skillsCard(page).scrollIntoViewIfNeeded()
+    await expect.poll(() => fillPercent(page), { timeout: 5000 }).toEqual(expectedPercents)
+    await toggle(page).click()
+    await expect(bars(page)).toHaveCount(all.length)
+    // Right after expanding, the new bars have not reached their value yet
+    const early = (await fillPercent(page)).slice(5)
+    expect(early.every((value, i) => value < allPercents[5 + i])).toBe(true)
+    await expect.poll(() => fillPercent(page), { timeout: 5000 }).toEqual(allPercents)
+  })
+
+  test('AC-03.9 the toggle works with the keyboard', async ({ page }) => {
+    await page.goto('/')
+    await toggle(page).focus()
+    await page.keyboard.press('Enter')
+    await expect(skillsCard(page).locator('.skill-name')).toHaveCount(all.length)
+    await page.keyboard.press('Space')
+    await expect(skillsCard(page).locator('.skill-name')).toHaveCount(expected.length)
+  })
+
+  test('AC-03.9 / AC-08.3 with reduced motion the list expands without animation', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.goto('/')
+    await toggle(page).click()
+    // Without animation all bars are at their value right away
+    expect(await fillPercent(page)).toEqual(allPercents)
   })
 
   test('AC-03.6 bars animate with a staggered transition', async ({ page }) => {

@@ -32,7 +32,7 @@
 | T-23 | CR-4: Skills als sortierte Liste ohne Kategorien | AC-03.2, AC-03.7, AC-03.8 | [x] |
 | T-19 | Career-Card | AC-04.1 | [x] |
 | T-20 | Contact- & GitHub-Card | AC-01.2, AC-05.1, AC-05.2 | [x] |
-| T-24 | CR-5: Nur SAP-Skills, Top 5 mit „Show all“ | AC-03.2, AC-03.7, AC-03.9 | [ ] |
+| T-24 | CR-5: Nur SAP-Skills, Top 5 mit „Show all“ | AC-03.2, AC-03.7, AC-03.9 | [x] |
 | T-13 | Responsive-Feinschliff | AC-01.6, AC-08.1 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [ ] |
 

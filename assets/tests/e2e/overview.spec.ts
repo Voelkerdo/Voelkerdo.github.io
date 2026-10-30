@@ -53,7 +53,7 @@ test.describe('overview page', () => {
     await page.goto('/')
     await expect(page.locator('.bento-cell')).toHaveCount(6)
     expect(await headerProps(page, 'projects')).toEqual({ title: 'Projects', kpi: '3' })
-    expect(await headerProps(page, 'skills')).toEqual({ title: 'Skills', kpi: '10' })
+    expect(await headerProps(page, 'skills')).toEqual({ title: 'Skills', kpi: '7' })
     expect((await headerProps(page, 'career')).title).toBe('Career')
     expect(await headerProps(page, 'contact')).toEqual({ title: 'Contact', kpi: '3' })
     expect(await headerProps(page, 'github')).toEqual({ title: 'GitHub', kpi: undefined })

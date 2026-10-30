@@ -255,13 +255,27 @@ body {
 }
 
 /* Skills card (REQ-03): one list sorted by level (AC-03.8) */
+.skills {
+  padding: 0 1rem 0.5rem;
+}
+
 .skill-list {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   margin: 0;
-  padding: 0 1rem 1rem;
+  padding: 0;
   list-style: none;
+}
+
+/* Expanding rows animate their height; hide overflow while they grow (AC-03.9) */
+li.skill {
+  overflow: hidden;
+}
+
+.skills-toggle {
+  margin-top: 0.25rem;
+  margin-left: -0.5rem;
 }
 
 .skill {
