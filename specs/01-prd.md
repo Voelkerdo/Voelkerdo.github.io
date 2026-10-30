@@ -60,7 +60,8 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-06.5 Tiles und Navigation sind per Tastatur bedienbar.
 - AC-06.6 Innerhalb einer App folgen die Inhalte Fiori-Mustern (z. B. Object Page / Dynamic Page mit Titelbereich).
 - AC-06.7 Der Zurück-Button führt aus einer App zurück zum Launchpad; ein Klick auf Logo/Name ebenfalls.
-- AC-06.8 **Footer** im Fiori-Stil, immer sichtbar: enthält den Hinweis aus AC-07.4 und den GitHub-Link.
+- ~~AC-06.8 Footer~~ – gestrichen (D-6): Das Fiori Launchpad hat keinen Footer.
+- AC-06.9 Ein Klick auf den Avatar öffnet ein Benutzermenü wie im Launchpad, mit dem Eintrag **About** (enthält den Hinweis aus AC-07.4).
 
 ### REQ-07 Wow-Effekt
 **Story:** Als Besucher will ich staunen – „das ist UI5?!“
@@ -68,7 +69,7 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-07.1 Die Anwendung sieht insgesamt aus wie eine Fiori-Anwendung (Shell, Layout, Komponenten). Der Wow-Effekt entsteht durch die Tiles mit Infos über Dominik und ihre Animationen, ergänzt um ein eigenes Akzent-Theme (Farben) auf Basis von UI5-Theming.
 - AC-07.2 Signature-Element ist der Fiori-Launchpad-Twist mit Tiles und Animationen (D-2), umgesetzt durch REQ-01 und REQ-06.
 - AC-07.3 Tiles reagieren auf Hover/Fokus mit einer Animation (z. B. Anheben, Tilt, Glow).
-- AC-07.4 Ein dezenter Hinweis „Built with React & SAP UI5 Web Components“ inkl. Link zum Repo dieser Website (im Footer, AC-06.8).
+- AC-07.4 Ein dezenter Hinweis „Built with React & SAP UI5 Web Components“ inkl. Link zum Repo dieser Website (im About-Dialog, AC-06.9).
 
 ### REQ-08 Responsiveness & Qualität
 **Akzeptanzkriterien:**
@@ -91,7 +92,8 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 | D-2 | Was trägt den Wow-Effekt? | Fiori-Launchpad-Twist: Inhalte als Tiles, die sich animiert zu Apps öffnen. |
 | D-3 | Inhalte für den Werdegang? | Vorerst Platzhalter mit `TODO`-Hinweis. |
 | D-4 | Kontaktkanäle? | Vorerst Platzhalter mit `TODO`-Hinweis. |
-| D-5 | One-Page oder Launchpad-Navigation? | Launchpad: Tiles öffnen Vollbild-Apps mit eigener URL. Die gesamte Anwendung sieht aus wie Fiori – mit Shell-Header, Footer und Zurück-Button. |
+| D-5 | One-Page oder Launchpad-Navigation? | Launchpad: Tiles öffnen Vollbild-Apps mit eigener URL. Die gesamte Anwendung sieht aus wie Fiori – mit Shell-Header und Zurück-Button. |
+| D-6 | Braucht die Anwendung einen Footer? | Nein – das Fiori Launchpad hat keinen. Der „Built with …“-Hinweis wandert ins About im Avatar-Menü. |
 
 ## 6. Offene Fragen
 _Keine._
