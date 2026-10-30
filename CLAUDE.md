@@ -38,4 +38,4 @@ Dieses Projekt wird spec-driven entwickelt. Die Specs in `specs/` sind die Quell
 - Einen Task nach dem anderen umsetzen, Ergebnis (inkl. Screenshot-Pfad) zeigen und auf Freigabe warten.
 - Geschmacksfragen (Farben, Texte, Layout) als Optionen vorlegen, nicht selbst entscheiden.
 - Dominiks Mac hat „Bewegung reduzieren“ aktiv → er sieht Animationen nur mit DevTools-Emulation oder auf anderen Geräten.
-- Mobile-Test im WLAN: `npm run dev -- --host` (nicht fest in der Config, D: bewusst).
+- Mobile-Test im WLAN: `npm run dev -- --host` – bewusst nicht fest in der Config, damit der Dev-Server in fremden Netzen nicht offen ist.
