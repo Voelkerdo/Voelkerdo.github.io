@@ -71,21 +71,27 @@ test.describe('overview page', () => {
     const [about, projects, career, contact, github, skills] = await Promise.all(
       ['about', 'projects', 'career', 'contact', 'github', 'skills'].map((id) => box(page, id)),
     )
-    // about: wide, top left
+    const near = (a: number, b: number) => expect(Math.abs(a - b)).toBeLessThanOrEqual(2)
+    const bottom = (b: { y: number; height: number }) => b.y + b.height
+    const right = (b: { x: number; width: number }) => b.x + b.width
+    // Row 1: about (wide) | career (tall) | contact (small)
+    near(about.y, career.y)
+    near(about.y, contact.y)
     expect(about.width).toBeGreaterThan(contact.width * 1.8)
-    expect(about.x).toBeLessThanOrEqual(projects.x)
-    expect(about.y).toBeLessThan(projects.y)
-    // projects: large (two columns, two rows)
-    expect(projects.width).toBeGreaterThan(career.width * 1.8)
-    expect(projects.height).toBeGreaterThan(contact.height * 1.8)
-    // career: tall (one column, two rows)
-    expect(career.height).toBeGreaterThan(contact.height * 1.8)
-    // contact and github: small, stacked in the last column
-    expect(Math.round(contact.x)).toBe(Math.round(github.x))
-    expect(github.y).toBeGreaterThan(contact.y)
-    // skills: wide, below career and github
-    expect(skills.width).toBeGreaterThan(contact.width * 1.8)
-    expect(skills.y).toBeGreaterThan(career.y + career.height - 1)
+    expect(career.x).toBeGreaterThan(right(about) - 1)
+    expect(contact.x).toBeGreaterThan(right(career) - 1)
+    // Row 2: projects (large) starts below about; career spans down to the bottom of github
+    near(projects.x, about.x)
+    near(projects.width, about.width)
+    expect(projects.y).toBeGreaterThan(bottom(about) - 1)
+    near(github.x, contact.x)
+    near(github.y, projects.y)
+    near(bottom(career), bottom(github))
+    // Row 3: skills (wide) sits below career/github, next to projects, which spans rows 2 and 3
+    expect(skills.y).toBeGreaterThan(bottom(github) - 1)
+    near(skills.x, career.x)
+    near(right(skills), right(contact))
+    near(bottom(projects), bottom(skills))
   })
 
   for (const { width, padding } of [

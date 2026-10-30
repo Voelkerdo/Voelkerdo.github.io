@@ -72,6 +72,8 @@ test.describe('skills card', () => {
   test('AC-03.5 / AC-03.6 bars fill to the length of their level', async ({ page }) => {
     await page.goto('/')
     await expect(bars(page)).toHaveCount(expected.length)
+    // Bars only start once the card is in view (AC-03.6)
+    await skillsCard(page).scrollIntoViewIfNeeded()
     await expect.poll(() => fillPercent(page), { timeout: 5000 }).toEqual(expectedPercents)
   })
 

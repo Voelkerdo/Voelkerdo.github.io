@@ -303,3 +303,23 @@ body {
   padding-left: 1.25rem;
   color: var(--sapContent_LabelColor);
 }
+
+/* Contact card (REQ-05): GitHub is highlighted as the primary channel (AC-05.1) */
+.contact-primary::part(title),
+.contact-primary::part(icon),
+.contact-primary::part(additional-text) {
+  color: var(--accent-1);
+}
+
+.contact-primary::part(title) {
+  font-weight: 600;
+}
+
+/* GitHub card (AC-01.2) */
+.github-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0 1rem 1rem;
+}

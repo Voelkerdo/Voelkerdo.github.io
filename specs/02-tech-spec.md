@@ -111,7 +111,7 @@ interface CardDef { id: string; title: string; subtitle?: string; icon: string; 
 | Skills-Card | eine Liste: je Skill Name + `ProgressIndicator` (`value` aus `LEVEL_PERCENT`, `displayValue` = Stufe), Balkenfarbe = Akzent (TD-12) | REQ-03 |
 | Career-Card | `Timeline` + `TimelineItem` (fiori) | REQ-04 |
 | Contact-Card | `List` / `ListItemStandard` mit Icons, GitHub hervorgehoben | REQ-05 |
-| GitHub-Card | `CardHeader` mit `interactive` – öffnet das Profil in neuem Tab | AC-01.2 |
+| GitHub-Card | `CardHeader` mit `interactive` – öffnet das Profil in neuem Tab; Inhalt: kurzer Einladungstext + `Button` (Emphasized) „Follow @Voelkerdo“ | AC-01.2 |
 
 ## 6. Layout & Animationen
 - **Bento-Grid (AC-01.6, AC-08.1):** CSS Grid, Card-Größe über `grid-area`:
