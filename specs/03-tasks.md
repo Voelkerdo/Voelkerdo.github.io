@@ -35,6 +35,8 @@
 | T-24 | CR-5: Nur SAP-Skills, Top 5 mit „Show all“ | AC-03.2, AC-03.7, AC-03.9 | [x] |
 | T-25 | CR-6: GitHub-Card entfernen, Contact hoch | AC-01.2, AC-01.3, AC-01.6 | [x] |
 | T-13 | Responsive-Feinschliff | AC-01.6, AC-08.1 | [x] |
+| T-26 | CR-7: Benachrichtigungsglocke | AC-10.1–AC-10.5 | [ ] |
+| T-27 | CR-7: „Currently building“-Status | AC-01.10 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
@@ -140,6 +142,17 @@ Tile-Komponente, Launchpad-Startseite, App-Rahmen mit Tile-to-App-Transition und
 ### T-13 Responsive-Feinschliff
 - Bento-Grid: 4 → 2 → 1 Spalten laut Tech Spec §6; ab 360 px kein horizontales Scrollen.
 - **Tests (E2E):** Bei 360 px, 800 px und 1280 px Viewport `scrollWidth <= clientWidth` und erwartete Spaltenanzahl.
+
+### T-26 CR-7: Benachrichtigungsglocke
+- `data/notifications.ts` mit den drei Einträgen aus AC-10.2.
+- ShellBar: `showNotifications`, Badge = Anzahl ungelesener; Klick öffnet `ResponsivePopover` mit `NotificationList`; beim Öffnen alle als gelesen markieren.
+- Klick auf „New follower request“ öffnet das GitHub-Profil.
+- **Tests:** Unit – Inhalte laut AC-10.2. E2E – Badge 3; Liste mit drei Einträgen; nach dem Öffnen kein Badge mehr; Klick auf Follower-Eintrag öffnet GitHub; Bedienung per Tastatur; bei 390 px Vollbild.
+
+### T-27 CR-7: „Currently building“-Status
+- `profile.currentlyBuilding` mit dem Text aus AC-01.10.
+- `ProfileCard`: Statuszeile mit Icon unter der Positionierung.
+- **Tests:** Unit – Text laut AC-01.10. E2E – Statuszeile sichtbar in der Profil-Card.
 
 ### T-14 Manuelle Abnahme
 - Production-Build lokal per `npm run preview`.

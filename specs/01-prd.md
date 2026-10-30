@@ -26,6 +26,7 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-01.7 Alle Inhalte stehen vollständig in den Cards; es gibt keine Detail-Seiten (D-8) und keine Inhalte außerhalb von Cards (D-9).
 - AC-01.8 Die erste Card ist eine Profil-Card **„About me“** mit Avatar, Name und Positionierung (eine Zeile) (D-9).
 - AC-01.9 Abstände folgen den Fiori Design Guidelines für die Overview Page (D-9): 1rem zwischen den Cards, 1rem unter der ShellBar, seitlicher Rand responsiv 1rem (S) / 2rem (M, L) / 3rem (XL); die Cards nutzen die volle Fensterbreite.
+- AC-01.10 Die Profil-Card zeigt unter der Positionierung eine Statuszeile **„Currently building: …“** mit Werkzeug-Icon. Der Text wird in den Profildaten gepflegt; initial: „this portfolio – spec-driven with React & SAP UI5“ (D-14).
 
 ### REQ-02 Git-Projekte
 **Story:** Als Entwickler will ich Dominiks Projekte sehen und direkt ins Repo springen.
@@ -94,6 +95,18 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-09.1 Die Seite folgt dem System-Theme und bietet einen manuellen Umschalter in der ShellBar.
 - AC-09.2 Beide Modi nutzen das eigene Theme aus AC-07.1.
 
+### REQ-10 Benachrichtigungen (Fiori-Gag)
+**Story:** Als Besucher aus der SAP-Community will ich schmunzeln, weil ich das Fiori-Benachrichtigungsmuster wiedererkenne.
+**Akzeptanzkriterien:**
+- AC-10.1 Die ShellBar zeigt eine Glocke mit Badge; das Badge zeigt die Anzahl ungelesener Benachrichtigungen (initial 3).
+- AC-10.2 Ein Klick auf die Glocke öffnet eine Fiori-Benachrichtigungsliste mit drei Einträgen (Titel, Text, Zeitangabe):
+  1. **Transport imported** – „Transport DVK900001 "Portfolio Website" was imported successfully into production.“ – „Just now“
+  2. **Quality gate passed** – „npm run verify: all tests green – built spec-driven.“ – „2 min ago“
+  3. **New follower request** – „You're not following Voelkerdo on GitHub yet. Fix that?“ – „Today“ (hohe Wichtigkeit)
+- AC-10.3 Beim Öffnen der Liste gelten alle Benachrichtigungen als gelesen; das Badge verschwindet. Der Zustand gilt nur bis zum Neuladen.
+- AC-10.4 Ein Klick auf „New follower request“ öffnet das GitHub-Profil in einem neuen Tab.
+- AC-10.5 Glocke und Liste sind per Tastatur bedienbar; auf schmalen Bildschirmen öffnet sich die Liste als Vollbild-Dialog.
+
 ## 4. Außerhalb des Scopes (v1)
 CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics, Hosting/Deployment.
 
@@ -113,6 +126,7 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 | D-11 | Skills gruppiert oder als Liste? | Eine Liste aller 10 Skills ohne Kategorien, absteigend nach Stufe sortiert – weniger überladen, die stärksten Skills stehen oben. (CR-4) |
 | D-12 | Welche Skills zeigt die Website? | Nur die SAP-Skills – allgemeine Webtechnologien entfallen; davon anfangs die Top 5 mit „Show all“, damit die Card kompakt bleibt und das Raster ausgewogen ist. (CR-5) |
 | D-13 | Braucht es eine eigene GitHub-Card? | Nein – sie war doppelt zur Contact-Card, in der GitHub als primärer Kanal hervorgehoben ist. Contact wird dafür eine hohe Card. (CR-6) |
+| D-14 | Welche Eye Catcher kommen zuerst? | Zwei kleine: eine augenzwinkernde Fiori-Benachrichtigungsglocke (Insider-Gag für die SAP-Community) und eine „Currently building“-Zeile in der Profil-Card (wirkt aktuell und persönlich). Größere Ideen (Heatmap, Standort-Card) bleiben für später. (CR-7) |
 
 ## 6. Offene Fragen
 _Keine._
@@ -126,3 +140,4 @@ _Keine._
 | CR-4 | 2026-10-30 | Skills als eine nach Stufe sortierte Liste ohne Kategorien. | AC-03.1, AC-03.2, AC-03.7, AC-03.8, D-11 |
 | CR-5 | 2026-10-30 | Nur SAP-Skills (ohne HTML5, Node.js, JavaScript), anfangs Top 5 mit „Show all“. | AC-03.2, AC-03.7, AC-03.9, D-12 |
 | CR-6 | 2026-10-30 | GitHub-Card entfernt (doppelt zur Contact-Card); Contact wird hoch. | AC-01.2, AC-01.3, AC-01.6, D-9, D-13 |
+| CR-7 | 2026-10-30 | Eye Catcher: Benachrichtigungsglocke in der ShellBar, „Currently building“-Status in der Profil-Card. | AC-01.10, REQ-10, D-14 |

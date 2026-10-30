@@ -83,7 +83,8 @@ tests/
 
 ## 4. Datenmodell (`assets/src/data/types.ts`)
 ```ts
-interface Profile  { name: string; tagline: string; githubUsername: string; githubUrl: string; avatarUrl?: string; siteRepoUrl: string }
+interface Profile  { name: string; tagline: string; currentlyBuilding: string; githubUsername: string; githubUrl: string; avatarUrl?: string; siteRepoUrl: string }
+interface NotificationDef { id: string; title: string; text: string; time: string; importance?: 'High'; href?: string }
 interface Project  { id: string; name: string; description: string; technologies: string[]; repoUrl: string }
 type SkillLevel = 'Expert' | 'Advanced' | 'Intermediate' | 'Familiar'
 interface Skill { name: string; level: SkillLevel }
@@ -105,7 +106,8 @@ interface CardDef { id: string; title: string; subtitle?: string; icon: string; 
 | About | `Dialog` | AC-07.4 |
 | Card (alle) | UI5 `Card` + `CardHeader` (`titleText`, `subtitleText`, Icon im `avatar`-Slot, KPI als `additionalText`) – umhüllt von Motion (TD-10) | AC-01.2, AC-01.3, AC-07.3 |
 | Bento-Grid | CSS Grid mit `grid-template-areas`, siehe §6 | AC-01.6, AC-01.9, AC-08.1 |
-| Profil-Card | `Avatar` (Initialen bzw. Bild, Farbe Accent1) + Name + Positionierung | AC-01.8 |
+| Profil-Card | `Avatar` (Initialen bzw. Bild, Farbe Accent1) + Name + Positionierung + Statuszeile (`Icon` `developer-settings` + Text) | AC-01.8, AC-01.10 |
+| Benachrichtigungen | `ShellBar` mit `showNotifications` und `notificationsCount`; `ResponsivePopover` (auf schmalen Bildschirmen Vollbild) mit `NotificationList` + `NotificationListItem` (fiori); Inhalte in `data/notifications.ts`, Lesestatus als React-State | REQ-10 |
 | Projects-Card | `List` mit je einem Eintrag pro Projekt: `Link` (target `_blank`), Beschreibung, `Tag`s für Technologien | REQ-02 |
 | Skills-Card | eine Liste (anfangs `VISIBLE_SKILLS` Einträge, Umschalter als `Button` design `Transparent` mit `aria-expanded`): je Skill Name + `ProgressIndicator` (`value` aus `LEVEL_PERCENT`, `displayValue` = Stufe), Balkenfarbe = Akzent (TD-12) | REQ-03 |
 | Career-Card | `Timeline` + `TimelineItem` (fiori) | REQ-04 |
