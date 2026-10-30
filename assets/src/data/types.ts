@@ -1,6 +1,8 @@
 export interface Profile {
   name: string
   tagline: string
+  /** Shown as "Currently building: …" in the profile card (AC-01.10) */
+  currentlyBuilding: string
   githubUsername: string
   githubUrl: string
   avatarUrl?: string

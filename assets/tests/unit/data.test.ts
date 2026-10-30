@@ -23,6 +23,10 @@ describe('data', () => {
     expect(cards.about.kpi).toBeUndefined()
   })
 
+  it('AC-01.10 the profile has the initial "currently building" text', () => {
+    expect(profile.currentlyBuilding).toBe('this portfolio – spec-driven with React & SAP UI5')
+  })
+
   it('AC-01.8 the profile card comes first', () => {
     expect(buildCards()[0]).toMatchObject({ id: 'about', title: 'About me' })
   })

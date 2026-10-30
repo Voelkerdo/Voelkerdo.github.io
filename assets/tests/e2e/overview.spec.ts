@@ -49,6 +49,18 @@ test.describe('overview page', () => {
     await expect(about.getByText('Fullstack Developer – from ABAP to UI5')).toBeVisible()
   })
 
+  test('AC-01.10 profile card shows the "currently building" status with icon', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    const status = card(page, 'about').getByTestId('profile-status')
+    await expect(status).toBeVisible()
+    await expect(status).toHaveText(
+      'Currently building: this portfolio – spec-driven with React & SAP UI5',
+    )
+    await expect(status.locator('ui5-icon[name="developer-settings"]')).toBeVisible()
+  })
+
   test('AC-01.2 / AC-01.3 cards with title and KPI in the header', async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('.bento-cell')).toHaveCount(5)

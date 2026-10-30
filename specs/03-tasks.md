@@ -36,7 +36,7 @@
 | T-25 | CR-6: GitHub-Card entfernen, Contact hoch | AC-01.2, AC-01.3, AC-01.6 | [x] |
 | T-13 | Responsive-Feinschliff | AC-01.6, AC-08.1 | [x] |
 | T-26 | CR-7: Benachrichtigungsglocke | AC-10.1–AC-10.5 | [x] |
-| T-27 | CR-7: „Currently building“-Status | AC-01.10 | [ ] |
+| T-27 | CR-7: „Currently building“-Status | AC-01.10 | [x] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details

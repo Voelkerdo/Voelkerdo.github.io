@@ -6,6 +6,7 @@ export const profile: Profile = {
   name: 'Dominik Völker',
   // TODO(content): sharpen positioning (see specs/00-intent.md)
   tagline: 'Fullstack Developer – from ABAP to UI5',
+  currentlyBuilding: 'this portfolio – spec-driven with React & SAP UI5',
   githubUsername,
   githubUrl: `https://github.com/${githubUsername}`,
   // TODO(content): add avatar image
