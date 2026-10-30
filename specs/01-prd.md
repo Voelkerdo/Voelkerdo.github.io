@@ -62,6 +62,7 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-06.7 Der Zurück-Button führt aus einer App zurück zum Launchpad; ein Klick auf Logo/Name ebenfalls.
 - ~~AC-06.8 Footer~~ – gestrichen (D-6): Das Fiori Launchpad hat keinen Footer.
 - AC-06.9 Ein Klick auf den Avatar öffnet ein Benutzermenü wie im Launchpad, mit dem Eintrag **About** (enthält den Hinweis aus AC-07.4).
+- AC-06.10 Das Benutzermenü enthält statt „Sign Out“ einen Link „Visit GitHub“ zum GitHub-Profil (kein Login, siehe Nicht-Ziele).
 
 ### REQ-07 Wow-Effekt
 **Story:** Als Besucher will ich staunen – „das ist UI5?!“

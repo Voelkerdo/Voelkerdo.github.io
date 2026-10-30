@@ -61,6 +61,17 @@ test.describe('launchpad shell', () => {
     )
   })
 
+  test('AC-06.10 avatar menu offers "Visit GitHub" instead of "Sign Out"', async ({ page }) => {
+    await page.goto('/')
+    await page.getByTestId('shell-avatar').click()
+    const menu = page.locator('ui5-user-menu')
+    await expect(menu.getByText('Sign Out')).toHaveCount(0)
+    const popupPromise = page.waitForEvent('popup')
+    await menu.getByText('Visit GitHub').click()
+    const popup = await popupPromise
+    expect(popup.url()).toContain('github.com/Voelkerdo')
+  })
+
   test('AC-09.1 theme toggle in the avatar menu switches the mode', async ({ page }) => {
     await page.emulateMedia({ colorScheme: 'light' })
     await page.goto('/')
