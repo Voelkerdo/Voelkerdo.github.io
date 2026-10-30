@@ -18,3 +18,24 @@ export const career: CareerStation[] = [
     highlights: ['Placeholder highlight'],
   },
 ]
+
+/** Newest station first, by start month (AC-04.1). */
+export function sortedCareer(stations: CareerStation[] = career): CareerStation[] {
+  return [...stations].sort((a, b) => b.from.localeCompare(a.from))
+}
+
+const monthFormat = new Intl.DateTimeFormat('en', {
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'UTC',
+})
+
+function formatMonth(yearMonth: string): string {
+  const [year, month] = yearMonth.split('-').map(Number)
+  return monthFormat.format(new Date(Date.UTC(year, month - 1)))
+}
+
+/** e.g. "Jan 2022 – Present" (AC-04.1) */
+export function formatPeriod(station: Pick<CareerStation, 'from' | 'to'>): string {
+  return `${formatMonth(station.from)} – ${station.to ? formatMonth(station.to) : 'Present'}`
+}

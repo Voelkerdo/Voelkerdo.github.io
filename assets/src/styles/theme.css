@@ -292,3 +292,14 @@ body {
 .no-bar-animation .skill-bar::part(bar) {
   transition: none;
 }
+
+/* Career card (REQ-04) */
+.career-timeline {
+  padding: 0 0.5rem 1rem;
+}
+
+.career-highlights {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--sapContent_LabelColor);
+}

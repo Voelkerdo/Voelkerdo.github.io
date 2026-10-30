@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { career } from '../../src/data/career.ts'
+import { career, formatPeriod, sortedCareer } from '../../src/data/career.ts'
 import { contactChannels } from '../../src/data/contact.ts'
 import { profile } from '../../src/data/profile.ts'
 import { projects } from '../../src/data/projects.ts'
@@ -106,6 +106,28 @@ describe('data', () => {
 
   it('AC-01.3 the skills KPI counts 10 skills', () => {
     expect(countSkills(skills)).toBe(10)
+  })
+
+  it('AC-04.1 career stations are sorted newest first', () => {
+    const stations = [
+      { id: 'old', from: '2015-03', role: 'r', company: 'c', highlights: [] },
+      { id: 'new', from: '2023-01', role: 'r', company: 'c', highlights: [] },
+      { id: 'mid', from: '2019-11', role: 'r', company: 'c', highlights: [] },
+    ]
+    expect(sortedCareer(stations).map((s) => s.id)).toEqual(['new', 'mid', 'old'])
+    expect(stations[0].id).toBe('old')
+  })
+
+  it('AC-04.1 periods are formatted as month and year, open end as "Present"', () => {
+    expect(formatPeriod({ from: '2019-08', to: '2021-12' })).toBe('Aug 2019 – Dec 2021')
+    expect(formatPeriod({ from: '2022-01' })).toBe('Jan 2022 – Present')
+  })
+
+  it('AC-04.1 every station has 1 to 3 highlights', () => {
+    for (const s of career) {
+      expect(s.highlights.length).toBeGreaterThanOrEqual(1)
+      expect(s.highlights.length).toBeLessThanOrEqual(3)
+    }
   })
 
   it('AC-04.2 career stations use YYYY-MM dates', () => {

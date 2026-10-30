@@ -30,7 +30,7 @@
 | T-18 | Skills-Card | AC-03.1, AC-03.2 | [x] |
 | T-22 | CR-3: Skills als animierte Fortschrittsbalken | AC-03.4, AC-03.5, AC-03.6, AC-03.7, AC-08.3 | [x] |
 | T-23 | CR-4: Skills als sortierte Liste ohne Kategorien | AC-03.2, AC-03.7, AC-03.8 | [x] |
-| T-19 | Career-Card | AC-04.1 | [ ] |
+| T-19 | Career-Card | AC-04.1 | [x] |
 | T-20 | Contact- & GitHub-Card | AC-01.2, AC-05.1, AC-05.2 | [ ] |
 | T-13 | Responsive-Feinschliff | AC-01.6, AC-08.1 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [ ] |

@@ -8,6 +8,7 @@ import type { ReactNode } from 'react'
 import { buildCards } from '../data/cards.ts'
 import { AnimatedCard } from './AnimatedCard.tsx'
 import { BentoGrid } from './BentoGrid.tsx'
+import { CareerCard } from './cards/CareerCard.tsx'
 import { ProfileCard } from './cards/ProfileCard.tsx'
 import { ProjectsCard } from './cards/ProjectsCard.tsx'
 import { SkillsCard } from './cards/SkillsCard.tsx'
@@ -19,6 +20,7 @@ const content: Record<string, ReactNode> = {
   about: <ProfileCard />,
   projects: <ProjectsCard />,
   skills: <SkillsCard />,
+  career: <CareerCard />,
 }
 
 export function OverviewPage() {
