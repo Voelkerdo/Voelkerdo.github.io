@@ -22,25 +22,41 @@ const waitForCards = (page: Page) =>
     .toBe(true)
 
 test.describe('overview page', () => {
-  test('AC-01.1 hero shows name, tagline and a GitHub CTA', async ({ page }) => {
+  test('AC-01.7 there is no content outside of cards', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByRole('heading', { level: 1, name: 'Dominik Völker' })).toBeVisible()
-    await expect(
-      page.locator('.hero').getByText('Fullstack Developer – from ABAP to UI5'),
-    ).toBeVisible()
-    const popupPromise = page.waitForEvent('popup')
-    await page.getByTestId('hero-cta').click()
-    expect((await popupPromise).url()).toContain('github.com/Voelkerdo')
+    const outside = await page.locator('main').evaluate((main) => {
+      // Every text node in <main> must belong to a card
+      const walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT)
+      const texts: string[] = []
+      while (walker.nextNode()) {
+        const node = walker.currentNode
+        if (node.textContent?.trim() && !node.parentElement?.closest('.bento-cell')) {
+          texts.push(node.textContent.trim())
+        }
+      }
+      return texts
+    })
+    expect(outside).toEqual([])
+    await expect(page.locator('.hero, [data-testid="hero-cta"]')).toHaveCount(0)
   })
 
-  test('AC-01.2 / AC-01.3 five cards with title and KPI in the header', async ({ page }) => {
+  test('AC-01.8 profile card shows avatar, name and positioning', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('.bento-cell')).toHaveCount(5)
+    const about = card(page, 'about')
+    expect((await headerProps(page, 'about')).title).toBe('About me')
+    await expect(about.locator('ui5-avatar')).toBeVisible()
+    await expect(about.getByRole('heading', { level: 1, name: 'Dominik Völker' })).toBeVisible()
+    await expect(about.getByText('Fullstack Developer – from ABAP to UI5')).toBeVisible()
+  })
+
+  test('AC-01.2 / AC-01.3 cards with title and KPI in the header', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('.bento-cell')).toHaveCount(6)
     expect(await headerProps(page, 'projects')).toEqual({ title: 'Projects', kpi: '3' })
     expect(await headerProps(page, 'skills')).toEqual({ title: 'Skills', kpi: '10' })
     expect((await headerProps(page, 'career')).title).toBe('Career')
     expect(await headerProps(page, 'contact')).toEqual({ title: 'Contact', kpi: '3' })
-    expect((await headerProps(page, 'github')).title).toBe('GitHub')
+    expect(await headerProps(page, 'github')).toEqual({ title: 'GitHub', kpi: undefined })
   })
 
   test('AC-01.4 cards fade in and end fully visible', async ({ page }) => {
@@ -52,20 +68,49 @@ test.describe('overview page', () => {
     await page.setViewportSize({ width: 1280, height: 900 })
     await page.goto('/')
     await waitForCards(page)
-    const [projects, career, contact, github, skills] = await Promise.all(
-      ['projects', 'career', 'contact', 'github', 'skills'].map((id) => box(page, id)),
+    const [about, projects, career, contact, github, skills] = await Promise.all(
+      ['about', 'projects', 'career', 'contact', 'github', 'skills'].map((id) => box(page, id)),
     )
-    // large: two columns and two rows
+    // about: wide, top left
+    expect(about.width).toBeGreaterThan(contact.width * 1.8)
+    expect(about.x).toBeLessThanOrEqual(projects.x)
+    expect(about.y).toBeLessThan(projects.y)
+    // projects: large (two columns, two rows)
     expect(projects.width).toBeGreaterThan(career.width * 1.8)
     expect(projects.height).toBeGreaterThan(contact.height * 1.8)
-    // tall: one column, two rows
+    // career: tall (one column, two rows)
     expect(career.height).toBeGreaterThan(contact.height * 1.8)
-    // small: contact and github share one column
+    // contact and github: small, stacked in the last column
     expect(Math.round(contact.x)).toBe(Math.round(github.x))
-    // wide: skills spans the full row below
-    expect(skills.width).toBeGreaterThan(projects.width * 1.8)
-    expect(skills.y).toBeGreaterThan(projects.y + projects.height - 1)
+    expect(github.y).toBeGreaterThan(contact.y)
+    // skills: wide, below career and github
+    expect(skills.width).toBeGreaterThan(contact.width * 1.8)
+    expect(skills.y).toBeGreaterThan(career.y + career.height - 1)
   })
+
+  for (const { width, padding } of [
+    { width: 375, padding: 16 },
+    { width: 800, padding: 32 },
+    { width: 1280, padding: 32 },
+    { width: 1600, padding: 48 },
+  ]) {
+    test(`AC-01.9 Fiori spacing at ${width}px: ${padding}px page padding, 16px card gap`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 })
+      await page.goto('/')
+      await waitForCards(page)
+      const grid = (await page.locator('.bento-grid').boundingBox())!
+      const shellBottom = (await page.locator('ui5-shellbar').boundingBox())!
+      expect(Math.round(grid.x)).toBe(padding)
+      expect(Math.round(width - (grid.x + grid.width))).toBe(padding)
+      expect(Math.round(grid.y - (shellBottom.y + shellBottom.height))).toBe(16)
+      const gap = await page
+        .locator('.bento-grid')
+        .evaluate((el) => [getComputedStyle(el).rowGap, getComputedStyle(el).columnGap])
+      expect(gap).toEqual(['16px', '16px'])
+    })
+  }
 
   test('AC-07.3 hovering a card lifts it and adds the glow', async ({ page }) => {
     await page.goto('/')

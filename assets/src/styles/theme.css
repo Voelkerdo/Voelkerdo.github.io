@@ -85,42 +85,40 @@ body {
   padding: 1rem;
 }
 
-/* Overview page (REQ-01) */
+/* Overview page spacing per Fiori Design Guidelines / SAPUI5 responsive padding (AC-01.9) */
+:root {
+  --card-gap: 1rem;
+  --page-padding-block: 1rem;
+  --page-padding-inline: 1rem;
+}
+
+@media (min-width: 600px) {
+  :root {
+    --page-padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --page-padding-inline: 3rem;
+  }
+}
+
 .overview-page {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 0 1rem 3rem;
-}
-
-.hero {
-  padding: 3rem 0 2rem;
-}
-
-.hero-title {
-  margin: 0;
-  font-family: var(--sapFontHeaderFamily);
-  font-size: clamp(2.25rem, 6vw, 3.75rem);
-  font-weight: 700;
-  line-height: 1.1;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.hero-tagline {
-  margin: 0.5rem 0 1.5rem;
-  font-size: 1.25rem;
-  color: var(--sapContent_LabelColor);
+  padding: var(--page-padding-block) var(--page-padding-inline);
 }
 
 /* Bento grid (AC-01.6, AC-08.1) – areas as specified in tech spec §6 */
 .bento-grid {
   display: grid;
-  gap: 1rem;
+  gap: var(--card-gap);
   grid-template-columns: 1fr;
   grid-auto-rows: minmax(10rem, auto);
   perspective: 1200px;
+}
+
+.bento-about {
+  grid-area: about;
 }
 
 .bento-projects {
@@ -140,13 +138,14 @@ body {
 }
 
 .bento-grid {
-  grid-template-areas: 'projects' 'career' 'contact' 'github' 'skills';
+  grid-template-areas: 'about' 'projects' 'career' 'contact' 'github' 'skills';
 }
 
 @media (min-width: 600px) {
   .bento-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-areas:
+      'about about'
       'projects projects'
       'career contact'
       'career github'
@@ -158,9 +157,9 @@ body {
   .bento-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-areas:
-      'projects projects career contact'
+      'about about career contact'
       'projects projects career github'
-      'skills skills skills skills';
+      'projects projects skills skills';
   }
 }
 
@@ -203,4 +202,29 @@ body {
 
 .overview-card [slot='avatar'] {
   color: var(--accent-1);
+}
+
+/* Profile card (AC-01.8) */
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem 1rem;
+}
+
+.profile-name {
+  margin: 0;
+  font-family: var(--sapFontHeaderFamily);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.profile-tagline {
+  margin: 0.25rem 0 0;
+  color: var(--sapContent_LabelColor);
 }

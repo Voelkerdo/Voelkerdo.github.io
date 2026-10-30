@@ -22,6 +22,13 @@ export function yearsOfExperience(stations: CareerStation[], now: Date = new Dat
 export function buildCards(now: Date = new Date()): CardDef[] {
   return [
     {
+      id: 'about',
+      title: 'About me',
+      subtitle: 'Who I am',
+      icon: 'person-placeholder',
+      size: 'wide',
+    },
+    {
       id: 'projects',
       title: 'Projects',
       subtitle: 'Selected repositories',

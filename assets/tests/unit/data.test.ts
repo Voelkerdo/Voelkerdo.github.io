@@ -18,6 +18,16 @@ describe('data', () => {
     expect(cards.contact.kpi).toBe(String(contactChannels.length))
   })
 
+  it('AC-01.3 profile and GitHub cards have no KPI', () => {
+    const cards = Object.fromEntries(buildCards().map((c) => [c.id, c]))
+    expect(cards.about.kpi).toBeUndefined()
+    expect(cards.github.kpi).toBeUndefined()
+  })
+
+  it('AC-01.8 the profile card comes first', () => {
+    expect(buildCards()[0]).toMatchObject({ id: 'about', title: 'About me' })
+  })
+
   it('AC-01.3 counts distinct skills and full years of experience', () => {
     expect(
       countSkills([
@@ -76,6 +86,7 @@ describe('data', () => {
   it('AC-01.6 cards have the specified sizes', () => {
     const sizes = Object.fromEntries(buildCards().map((c) => [c.id, c.size]))
     expect(sizes).toEqual({
+      about: 'wide',
       projects: 'large',
       skills: 'wide',
       career: 'tall',
