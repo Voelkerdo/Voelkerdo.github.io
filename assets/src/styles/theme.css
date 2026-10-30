@@ -85,6 +85,122 @@ body {
   padding: 1rem;
 }
 
-.overview-placeholder {
-  padding: 1rem;
+/* Overview page (REQ-01) */
+.overview-page {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1rem 3rem;
+}
+
+.hero {
+  padding: 3rem 0 2rem;
+}
+
+.hero-title {
+  margin: 0;
+  font-family: var(--sapFontHeaderFamily);
+  font-size: clamp(2.25rem, 6vw, 3.75rem);
+  font-weight: 700;
+  line-height: 1.1;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-tagline {
+  margin: 0.5rem 0 1.5rem;
+  font-size: 1.25rem;
+  color: var(--sapContent_LabelColor);
+}
+
+/* Bento grid (AC-01.6, AC-08.1) – areas as specified in tech spec §6 */
+.bento-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+  grid-auto-rows: minmax(10rem, auto);
+  perspective: 1200px;
+}
+
+.bento-projects {
+  grid-area: projects;
+}
+.bento-skills {
+  grid-area: skills;
+}
+.bento-career {
+  grid-area: career;
+}
+.bento-contact {
+  grid-area: contact;
+}
+.bento-github {
+  grid-area: github;
+}
+
+.bento-grid {
+  grid-template-areas: 'projects' 'career' 'contact' 'github' 'skills';
+}
+
+@media (min-width: 600px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      'projects projects'
+      'career contact'
+      'career github'
+      'skills skills';
+  }
+}
+
+@media (min-width: 1024px) {
+  .bento-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-areas:
+      'projects projects career contact'
+      'projects projects career github'
+      'skills skills skills skills';
+  }
+}
+
+.bento-cell,
+.bento-card,
+.overview-card {
+  height: 100%;
+}
+
+.bento-card {
+  border-radius: var(--sapElement_BorderCornerRadius, 0.75rem);
+  transition: box-shadow 0.25s ease;
+}
+
+/* Coral glow on hover and keyboard focus (AC-07.3, AC-06.5) */
+.bento-card[data-active='true'] {
+  box-shadow: 0 12px 32px -8px color-mix(in srgb, var(--accent-1) 60%, transparent);
+}
+
+.overview-card {
+  display: block;
+}
+
+.overview-card::part(root) {
+  height: 100%;
+}
+
+/* KPI as a large number like on Fiori overview page cards (AC-01.3) */
+.overview-card [slot='header']::part(additional-text) {
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--accent-1);
+}
+
+.bento-card[data-active='true'] .overview-card {
+  outline: 1px solid var(--accent-1);
+  border-radius: var(--sapTile_BorderCornerRadius, 1rem);
+}
+
+.overview-card [slot='avatar'] {
+  color: var(--accent-1);
 }
