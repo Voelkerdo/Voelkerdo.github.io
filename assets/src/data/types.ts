@@ -15,19 +15,11 @@ export interface Project {
   repoUrl: string
 }
 
-export type SkillGroupId = 'backend' | 'frontend' | 'frameworks' | 'sap'
-
 export type SkillLevel = 'Expert' | 'Advanced' | 'Intermediate' | 'Familiar'
 
 export interface Skill {
   name: string
   level: SkillLevel
-}
-
-export interface SkillGroup {
-  id: SkillGroupId
-  title: string
-  skills: Skill[]
 }
 
 export interface CareerStation {

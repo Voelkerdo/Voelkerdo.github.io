@@ -2,12 +2,12 @@ import { career } from './career.ts'
 import { contactChannels } from './contact.ts'
 import { profile } from './profile.ts'
 import { projects } from './projects.ts'
-import { skillGroups } from './skills.ts'
-import type { CardDef, CareerStation, SkillGroup } from './types.ts'
+import { skills } from './skills.ts'
+import type { CardDef, CareerStation, Skill } from './types.ts'
 
-/** Number of distinct skills across all groups (a skill may appear in several groups). */
-export function countSkills(groups: SkillGroup[]): number {
-  return new Set(groups.flatMap((g) => g.skills.map((s) => s.name))).size
+/** Number of distinct skills (AC-01.3) */
+export function countSkills(list: Skill[]): number {
+  return new Set(list.map((s) => s.name)).size
 }
 
 /** Full years since the earliest career station started. */
@@ -41,7 +41,7 @@ export function buildCards(now: Date = new Date()): CardDef[] {
       title: 'Skills',
       subtitle: 'Tech stack',
       icon: 'wrench',
-      kpi: String(countSkills(skillGroups)),
+      kpi: String(countSkills(skills)),
       size: 'wide',
     },
     {

@@ -3,7 +3,7 @@ import { career } from '../../src/data/career.ts'
 import { contactChannels } from '../../src/data/contact.ts'
 import { profile } from '../../src/data/profile.ts'
 import { projects } from '../../src/data/projects.ts'
-import { LEVEL_PERCENT, skillGroups } from '../../src/data/skills.ts'
+import { LEVEL_PERCENT, skills, sortedSkills } from '../../src/data/skills.ts'
 import { buildCards, countSkills, yearsOfExperience } from '../../src/data/cards.ts'
 
 const ids = (items: { id: string }[]) => items.map((i) => i.id)
@@ -13,7 +13,7 @@ describe('data', () => {
   it('AC-01.3 card KPIs are derived from the data', () => {
     const cards = Object.fromEntries(buildCards(new Date('2026-10-30')).map((t) => [t.id, t]))
     expect(cards.projects.kpi).toBe(String(projects.length))
-    expect(cards.skills.kpi).toBe(String(countSkills(skillGroups)))
+    expect(cards.skills.kpi).toBe(String(countSkills(skills)))
     expect(cards.career.kpi).toBe(String(yearsOfExperience(career, new Date('2026-10-30'))))
     expect(cards.contact.kpi).toBe(String(contactChannels.length))
   })
@@ -31,15 +31,9 @@ describe('data', () => {
   it('AC-01.3 counts distinct skills and full years of experience', () => {
     expect(
       countSkills([
-        {
-          id: 'backend',
-          title: 'A',
-          skills: [
-            { name: 'X', level: 'Expert' },
-            { name: 'Y', level: 'Familiar' },
-          ],
-        },
-        { id: 'sap', title: 'B', skills: [{ name: 'Y', level: 'Familiar' }] },
+        { name: 'X', level: 'Expert' },
+        { name: 'Y', level: 'Familiar' },
+        { name: 'Y', level: 'Familiar' },
       ]),
     ).toBe(2)
     const stations = [{ id: 'a', from: '2020-11', role: 'r', company: 'c', highlights: [] }]
@@ -58,22 +52,20 @@ describe('data', () => {
     }
   })
 
-  it('AC-03.1 skills are grouped into backend, frontend, frameworks and further SAP experience', () => {
-    expect(ids(skillGroups)).toEqual(['backend', 'frontend', 'frameworks', 'sap'])
-  })
-
-  it('AC-03.2 skills contain the initial content from the intent', () => {
-    const byId = Object.fromEntries(skillGroups.map((g) => [g.id, g.skills.map((s) => s.name)]))
-    expect(byId.backend).toEqual(['ABAP', 'Node.js'])
-    expect(byId.frontend).toEqual(['SAP UI5', 'JavaScript', 'HTML5'])
-    expect(byId.frameworks).toEqual([
+  it('AC-03.2 skills contain all 10 skills from the intent, each once', () => {
+    expect(skills.map((s) => s.name)).toEqual([
+      'ABAP',
+      'Node.js',
       'SAP UI5',
+      'JavaScript',
+      'HTML5',
       'ABAP RAP',
       'ABAP Programming Model for Fiori',
       'SAP OData (SEGW)',
       'SAP Adobe Forms',
+      'User & Authorization Management',
     ])
-    expect(byId.sap).toEqual(['User & Authorization Management'])
+    expect(isUnique(skills.map((s) => s.name))).toBe(true)
   })
 
   it('AC-03.5 levels map to bar lengths', () => {
@@ -81,26 +73,39 @@ describe('data', () => {
   })
 
   it('AC-03.4 / AC-03.7 every skill has the level provided by Dominik', () => {
-    const levels = Object.fromEntries(
-      skillGroups.flatMap((g) => g.skills.map((s) => [`${g.id}/${s.name}`, s.level])),
-    )
-    expect(levels).toEqual({
-      'backend/ABAP': 'Advanced',
-      'backend/Node.js': 'Intermediate',
-      'frontend/SAP UI5': 'Familiar',
-      'frontend/JavaScript': 'Familiar',
-      'frontend/HTML5': 'Advanced',
-      'frameworks/SAP UI5': 'Familiar',
-      'frameworks/ABAP RAP': 'Intermediate',
-      'frameworks/ABAP Programming Model for Fiori': 'Advanced',
-      'frameworks/SAP OData (SEGW)': 'Expert',
-      'frameworks/SAP Adobe Forms': 'Expert',
-      'sap/User & Authorization Management': 'Advanced',
+    expect(Object.fromEntries(skills.map((s) => [s.name, s.level]))).toEqual({
+      ABAP: 'Advanced',
+      'Node.js': 'Intermediate',
+      'SAP UI5': 'Familiar',
+      JavaScript: 'Familiar',
+      HTML5: 'Advanced',
+      'ABAP RAP': 'Intermediate',
+      'ABAP Programming Model for Fiori': 'Advanced',
+      'SAP OData (SEGW)': 'Expert',
+      'SAP Adobe Forms': 'Expert',
+      'User & Authorization Management': 'Advanced',
     })
   })
 
-  it('AC-01.3 the skills KPI still counts 10 distinct skills', () => {
-    expect(countSkills(skillGroups)).toBe(10)
+  it('AC-03.8 skills are sorted by level descending, ties keep the data order', () => {
+    expect(sortedSkills().map((s) => s.name)).toEqual([
+      'SAP OData (SEGW)',
+      'SAP Adobe Forms',
+      'ABAP',
+      'HTML5',
+      'ABAP Programming Model for Fiori',
+      'User & Authorization Management',
+      'Node.js',
+      'ABAP RAP',
+      'SAP UI5',
+      'JavaScript',
+    ])
+    // Sorting must not change the source list
+    expect(skills[0].name).toBe('ABAP')
+  })
+
+  it('AC-01.3 the skills KPI counts 10 skills', () => {
+    expect(countSkills(skills)).toBe(10)
   })
 
   it('AC-04.2 career stations use YYYY-MM dates', () => {
@@ -135,7 +140,7 @@ describe('data', () => {
   })
 
   it('AC-02.3 / AC-04.2 / AC-05.1 ids are unique', () => {
-    for (const list of [projects, skillGroups, career, contactChannels, buildCards()]) {
+    for (const list of [projects, career, contactChannels, buildCards()]) {
       expect(isUnique(ids(list))).toBe(true)
     }
   })

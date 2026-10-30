@@ -1,40 +1,17 @@
 import { expect, test, type Page } from '@playwright/test'
 
-// Expected content from specs/00-intent.md (AC-03.2) and levels from AC-03.7
-const expectedGroups = [
-  {
-    id: 'backend',
-    title: 'Backend',
-    skills: [
-      ['ABAP', 'Advanced'],
-      ['Node.js', 'Intermediate'],
-    ],
-  },
-  {
-    id: 'frontend',
-    title: 'Frontend',
-    skills: [
-      ['SAP UI5', 'Familiar'],
-      ['JavaScript', 'Familiar'],
-      ['HTML5', 'Advanced'],
-    ],
-  },
-  {
-    id: 'frameworks',
-    title: 'Frameworks',
-    skills: [
-      ['SAP UI5', 'Familiar'],
-      ['ABAP RAP', 'Intermediate'],
-      ['ABAP Programming Model for Fiori', 'Advanced'],
-      ['SAP OData (SEGW)', 'Expert'],
-      ['SAP Adobe Forms', 'Expert'],
-    ],
-  },
-  {
-    id: 'sap',
-    title: 'Further SAP Experience',
-    skills: [['User & Authorization Management', 'Advanced']],
-  },
+// Expected order (AC-03.8) and levels (AC-03.7)
+const expected = [
+  ['SAP OData (SEGW)', 'Expert'],
+  ['SAP Adobe Forms', 'Expert'],
+  ['ABAP', 'Advanced'],
+  ['HTML5', 'Advanced'],
+  ['ABAP Programming Model for Fiori', 'Advanced'],
+  ['User & Authorization Management', 'Advanced'],
+  ['Node.js', 'Intermediate'],
+  ['ABAP RAP', 'Intermediate'],
+  ['SAP UI5', 'Familiar'],
+  ['JavaScript', 'Familiar'],
 ]
 const PERCENT: Record<string, number> = {
   Expert: 100,
@@ -42,10 +19,12 @@ const PERCENT: Record<string, number> = {
   Intermediate: 50,
   Familiar: 25,
 }
+const expectedPercents = expected.map(([, level]) => PERCENT[level])
 
-const bars = (page: Page) => page.locator('[data-card-id="skills"] .skill-bar')
+const skillsCard = (page: Page) => page.locator('[data-card-id="skills"]')
+const bars = (page: Page) => skillsCard(page).locator('.skill-bar')
 
-// Width of the filled part relative to the whole bar, in percent
+// Width of the filled bar relative to its track, in percent
 const fillPercent = (page: Page) =>
   bars(page).evaluateAll((els) =>
     els.map((el) => {
@@ -56,39 +35,43 @@ const fillPercent = (page: Page) =>
     }),
   )
 
-const expectedPercents = expectedGroups.flatMap((g) => g.skills.map(([, level]) => PERCENT[level]))
-
 test.describe('skills card', () => {
-  test('AC-03.1 skill groups are shown in the specified order', async ({ page }) => {
+  test('AC-03.8 skills form one list sorted by level, without categories', async ({ page }) => {
     await page.goto('/')
-    const groups = page.locator('[data-card-id="skills"] [data-skill-group]')
-    await expect(groups).toHaveCount(4)
-    const ids = await groups.evaluateAll((els) =>
-      els.map((el) => el.getAttribute('data-skill-group')),
-    )
-    expect(ids).toEqual(expectedGroups.map((g) => g.id))
+    await expect(skillsCard(page).locator('.skill-name')).toHaveText(expected.map(([name]) => name))
+    await expect(skillsCard(page).locator('[data-skill-group], .skill-group-title')).toHaveCount(0)
   })
 
-  test('AC-03.2 / AC-03.5 every skill shows its name and level in a progress bar', async ({
-    page,
-  }) => {
+  test('AC-03.2 / AC-03.5 every skill shows its level in a progress bar', async ({ page }) => {
     await page.goto('/')
-    for (const group of expectedGroups) {
-      const section = page.locator(`[data-skill-group="${group.id}"]`)
-      await expect(section.locator('.skill-group-title')).toHaveText(group.title)
-      await expect(section.locator('.skill-name')).toHaveText(group.skills.map(([name]) => name))
-      const levels = await section
-        .locator('ui5-progress-indicator')
-        .evaluateAll((els) =>
-          els.map((el) => (el as HTMLElement & { displayValue: string }).displayValue),
-        )
-      expect(levels).toEqual(group.skills.map(([, level]) => level))
-    }
+    const levels = await bars(page).evaluateAll((els) =>
+      els.map((el) => (el as HTMLElement & { displayValue: string }).displayValue),
+    )
+    expect(levels).toEqual(expected.map(([, level]) => level))
+  })
+
+  test('AC-03.8 skill name and bar sit side by side', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 })
+    await page.goto('/')
+    const first = skillsCard(page).locator('.skill').first()
+    const name = (await first.locator('.skill-name').boundingBox())!
+    const bar = (await first.locator('.skill-bar').boundingBox())!
+    expect(bar.x).toBeGreaterThan(name.x + name.width - 1)
+    // The name is vertically centered on the bar track
+    const centers = await first.evaluate((row) => {
+      const nameBox = row.querySelector('.skill-name')!.getBoundingClientRect()
+      const track = row
+        .querySelector('.skill-bar')!
+        .shadowRoot!.querySelector('[part="remaining-bar"]')!
+        .getBoundingClientRect()
+      return [nameBox.top + nameBox.height / 2, track.top + track.height / 2]
+    })
+    expect(Math.abs(centers[0] - centers[1])).toBeLessThanOrEqual(2)
   })
 
   test('AC-03.5 / AC-03.6 bars fill to the length of their level', async ({ page }) => {
     await page.goto('/')
-    await expect(bars(page)).toHaveCount(expectedPercents.length)
+    await expect(bars(page)).toHaveCount(expected.length)
     await expect.poll(() => fillPercent(page), { timeout: 5000 }).toEqual(expectedPercents)
   })
 
