@@ -46,19 +46,19 @@ body {
   font-family: var(--sapFontFamily);
 }
 
-.launchpad-shell {
+.app-shell {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.launchpad-shellbar {
+.app-shellbar {
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
-.launchpad-content {
+.app-content {
   flex: 1;
 }
 
@@ -74,7 +74,7 @@ body {
   font-size: 0.875rem;
 }
 
-.shell-app-title {
+.shell-page-title {
   font-weight: 600;
 }
 
@@ -85,7 +85,6 @@ body {
   padding: 1rem;
 }
 
-.app-placeholder,
-.launchpad-placeholder {
+.overview-placeholder {
   padding: 1rem;
 }

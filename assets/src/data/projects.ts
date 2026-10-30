@@ -7,7 +7,7 @@ export const projects: Project[] = [
     id: 'portfolio-website',
     name: 'Portfolio Website',
     description:
-      'This website – a Fiori Launchpad reimagined with React and SAP UI5 Web Components, built spec-driven.',
+      'This website – a Fiori overview page reimagined with React and SAP UI5 Web Components, built spec-driven.',
     technologies: ['React', 'TypeScript', 'SAP UI5 Web Components', 'Motion'],
     repoUrl: profile.siteRepoUrl,
   },

@@ -8,13 +8,10 @@ import {
   UserMenuAccount,
   UserMenuItem,
 } from '@ui5/webcomponents-react'
-import '@ui5/webcomponents-icons/dist/nav-back.js'
 import '@ui5/webcomponents-icons/dist/hint.js'
 import '@ui5/webcomponents-icons/dist/dark-mode.js'
 import '@ui5/webcomponents-icons/dist/light-mode.js'
 import { useState, type ReactNode } from 'react'
-import { useLocation, useNavigate } from 'react-router'
-import { HOME_TITLE, titleForPath } from '../apps/appRoutes.tsx'
 import { profile } from '../data/profile.ts'
 import { AboutDialog } from './AboutDialog.tsx'
 import { useThemeMode } from './useThemeMode.ts'
@@ -24,27 +21,20 @@ const initials = profile.name
   .map((part) => part[0])
   .join('')
 
-export function LaunchpadShell({ children }: { children: ReactNode }) {
-  const { pathname } = useLocation()
-  const navigate = useNavigate()
+const PAGE_TITLE = 'Overview'
+
+// Single page (D-8): the branding scrolls back to the top instead of navigating (AC-06.11)
+const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
+
+export function AppShell({ children }: { children: ReactNode }) {
   const { mode, toggleMode } = useThemeMode()
   const [menuOpener, setMenuOpener] = useState<HTMLElement | null>(null)
   const [aboutOpen, setAboutOpen] = useState(false)
 
-  const title = titleForPath(pathname)
-  const inApp = title !== HOME_TITLE
-  // Navigate to "/" instead of history.back() so it also works after a direct link (AC-06.7)
-  const goHome = () => navigate('/')
-
   return (
-    <div className="launchpad-shell">
+    <div className="app-shell">
       <ShellBar
-        className="launchpad-shellbar"
-        startButton={
-          inApp ? (
-            <Button icon="nav-back" design="Transparent" accessibleName="Back" onClick={goHome} />
-          ) : undefined
-        }
+        className="app-shellbar"
         branding={
           <ShellBarBranding
             logo={
@@ -52,15 +42,15 @@ export function LaunchpadShell({ children }: { children: ReactNode }) {
                 {initials}
               </span>
             }
-            accessibleName={`${profile.name} – Home`}
-            onClick={goHome}
+            accessibleName={`${profile.name} – scroll to top`}
+            onClick={scrollToTop}
           >
             {profile.name}
           </ShellBarBranding>
         }
         content={
-          <Text className="shell-app-title" data-testid="app-title">
-            {title}
+          <Text className="shell-page-title" data-testid="page-title">
+            {PAGE_TITLE}
           </Text>
         }
         profile={
@@ -112,7 +102,7 @@ export function LaunchpadShell({ children }: { children: ReactNode }) {
 
       <AboutDialog open={aboutOpen} onClose={() => setAboutOpen(false)} />
 
-      <div className="launchpad-content">{children}</div>
+      <div className="app-content">{children}</div>
     </div>
   )
 }

@@ -43,15 +43,17 @@ export interface ContactChannel {
   primary?: boolean
 }
 
-export interface TileDef {
+/** Card size in the bento grid (AC-01.6) */
+export type CardSize = 'large' | 'wide' | 'tall' | 'small'
+
+export interface CardDef {
   id: string
   title: string
   subtitle?: string
   /** UI5 icon name */
   icon: string
   kpi?: string
-  /** Internal app route, e.g. `/projects` */
-  route?: string
+  size: CardSize
   /** External link, e.g. the GitHub profile */
   href?: string
 }

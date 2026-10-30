@@ -3,7 +3,7 @@ import { contactChannels } from './contact.ts'
 import { profile } from './profile.ts'
 import { projects } from './projects.ts'
 import { skillGroups } from './skills.ts'
-import type { CareerStation, SkillGroup, TileDef } from './types.ts'
+import type { CardDef, CareerStation, SkillGroup } from './types.ts'
 
 /** Number of distinct skills across all groups (a skill may appear in several groups). */
 export function countSkills(groups: SkillGroup[]): number {
@@ -19,7 +19,7 @@ export function yearsOfExperience(stations: CareerStation[], now: Date = new Dat
   return Math.max(0, Math.floor(months / 12))
 }
 
-export function buildTiles(now: Date = new Date()): TileDef[] {
+export function buildCards(now: Date = new Date()): CardDef[] {
   return [
     {
       id: 'projects',
@@ -27,7 +27,7 @@ export function buildTiles(now: Date = new Date()): TileDef[] {
       subtitle: 'Selected repositories',
       icon: 'source-code',
       kpi: String(projects.length),
-      route: '/projects',
+      size: 'large',
     },
     {
       id: 'skills',
@@ -35,7 +35,7 @@ export function buildTiles(now: Date = new Date()): TileDef[] {
       subtitle: 'Tech stack',
       icon: 'wrench',
       kpi: String(countSkills(skillGroups)),
-      route: '/skills',
+      size: 'wide',
     },
     {
       id: 'career',
@@ -43,7 +43,7 @@ export function buildTiles(now: Date = new Date()): TileDef[] {
       subtitle: 'Years of experience',
       icon: 'history',
       kpi: String(yearsOfExperience(career, now)),
-      route: '/career',
+      size: 'tall',
     },
     {
       id: 'contact',
@@ -51,13 +51,14 @@ export function buildTiles(now: Date = new Date()): TileDef[] {
       subtitle: 'Get in touch',
       icon: 'email',
       kpi: String(contactChannels.length),
-      route: '/contact',
+      size: 'small',
     },
     {
       id: 'github',
       title: 'GitHub',
       subtitle: `@${profile.githubUsername}`,
       icon: 'chain-link',
+      size: 'small',
       href: profile.githubUrl,
     },
   ]

@@ -4,18 +4,18 @@ import { contactChannels } from '../../src/data/contact.ts'
 import { profile } from '../../src/data/profile.ts'
 import { projects } from '../../src/data/projects.ts'
 import { skillGroups } from '../../src/data/skills.ts'
-import { buildTiles, countSkills, yearsOfExperience } from '../../src/data/tiles.ts'
+import { buildCards, countSkills, yearsOfExperience } from '../../src/data/cards.ts'
 
 const ids = (items: { id: string }[]) => items.map((i) => i.id)
 const isUnique = (values: string[]) => new Set(values).size === values.length
 
 describe('data', () => {
-  it('AC-01.3 tile KPIs are derived from the data', () => {
-    const tiles = Object.fromEntries(buildTiles(new Date('2026-10-30')).map((t) => [t.id, t]))
-    expect(tiles.projects.kpi).toBe(String(projects.length))
-    expect(tiles.skills.kpi).toBe(String(countSkills(skillGroups)))
-    expect(tiles.career.kpi).toBe(String(yearsOfExperience(career, new Date('2026-10-30'))))
-    expect(tiles.contact.kpi).toBe(String(contactChannels.length))
+  it('AC-01.3 card KPIs are derived from the data', () => {
+    const cards = Object.fromEntries(buildCards(new Date('2026-10-30')).map((t) => [t.id, t]))
+    expect(cards.projects.kpi).toBe(String(projects.length))
+    expect(cards.skills.kpi).toBe(String(countSkills(skillGroups)))
+    expect(cards.career.kpi).toBe(String(yearsOfExperience(career, new Date('2026-10-30'))))
+    expect(cards.contact.kpi).toBe(String(contactChannels.length))
   })
 
   it('AC-01.3 counts distinct skills and full years of experience', () => {
@@ -73,13 +73,24 @@ describe('data', () => {
     expect(primary[0].url).toBe(profile.githubUrl)
   })
 
-  it('AC-01.2 GitHub tile links to the profile', () => {
-    const github = buildTiles().find((t) => t.id === 'github')
+  it('AC-01.6 cards have the specified sizes', () => {
+    const sizes = Object.fromEntries(buildCards().map((c) => [c.id, c.size]))
+    expect(sizes).toEqual({
+      projects: 'large',
+      skills: 'wide',
+      career: 'tall',
+      contact: 'small',
+      github: 'small',
+    })
+  })
+
+  it('AC-01.2 GitHub card links to the profile', () => {
+    const github = buildCards().find((t) => t.id === 'github')
     expect(github?.href).toBe('https://github.com/Voelkerdo')
   })
 
   it('AC-02.3 / AC-04.2 / AC-05.1 ids are unique', () => {
-    for (const list of [projects, skillGroups, career, contactChannels, buildTiles()]) {
+    for (const list of [projects, skillGroups, career, contactChannels, buildCards()]) {
       expect(isUnique(ids(list))).toBe(true)
     }
   })

@@ -23,7 +23,7 @@
 | ~~T-10~~ | ~~Skills-App~~ | ersetzt durch T-18 (CR-1) | – |
 | ~~T-11~~ | ~~Career-App~~ | ersetzt durch T-19 (CR-1) | – |
 | ~~T-12~~ | ~~Contact-App~~ | ersetzt durch T-20 (CR-1) | – |
-| T-15 | CR-1: Shell & Daten umbauen | AC-01.3, AC-01.6, AC-06.2, AC-06.11, TD-10, TD-11 | [ ] |
+| T-15 | CR-1: Shell & Daten umbauen | AC-01.3, AC-01.6, AC-06.2, AC-06.11, TD-10, TD-11 | [x] |
 | T-16 | Overview Page mit Bento-Grid | AC-01.1, AC-01.4, AC-06.5, AC-07.2, AC-07.3, AC-08.3 | [ ] |
 | T-17 | Projects-Card | AC-02.1, AC-02.2 | [ ] |
 | T-18 | Skills-Card | AC-03.1, AC-03.2 | [ ] |

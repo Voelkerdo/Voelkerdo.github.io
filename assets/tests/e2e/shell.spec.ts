@@ -1,51 +1,26 @@
 import { expect, test } from '@playwright/test'
 
-const appTitle = (page: import('@playwright/test').Page) => page.getByTestId('app-title')
-
-test.describe('launchpad shell', () => {
-  test('AC-06.2 header shows branding, "Home" title and avatar; no back button on home', async ({
+test.describe('fiori shell', () => {
+  test('AC-06.2 header shows branding, "Overview" title and avatar; no back button', async ({
     page,
   }) => {
     await page.goto('/')
-    await expect(page.getByText('Dominik Völker').first()).toBeVisible()
-    await expect(appTitle(page)).toHaveText('Home')
+    await expect(page.locator('ui5-shellbar-branding')).toContainText('Dominik Völker')
+    await expect(page.getByTestId('page-title')).toHaveText('Overview')
     await expect(page.getByTestId('shell-avatar')).toBeVisible()
     await expect(page.getByRole('button', { name: 'Back' })).toHaveCount(0)
   })
 
-  test('AC-06.3 direct link opens the app with its title', async ({ page }) => {
-    await page.goto('/#/skills')
-    await expect(appTitle(page)).toHaveText('Skills')
-    await expect(page.getByRole('heading', { name: 'Skills' })).toBeVisible()
-  })
-
-  test('AC-06.3 unknown routes redirect to the launchpad', async ({ page }) => {
-    await page.goto('/#/does-not-exist')
-    await expect(page).toHaveURL(/#\/$/)
-    await expect(appTitle(page)).toHaveText('Home')
-  })
-
-  test('AC-06.7 back button returns to the launchpad, even after a direct link', async ({
-    page,
-  }) => {
-    await page.goto('/#/career')
-    await page.getByRole('button', { name: 'Back' }).click()
-    await expect(page).toHaveURL(/#\/$/)
-    await expect(appTitle(page)).toHaveText('Home')
-  })
-
-  test('AC-06.7 clicking the branding returns to the launchpad', async ({ page }) => {
-    await page.goto('/#/projects')
-    await page.locator('ui5-shellbar-branding').click()
-    await expect(appTitle(page)).toHaveText('Home')
-  })
-
-  test('AC-06.3 browser back works between launchpad and app', async ({ page }) => {
+  test('AC-06.11 clicking the branding scrolls to the top', async ({ page }) => {
     await page.goto('/')
-    await page.goto('/#/contact')
-    await expect(appTitle(page)).toHaveText('Contact')
-    await page.goBack()
-    await expect(appTitle(page)).toHaveText('Home')
+    // Make the page scrollable independent of its content
+    await page.evaluate(() => {
+      document.body.style.minHeight = '3000px'
+      window.scrollTo(0, 1500)
+    })
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0)
+    await page.locator('ui5-shellbar-branding').click()
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
   })
 
   test('AC-06.9 / AC-07.4 avatar menu opens About with the built-with hint', async ({ page }) => {
