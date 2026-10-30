@@ -95,7 +95,7 @@ interface CardDef { id: string; title: string; subtitle?: string; icon: string; 
 ```
 - Platzhalter-Inhalte (REQ-02/04/05) sind mit `// TODO(content): …` markiert, damit sie per Suche auffindbar sind.
 - Die Balkenlänge je Stufe (AC-03.5) ist eine Konstante `LEVEL_PERCENT` in `data/skills.ts` (Expert 100, Advanced 75, Intermediate 50, Familiar 25).
-- `skills` ist eine flache Liste `Skill[]` (CR-4); jeder Skill kommt genau einmal vor. `sortedSkills()` sortiert stabil absteigend nach `LEVEL_PERCENT` (AC-03.8).
+- `skills` ist eine flache Liste `Skill[]` (CR-4) mit den 7 SAP-Skills (CR-5); jeder Skill kommt genau einmal vor. `sortedSkills()` sortiert stabil absteigend nach `LEVEL_PERCENT` (AC-03.8). `VISIBLE_SKILLS = 5` legt fest, wie viele anfangs sichtbar sind (AC-03.9).
 - Die KPIs der Cards (AC-01.3) werden aus den Daten berechnet (z. B. `projects.length`), nicht doppelt gepflegt.
 
 ## 5. Komponenten-Mapping
@@ -108,7 +108,7 @@ interface CardDef { id: string; title: string; subtitle?: string; icon: string; 
 | Bento-Grid | CSS Grid mit `grid-template-areas`, siehe §6 | AC-01.6, AC-01.9, AC-08.1 |
 | Profil-Card | `Avatar` (Initialen bzw. Bild, Farbe Accent1) + Name + Positionierung | AC-01.8 |
 | Projects-Card | `List` mit je einem Eintrag pro Projekt: `Link` (target `_blank`), Beschreibung, `Tag`s für Technologien | REQ-02 |
-| Skills-Card | eine Liste: je Skill Name + `ProgressIndicator` (`value` aus `LEVEL_PERCENT`, `displayValue` = Stufe), Balkenfarbe = Akzent (TD-12) | REQ-03 |
+| Skills-Card | eine Liste (anfangs `VISIBLE_SKILLS` Einträge, Umschalter als `Button` design `Transparent` mit `aria-expanded`): je Skill Name + `ProgressIndicator` (`value` aus `LEVEL_PERCENT`, `displayValue` = Stufe), Balkenfarbe = Akzent (TD-12) | REQ-03 |
 | Career-Card | `Timeline` + `TimelineItem` (fiori) | REQ-04 |
 | Contact-Card | `List` / `ListItemStandard` mit Icons, GitHub hervorgehoben | REQ-05 |
 | GitHub-Card | `CardHeader` mit `interactive` – öffnet das Profil in neuem Tab; Inhalt: kurzer Einladungstext + `Button` (Emphasized) „Follow @Voelkerdo“ | AC-01.2 |
@@ -136,6 +136,7 @@ interface CardDef { id: string; title: string; subtitle?: string; icon: string; 
 - **Kein Routing (TD-11):** Ein Klick auf Logo/Name scrollt per `window.scrollTo({ top: 0 })` nach oben (AC-06.11).
 - **Gestaffeltes Einblenden (AC-01.4):** Motion-Variants mit `staggerChildren` auf dem BentoGrid.
 - **Skill-Balken (AC-03.6):** Die Balken starten mit `value=0` und springen auf ihren Zielwert, sobald (a) die Einblend-Animation der Card abgeschlossen ist (`onAnimationComplete` in `AnimatedCard`, weitergegeben per React-Context) und (b) die Card zu mindestens 30 % im Viewport liegt (`useInView` aus Motion, einmalig); die eingebaute Breiten-Transition des `ProgressIndicator` (`::part(bar)`) übernimmt die Animation, Dauer ca. 0,8 s, gestaffelt per `transition-delay`. Bei Reduced Motion wird direkt der Zielwert gerendert und die Transition per CSS abgeschaltet.
+- **Show all / Show less (AC-03.9):** Zusätzliche Zeilen erscheinen per `AnimatePresence` mit Höhen- und Opacity-Animation; ihre Balken nutzen dieselbe Füll-Logik und starten, sobald sie gerendert sind. Bei Reduced Motion ohne Animation.
 - **Hover/Fokus (AC-07.3):** Anheben + leichter Tilt + Akzent-Glow über `whileHover` / `whileFocus`.
 - **Reduced Motion (AC-08.3):** `useReducedMotion()`; wenn aktiv, nur Opacity-Übergänge ohne Bewegung.
 - **Tastatur (AC-06.5):** Alle Links und die interaktive GitHub-Card sind per Tab erreichbar und haben einen sichtbaren Fokus-Ring; die Hover-Animation greift auch bei Fokus innerhalb der Card (`:focus-within`).
