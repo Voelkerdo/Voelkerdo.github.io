@@ -88,7 +88,6 @@ interface Profile  { name: string; tagline: string; githubUsername: string; gith
 interface Project  { id: string; name: string; description: string; technologies: string[]; repoUrl: string }
 type SkillLevel = 'Expert' | 'Advanced' | 'Intermediate' | 'Familiar'
 interface Skill { name: string; level: SkillLevel }
-interface SkillGroup { id: 'backend' | 'frontend' | 'frameworks' | 'sap'; title: string; skills: Skill[] }
 interface CareerStation { id: string; from: string; to?: string; role: string; company: string; highlights: string[] }
 interface ContactChannel { id: string; label: string; url: string; icon: string; primary?: boolean }
 type CardSize = 'large' | 'wide' | 'tall' | 'small'
@@ -96,6 +95,7 @@ interface CardDef { id: string; title: string; subtitle?: string; icon: string; 
 ```
 - Platzhalter-Inhalte (REQ-02/04/05) sind mit `// TODO(content): …` markiert, damit sie per Suche auffindbar sind.
 - Die Balkenlänge je Stufe (AC-03.5) ist eine Konstante `LEVEL_PERCENT` in `data/skills.ts` (Expert 100, Advanced 75, Intermediate 50, Familiar 25).
+- `skills` ist eine flache Liste `Skill[]` (CR-4); jeder Skill kommt genau einmal vor. `sortedSkills()` sortiert stabil absteigend nach `LEVEL_PERCENT` (AC-03.8).
 - Die KPIs der Cards (AC-01.3) werden aus den Daten berechnet (z. B. `projects.length`), nicht doppelt gepflegt.
 
 ## 5. Komponenten-Mapping
@@ -108,7 +108,7 @@ interface CardDef { id: string; title: string; subtitle?: string; icon: string; 
 | Bento-Grid | CSS Grid mit `grid-template-areas`, siehe §6 | AC-01.6, AC-01.9, AC-08.1 |
 | Profil-Card | `Avatar` (Initialen bzw. Bild, Farbe Accent1) + Name + Positionierung | AC-01.8 |
 | Projects-Card | `List` mit je einem Eintrag pro Projekt: `Link` (target `_blank`), Beschreibung, `Tag`s für Technologien | REQ-02 |
-| Skills-Card | je Gruppe ein `Label`; je Skill Name + `ProgressIndicator` (`value` aus `LEVEL_PERCENT`, `displayValue` = Stufe), Balkenfarbe = Akzent (TD-12) | REQ-03 |
+| Skills-Card | eine Liste: je Skill Name + `ProgressIndicator` (`value` aus `LEVEL_PERCENT`, `displayValue` = Stufe), Balkenfarbe = Akzent (TD-12) | REQ-03 |
 | Career-Card | `Timeline` + `TimelineItem` (fiori) | REQ-04 |
 | Contact-Card | `List` / `ListItemStandard` mit Icons, GitHub hervorgehoben | REQ-05 |
 | GitHub-Card | `CardHeader` mit `interactive` – öffnet das Profil in neuem Tab | AC-01.2 |
