@@ -10,6 +10,7 @@ import { AnimatedCard } from './AnimatedCard.tsx'
 import { BentoGrid } from './BentoGrid.tsx'
 import { ProfileCard } from './cards/ProfileCard.tsx'
 import { ProjectsCard } from './cards/ProjectsCard.tsx'
+import { SkillsCard } from './cards/SkillsCard.tsx'
 
 const cards = buildCards()
 
@@ -17,6 +18,7 @@ const cards = buildCards()
 const content: Record<string, ReactNode> = {
   about: <ProfileCard />,
   projects: <ProjectsCard />,
+  skills: <SkillsCard />,
 }
 
 export function OverviewPage() {
