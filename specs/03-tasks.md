@@ -34,7 +34,7 @@
 | T-20 | Contact- & GitHub-Card | AC-01.2, AC-05.1, AC-05.2 | [x] |
 | T-24 | CR-5: Nur SAP-Skills, Top 5 mit „Show all“ | AC-03.2, AC-03.7, AC-03.9 | [x] |
 | T-25 | CR-6: GitHub-Card entfernen, Contact hoch | AC-01.2, AC-01.3, AC-01.6 | [x] |
-| T-13 | Responsive-Feinschliff | AC-01.6, AC-08.1 | [ ] |
+| T-13 | Responsive-Feinschliff | AC-01.6, AC-08.1 | [x] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [ ] |
 
 ## Details
