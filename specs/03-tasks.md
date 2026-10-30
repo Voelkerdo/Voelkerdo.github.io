@@ -10,7 +10,7 @@
 ## Übersicht
 | Task | Titel | Erfüllt | Status |
 |---|---|---|---|
-| T-01 | Projekt-Setup | TD-1, TD-3, TD-5, TD-7 | [ ] |
+| T-01 | Projekt-Setup | TD-1, TD-3, TD-5, TD-7, TD-8 | [x] |
 | T-02 | Test-Setup & Qualitätstor | TD-2 | [ ] |
 | T-03 | Datenmodell & Platzhalter-Inhalte | AC-01.3, AC-02.3/02.4, AC-03.1–03.3, AC-04.2, AC-05.1 | [ ] |
 | T-04 | Theming & Theme-Modus | AC-07.1, AC-09.1, AC-09.2 | [ ] |
@@ -30,7 +30,7 @@
 ### T-01 Projekt-Setup
 - Vite-Projekt (React + TypeScript strict) im Ordner `assets/` anlegen (TD-7); alle Configs liegen dort.
 - Abhängigkeiten laut Tech Spec §1 installieren (UI5 Web Components for React, Motion, React Router).
-- ESLint + Prettier konfigurieren; npm-Scripts `dev`, `build`, `preview`, `typecheck`, `lint`.
+- Oxlint + Prettier konfigurieren (TD-8); npm-Scripts `dev`, `build`, `preview`, `typecheck`, `lint`.
 - `HashRouter` + `ThemeProvider` in `App.tsx` mit einer leeren Startseite.
 - **Fertig, wenn:** `npm run dev` startet die leere App, `npm run build` erzeugt `assets/dist/`, `typecheck` und `lint` sind grün.
 

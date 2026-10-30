@@ -14,7 +14,7 @@
 | Routing | React Router, Hash-Routing | 8.x |
 | Unit-/Komponententests | Vitest + Testing Library (jsdom) | 5.x / 16.x |
 | E2E-Tests | Playwright (Chromium) | 1.x |
-| Linting / Formatierung | ESLint + Prettier | – |
+| Linting / Formatierung | Oxlint + Prettier | 1.x / 3.x |
 | Package Manager | npm | – |
 
 ## 2. Architektur
@@ -39,7 +39,7 @@ Specs und Code sind getrennt (TD-7): `specs/` enthält ausschließlich die Spezi
 ```
 specs/                      # Intent, PRD, Tech Spec, Tasks
 assets/
-├─ package.json, vite.config.ts, tsconfig*.json, eslint/prettier/playwright/vitest-Config
+├─ package.json, vite.config.ts, tsconfig*.json, oxlint/prettier/playwright/vitest-Config
 ├─ index.html
 src/
 ├─ main.tsx                 # Einstieg, UI5-Theme-Setup
@@ -123,7 +123,7 @@ interface TileDef { id: string; title: string; subtitle?: string; icon: string; 
 ## 9. Qualitätstor (`npm run verify`)
 Nach **jeder** Quellcode-Änderung wird in `assets/` ausgeführt:
 1. `typecheck` – `tsc --noEmit`
-2. `lint` – ESLint
+2. `lint` – Oxlint + Prettier-Check
 3. `test` – Vitest (einmaliger Lauf)
 4. `e2e` – Playwright gegen den Vite-Dev-Server
 
@@ -152,6 +152,7 @@ Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 | TD-5 | Routing | Hash-Routing | Hosting noch offen – funktioniert überall ohne Server-Konfiguration |
 | TD-6 | Animationen | Motion (Shared Layout) | Tile-to-App-Transition ohne eigene FLIP-Logik |
 | TD-7 | Repo-Struktur | Code, Tests und Configs in `assets/`, Specs in `specs/` | Wunsch Dominik; klare Trennung von Spezifikation und Umsetzung |
+| TD-8 | Linter | Oxlint statt ESLint | `typescript-eslint` unterstützt TypeScript 7 noch nicht (Peer-Dependency `<6.1`); Oxlint ist der aktuelle Vite-Standard. Erkannt in T-01. |
 
 ## 12. Offene Fragen
 _Keine._
