@@ -14,7 +14,7 @@
 | T-02 | Test-Setup & Qualitätstor | TD-2 | [x] |
 | T-03 | Datenmodell & Platzhalter-Inhalte | AC-01.3, AC-02.3/02.4, AC-03.1–03.3, AC-04.2, AC-05.1 | [x] |
 | T-04 | Theming & Theme-Modus | AC-07.1, AC-09.1, AC-09.2 | [x] |
-| T-05 | Launchpad-Shell & Routing | AC-06.2, AC-06.3, AC-06.7, AC-06.9, AC-07.4 | [ ] |
+| T-05 | Launchpad-Shell & Routing | AC-06.2, AC-06.3, AC-06.7, AC-06.9, AC-07.4 | [x] |
 | T-06 | Tile-Komponente | AC-01.3, AC-06.5, AC-07.3 | [ ] |
 | T-07 | Launchpad-Startseite | AC-01.1, AC-01.2, AC-01.4 | [ ] |
 | T-08 | App-Rahmen & Tile-to-App-Transition | AC-06.1, AC-06.4, AC-06.6, AC-08.3 | [ ] |

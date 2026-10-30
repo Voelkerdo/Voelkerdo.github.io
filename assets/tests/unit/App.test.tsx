@@ -5,6 +5,6 @@ import App from '../../src/App.tsx'
 describe('App', () => {
   it('TD-2 smoke: renders the app', () => {
     render(<App />)
-    expect(screen.getByText('Dominik Völker')).toBeInTheDocument()
+    expect(screen.getAllByText('Dominik Völker').length).toBeGreaterThan(0)
   })
 })

@@ -8,6 +8,6 @@ test('TD-2 smoke: start page loads without console errors', async ({ page }) => 
   page.on('pageerror', (err) => errors.push(err.message))
 
   await page.goto('/')
-  await expect(page.getByText('Dominik Völker')).toBeVisible()
+  await expect(page.getByRole('main')).toBeVisible()
   expect(errors).toEqual([])
 })

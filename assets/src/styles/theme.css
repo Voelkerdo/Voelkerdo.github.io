@@ -26,6 +26,17 @@
   --sapButton_Emphasized_TextColor: var(--on-accent);
   --sapButton_Emphasized_Hover_Background: color-mix(in srgb, var(--accent-1) 85%, black);
   --sapButton_Emphasized_Hover_BorderColor: color-mix(in srgb, var(--accent-1) 85%, black);
+  --sapButton_Lite_TextColor: var(--accent-1);
+  --sapButton_Lite_Hover_TextColor: var(--accent-1);
+  --sapLinkColor: var(--accent-1);
+  --sapLink_Hover_Color: var(--accent-1);
+  --sapShell_SubBrand_TextColor: var(--accent-1);
+  --sapShell_Active_TextColor: var(--accent-1);
+  /* Avatars use color scheme Accent1, re-colored to the accent */
+  --sapAvatar_1_Background: var(--accent-1);
+  --sapAvatar_1_Hover_Background: color-mix(in srgb, var(--accent-1) 85%, black);
+  --sapAvatar_1_TextColor: var(--on-accent);
+  --sapAvatar_1_BorderColor: var(--accent-1);
 }
 
 body {
@@ -33,4 +44,48 @@ body {
   background: var(--sapBackgroundColor);
   color: var(--sapTextColor);
   font-family: var(--sapFontFamily);
+}
+
+.launchpad-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.launchpad-shellbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.launchpad-content {
+  flex: 1;
+}
+
+.shell-logo {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background: var(--accent-gradient);
+  color: var(--on-accent);
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.shell-app-title {
+  font-weight: 600;
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.app-placeholder,
+.launchpad-placeholder {
+  padding: 1rem;
 }
