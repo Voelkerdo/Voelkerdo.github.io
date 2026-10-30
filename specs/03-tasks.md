@@ -12,7 +12,7 @@
 |---|---|---|---|
 | T-01 | Projekt-Setup | TD-1, TD-3, TD-5, TD-7, TD-8 | [x] |
 | T-02 | Test-Setup & Qualitätstor | TD-2 | [x] |
-| T-03 | Datenmodell & Platzhalter-Inhalte | AC-01.3, AC-02.3/02.4, AC-03.1–03.3, AC-04.2, AC-05.1 | [ ] |
+| T-03 | Datenmodell & Platzhalter-Inhalte | AC-01.3, AC-02.3/02.4, AC-03.1–03.3, AC-04.2, AC-05.1 | [x] |
 | T-04 | Theming & Theme-Modus | AC-07.1, AC-09.1, AC-09.2 | [ ] |
 | T-05 | Launchpad-Shell & Routing | AC-06.2, AC-06.3, AC-06.7, AC-06.9, AC-07.4 | [ ] |
 | T-06 | Tile-Komponente | AC-01.3, AC-06.5, AC-07.3 | [ ] |

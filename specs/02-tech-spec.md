@@ -78,7 +78,7 @@ tests/
 
 ## 4. Datenmodell (`assets/src/data/types.ts`)
 ```ts
-interface Profile  { name: string; tagline: string; githubUrl: string; avatarUrl?: string; siteRepoUrl: string }
+interface Profile  { name: string; tagline: string; githubUsername: string; githubUrl: string; avatarUrl?: string; siteRepoUrl: string }
 interface Project  { id: string; name: string; description: string; technologies: string[]; repoUrl: string }
 interface SkillGroup { id: 'backend' | 'frontend' | 'frameworks' | 'sap'; title: string; skills: string[] }
 interface CareerStation { id: string; from: string; to?: string; role: string; company: string; highlights: string[] }
