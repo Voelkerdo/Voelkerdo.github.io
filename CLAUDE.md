@@ -14,4 +14,8 @@ Dieses Projekt wird spec-driven entwickelt. Die Specs in `specs/` sind die Quell
 - Kein Code ohne zugehörigen Task, kein Task ohne Requirement-ID.
 - Specs und Code werden im selben Commit geändert, wenn sie zusammengehören.
 - Commit-Messages referenzieren Requirement-/Task-IDs (z. B. `feat(T-04): ... [REQ-02]`).
+- Nach jeder Quellcode-Änderung `npm run verify` ausführen (typecheck, lint, Vitest, Playwright). Erst wenn alles grün ist, gilt die Änderung als fertig.
+- Testnamen beginnen mit der AC-ID (z. B. `AC-02.2 …`).
+- Platzhalter-Inhalte mit `// TODO(content): …` markieren.
+- Specs auf Deutsch, Website-Inhalte auf Englisch.
 - Antworten an den User auf Deutsch.
