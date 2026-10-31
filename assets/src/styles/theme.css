@@ -331,6 +331,30 @@ body {
   transition-delay: 0s;
 }
 
+/* Both pages in one cell; the inactive one fades out and is hidden afterwards (AC-02.12) */
+.project-pages {
+  display: grid;
+}
+
+.project-page {
+  grid-area: 1 / 1;
+  min-width: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.4s ease,
+    visibility 0s linear 0.4s;
+}
+
+.project-page[data-active='true'] {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 0.4s ease,
+    visibility 0s;
+}
+
+.no-collapse-animation .project-page,
 .no-collapse-animation .project-more,
 .no-collapse-animation .project-more > .project-more-list {
   transition: none;

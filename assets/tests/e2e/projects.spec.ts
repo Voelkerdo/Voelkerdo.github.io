@@ -72,7 +72,7 @@ test.describe('projects card', () => {
       await page.goto('/')
       await expect(toggle(page)).toHaveText('Show all (5)')
       await expect.poll(() => visibleIds(page)).toEqual(projects.slice(0, 3).map((p) => p.id))
-      await expect(page.locator('.project-more')).toHaveAttribute('inert')
+      await expect(page.locator('#projects-more')).toHaveAttribute('inert')
     })
 
     test('AC-02.5 "Show all" expands, "Show less" collapses again', async ({ page }) => {
@@ -80,7 +80,7 @@ test.describe('projects card', () => {
       await toggle(page).click()
       await expect(toggle(page)).toHaveText('Show less')
       await expect.poll(() => visibleIds(page)).toEqual(projects.map((p) => p.id))
-      await expect(page.locator('.project-more')).not.toHaveAttribute('inert')
+      await expect(page.locator('#projects-more')).not.toHaveAttribute('inert')
       await toggle(page).click()
       await expect.poll(() => visibleIds(page)).toHaveLength(3)
     })
@@ -102,7 +102,7 @@ test.describe('projects card', () => {
       page,
     }) => {
       const duration = () =>
-        page.locator('.project-more').evaluate((el) => getComputedStyle(el).transitionDuration)
+        page.locator('#projects-more').evaluate((el) => getComputedStyle(el).transitionDuration)
       await page.goto('/')
       expect(await duration()).toBe('0.3s')
       await page.emulateMedia({ reducedMotion: 'reduce' })
@@ -112,12 +112,16 @@ test.describe('projects card', () => {
   })
 
   for (const width of [800, 390]) {
-    test(`AC-02.5 at ${width} px all projects are shown without toggle`, async ({ page }) => {
+    test(`AC-02.5 at ${width} px the first 3 projects are shown with "Show all"`, async ({
+      page,
+    }) => {
       await page.setViewportSize({ width, height: 900 })
       await page.goto('/')
-      await expect(page.getByTestId('projects-toggle')).toHaveCount(0)
-      for (const project of projects) {
-        await expect(page.locator(`[data-project-id="${project.id}"]`)).toBeVisible()
+      await expect(page.getByTestId('projects-toggle')).toHaveText('Show all (5)')
+      for (const [index, project] of projects.entries()) {
+        const item = page.locator(`[data-project-id="${project.id}"]`)
+        if (index < 3) await expect(item).toBeVisible()
+        else await expect(item).toBeHidden()
       }
     })
   }

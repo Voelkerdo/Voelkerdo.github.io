@@ -60,7 +60,7 @@ src/
 │  ├─ OverviewPage.tsx      # BentoGrid mit allen Cards
 │  ├─ BentoGrid.tsx         # CSS-Grid mit Card-Größen
 │  ├─ AnimatedCard.tsx      # UI5 Card + Motion (Einblenden, Hover/Fokus)
-│  ├─ useDesktop.ts         # ≥ 1024 px per matchMedia (AC-02.5, AC-04.4)
+│  ├─ useDesktop.ts         # ≥ 1024 px per matchMedia (AC-04.4; Projects seit CR-16 nicht mehr)
 │  └─ cards/
 │     ├─ ProfileCard.tsx
 │     ├─ ProjectsCard.tsx

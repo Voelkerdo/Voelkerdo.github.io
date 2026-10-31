@@ -61,7 +61,8 @@ test.describe('projects card views', () => {
     await expect(last).toHaveAttribute('data-transport', 'DVK900001')
     await expect(last.locator('.transport-text')).toHaveText('Initial release')
     await expect(last.locator('.transport-status')).toHaveText('✓ Imported')
-    await expect(card(page).locator('[data-project-id]')).toHaveCount(0)
+    // The repositories page is faded out and hidden
+    await expect(card(page).locator('[data-project-id]').first()).toBeHidden()
   })
 
   test('AC-02.10 the page dots work with the keyboard', async ({ page }) => {
@@ -86,7 +87,10 @@ test.describe('projects card views', () => {
             let lowest = 1
             const end = performance.now() + 2000
             const sample = () => {
-              const view = document.querySelector('[data-active-view="transports"]')
+              // Only once the page is active; before that it is hidden at opacity 0
+              const view = document.querySelector(
+                '[data-page-view="transports"][data-active="true"]',
+              )
               if (view) lowest = Math.min(lowest, Number(getComputedStyle(view).opacity))
               if (performance.now() < end) requestAnimationFrame(sample)
               else resolve(lowest)
@@ -120,14 +124,59 @@ test.describe('projects card views', () => {
     })
   })
 
-  test('AC-02.9 at 390 px all transports are shown without toggle', async ({ page }) => {
+  test('AC-02.9 at 390 px the 3 newest transports are shown with "Show all"', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/')
     await openTransportLog(page)
-    await expect(page.getByTestId('transports-toggle')).toHaveCount(0)
-    await expect
-      .poll(async () => (await visibleTransports(page)).length)
-      .toBe(await transportItems(page).count())
+    const all = await transportItems(page).count()
+    await expect(page.getByTestId('transports-toggle')).toHaveText(`Show all (${all})`)
+    await expect.poll(() => visibleTransports(page)).toHaveLength(3)
+  })
+
+  for (const width of [390, 1280]) {
+    test(`AC-02.12 at ${width} px both pages have the same height`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 })
+      await page.goto('/')
+      const cardHeight = () =>
+        card(page).evaluate((el) => Math.round(el.getBoundingClientRect().height))
+      await page.mouse.move(0, 0)
+      await expect.poll(cardHeight).toBeGreaterThan(200)
+      const before = await cardHeight()
+      await dot(page, 'transports').click()
+      await page.mouse.move(0, 0)
+      await expect(page.getByTestId('build-stats')).toBeVisible()
+      expect(await cardHeight()).toBe(before)
+      await dot(page, 'repositories').click()
+      await page.mouse.move(0, 0)
+      expect(await cardHeight()).toBe(before)
+    })
+  }
+
+  test('AC-02.12 the pages cross-fade: both are partly visible during the change', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    await expect(dot(page, 'repositories')).toHaveAttribute('aria-current', 'true')
+    // Frames in which the old and the new page are both partly visible
+    const sampling = page.evaluate(
+      () =>
+        new Promise<number>((resolve) => {
+          let both = 0
+          const end = performance.now() + 2000
+          const opacity = (view: string) =>
+            Number(getComputedStyle(document.querySelector(`[data-page-view="${view}"]`)!).opacity)
+          const sample = () => {
+            const [a, b] = [opacity('repositories'), opacity('transports')]
+            if (a > 0.05 && a < 0.95 && b > 0.05 && b < 0.95) both++
+            if (performance.now() < end) requestAnimationFrame(sample)
+            else resolve(both)
+          }
+          requestAnimationFrame(sample)
+        }),
+    )
+    await dot(page, 'transports').click()
+    expect(await sampling).toBeGreaterThan(0)
+    await expect(card(page).locator('[data-page-view="repositories"]')).toHaveAttribute('inert')
   })
 
   for (const width of [1280, 1440]) {

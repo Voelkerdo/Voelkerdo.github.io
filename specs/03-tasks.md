@@ -50,7 +50,7 @@
 | T-38 | CR-13: Projects-Card mit Ansicht „Transport Log“ | AC-01.3, AC-01.11, AC-02.5, AC-02.6, AC-02.9, AC-08.3 | [x] |
 | T-39 | CR-14: Seitenpunkte und automatischer Seitenwechsel | AC-01.11, AC-02.10, AC-02.11, AC-08.3 | [x] |
 | T-40 | CR-15: Pfeile neben den Seitenpunkten | AC-02.10, AC-02.11 | [x] |
-| T-41 | CR-16: Gleich hohe Seiten und Überblendung in der Projects-Card | AC-02.5, AC-02.9, AC-02.12, AC-08.3 | [ ] |
+| T-41 | CR-16: Gleich hohe Seiten und Überblendung in der Projects-Card | AC-02.5, AC-02.9, AC-02.12, AC-08.3 | [x] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details

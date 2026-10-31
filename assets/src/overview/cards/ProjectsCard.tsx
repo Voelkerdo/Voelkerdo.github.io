@@ -12,19 +12,29 @@ import '@ui5/webcomponents-icons/dist/shipping-status.js'
 import '@ui5/webcomponents-icons/dist/slim-arrow-left.js'
 import '@ui5/webcomponents-icons/dist/slim-arrow-right.js'
 import { renderFinished } from '@ui5/webcomponents-base/dist/Render.js'
-import { motion, useReducedMotion } from 'motion/react'
+import { useReducedMotion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { projects, VISIBLE_PROJECTS } from '../../data/projects.ts'
 import { buildStats, transports } from '../../data/transports.ts'
 import type { Project, Transport } from '../../data/types.ts'
 import { useCardHeader } from '../cardHeader.ts'
-import { useDesktop } from '../useDesktop.ts'
 
 type View = 'repositories' | 'transports'
 
-const PAGES: { view: View; label: string }[] = [
-  { view: 'repositories', label: 'Repositories' },
-  { view: 'transports', label: 'Transport Log' },
+// Header subtitle and KPI follow the active page (AC-01.3, AC-02.10)
+const PAGES: { view: View; label: string; subtitle: string; kpi: string }[] = [
+  {
+    view: 'repositories',
+    label: 'Repositories',
+    subtitle: 'Selected repositories',
+    kpi: String(projects.length),
+  },
+  {
+    view: 'transports',
+    label: 'Transport Log',
+    subtitle: 'Built spec-driven',
+    kpi: String(transports.length),
+  },
 ]
 
 // Automatic page change (AC-02.11)
@@ -100,11 +110,11 @@ function ShowAllList<T>({
   id: Lowercase<string>
   onExpand: () => void
 }) {
-  const desktop = useDesktop()
   const [showAll, setShowAll] = useState(false)
   const top = items.slice(0, VISIBLE_ENTRIES)
   const more = items.slice(VISIBLE_ENTRIES)
-  const collapsible = desktop && more.length > 0
+  // On every screen width, so both pages keep about the same height (AC-02.5, AC-02.9, D-23)
+  const collapsible = more.length > 0
   const open = !collapsible || showAll
   const moreId = `${id}-more` as const
 
@@ -143,7 +153,6 @@ function ShowAllList<T>({
 }
 
 function RepositoriesView({ onExpand }: { onExpand: () => void }) {
-  useCardHeader({ subtitle: 'Selected repositories', kpi: String(projects.length) })
   return (
     <ShowAllList
       items={projects}
@@ -157,7 +166,6 @@ function RepositoriesView({ onExpand }: { onExpand: () => void }) {
 
 // The site's change requests as SAP transports (AC-02.7, AC-02.8)
 function TransportLogView({ onExpand }: { onExpand: () => void }) {
-  useCardHeader({ subtitle: 'Built spec-driven', kpi: String(transports.length) })
   return (
     <>
       <dl className="build-stats" data-testid="build-stats">
@@ -222,6 +230,7 @@ export function ProjectsCard() {
   const paused = useRotationPaused(rootRef)
   const stop = () => setStopped(true)
   const pageIndex = PAGES.findIndex((page) => page.view === view)
+  useCardHeader({ subtitle: PAGES[pageIndex].subtitle, kpi: PAGES[pageIndex].kpi })
   const isFirst = pageIndex === 0
   const isLast = pageIndex === PAGES.length - 1
 
@@ -254,20 +263,28 @@ export function ProjectsCard() {
 
   return (
     <div ref={rootRef} className={`projects${reduceMotion ? ' no-collapse-animation' : ''}`}>
-      {/* Cross-fade between the pages; without animation on reduced motion (AC-02.10) */}
-      <motion.div
-        key={view}
-        initial={reduceMotion ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.2 }}
-        data-active-view={view}
-      >
-        {view === 'repositories' ? (
-          <RepositoriesView onExpand={stop} />
-        ) : (
-          <TransportLogView onExpand={stop} />
-        )}
-      </motion.div>
+      {/* Both pages stacked in one grid cell: the card is as high as the higher page and
+          the pages cross-fade (AC-02.12, D-23) */}
+      <div className="project-pages" data-active-view={view}>
+        {PAGES.map((page) => {
+          const active = page.view === view
+          return (
+            <div
+              key={page.view}
+              className="project-page"
+              data-page-view={page.view}
+              data-active={active}
+              inert={!active}
+            >
+              {page.view === 'repositories' ? (
+                <RepositoriesView onExpand={stop} />
+              ) : (
+                <TransportLogView onExpand={stop} />
+              )}
+            </div>
+          )
+        })}
+      </div>
       {/* Page dots at the bottom of the card; the active page is filled (AC-02.10) */}
       <div className="page-dots" role="group" aria-label="Project pages" data-testid="page-dots">
         <Button
