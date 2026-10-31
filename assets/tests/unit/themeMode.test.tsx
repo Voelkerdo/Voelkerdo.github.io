@@ -8,7 +8,8 @@ vi.mock('@ui5/webcomponents-base/dist/config/Theme.js', () => ({
 }))
 
 const { ThemeModeProvider } = await import('../../src/shell/ThemeModeProvider.tsx')
-const { STORAGE_KEY, useThemeMode } = await import('../../src/shell/useThemeMode.ts')
+const { LEGACY_STORAGE_KEY, STORAGE_KEY, useThemeMode } =
+  await import('../../src/shell/useThemeMode.ts')
 
 type Listener = (event: MediaQueryListEvent) => void
 let systemDark = false
@@ -31,8 +32,14 @@ function changeSystem(dark: boolean) {
 }
 
 function Probe() {
-  const { mode, toggleMode } = useThemeMode()
-  return <button onClick={toggleMode}>mode:{mode}</button>
+  const { theme, selectTheme } = useThemeMode()
+  return (
+    <>
+      <output>theme:{theme}</output>
+      <button onClick={() => selectTheme('quartz-dark')}>Quartz Dark</button>
+      <button onClick={() => selectTheme('sunset-coral-dark')}>Sunset Coral Dark</button>
+    </>
+  )
 }
 
 const renderProbe = () =>
@@ -42,7 +49,9 @@ const renderProbe = () =>
     </ThemeModeProvider>,
   )
 
-describe('theme mode', () => {
+const dataTheme = () => document.documentElement.dataset.theme
+
+describe('theme choice', () => {
   beforeEach(() => {
     window.localStorage.clear()
     setTheme.mockClear()
@@ -50,38 +59,55 @@ describe('theme mode', () => {
   })
   afterEach(() => vi.restoreAllMocks())
 
-  it('AC-09.1 follows the system theme initially', () => {
+  it('AC-11.3 / AC-09.1 default "Auto" follows the system theme initially', () => {
     mockSystem(true)
     renderProbe()
-    expect(screen.getByRole('button')).toHaveTextContent('mode:dark')
+    expect(screen.getByRole('status')).toHaveTextContent('theme:sunset-coral-auto')
     expect(setTheme).toHaveBeenLastCalledWith('sap_horizon_dark')
-    expect(document.documentElement.dataset.theme).toBe('dark')
+    expect(dataTheme()).toBe('sunset-coral-dark')
   })
 
-  it('AC-09.1 follows system changes while no mode was chosen manually', () => {
+  it('AC-09.1 "Auto" follows system changes', () => {
     renderProbe()
+    expect(dataTheme()).toBe('sunset-coral-light')
     changeSystem(true)
-    expect(screen.getByRole('button')).toHaveTextContent('mode:dark')
-  })
-
-  it('AC-09.1 manual toggle switches the UI5 theme and is remembered', async () => {
-    renderProbe()
-    await userEvent.click(screen.getByRole('button'))
-    expect(screen.getByRole('button')).toHaveTextContent('mode:dark')
+    expect(dataTheme()).toBe('sunset-coral-dark')
     expect(setTheme).toHaveBeenLastCalledWith('sap_horizon_dark')
-    expect(window.localStorage.getItem(STORAGE_KEY)).toBe('dark')
   })
 
-  it('AC-09.1 manual choice wins over the system theme', () => {
-    window.localStorage.setItem(STORAGE_KEY, 'light')
+  it('AC-11.4 selecting a theme applies the UI5 theme and is remembered', async () => {
+    renderProbe()
+    await userEvent.click(screen.getByRole('button', { name: 'Quartz Dark' }))
+    expect(screen.getByRole('status')).toHaveTextContent('theme:quartz-dark')
+    expect(setTheme).toHaveBeenLastCalledWith('sap_fiori_3_dark')
+    expect(dataTheme()).toBe('quartz-dark')
+    expect(window.localStorage.getItem(STORAGE_KEY)).toBe('quartz-dark')
+  })
+
+  it('AC-11.4 the stored theme is restored and wins over the system theme', () => {
+    window.localStorage.setItem(STORAGE_KEY, 'sunset-coral-light')
     mockSystem(true)
     renderProbe()
-    expect(screen.getByRole('button')).toHaveTextContent('mode:light')
+    expect(dataTheme()).toBe('sunset-coral-light')
     changeSystem(true)
-    expect(screen.getByRole('button')).toHaveTextContent('mode:light')
+    expect(dataTheme()).toBe('sunset-coral-light')
   })
 
-  it('AC-09.1 unavailable storage does not break the toggle', async () => {
+  it('AC-11.4 an unknown stored theme falls back to the default', () => {
+    window.localStorage.setItem(STORAGE_KEY, 'sap_tron')
+    renderProbe()
+    expect(screen.getByRole('status')).toHaveTextContent('theme:sunset-coral-auto')
+  })
+
+  it('AC-11.4 the mode stored before CR-8 is taken over once', () => {
+    window.localStorage.setItem(LEGACY_STORAGE_KEY, 'dark')
+    renderProbe()
+    expect(dataTheme()).toBe('sunset-coral-dark')
+    expect(window.localStorage.getItem(STORAGE_KEY)).toBe('sunset-coral-dark')
+    expect(window.localStorage.getItem(LEGACY_STORAGE_KEY)).toBeNull()
+  })
+
+  it('AC-11.4 unavailable storage does not break the selection', async () => {
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
       throw new Error('blocked')
     })
@@ -89,7 +115,7 @@ describe('theme mode', () => {
       throw new Error('blocked')
     })
     renderProbe()
-    await userEvent.click(screen.getByRole('button'))
-    expect(screen.getByRole('button')).toHaveTextContent('mode:dark')
+    await userEvent.click(screen.getByRole('button', { name: 'Sunset Coral Dark' }))
+    expect(dataTheme()).toBe('sunset-coral-dark')
   })
 })

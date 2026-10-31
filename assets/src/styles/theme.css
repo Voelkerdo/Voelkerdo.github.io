@@ -1,23 +1,31 @@
 /*
- * Accent theme "Sunset Coral" on top of SAP Horizon (TD-9, AC-07.1, AC-09.2).
- * The [data-theme] attribute is set by ThemeModeProvider; the selector's higher
- * specificity overrides the UI5 theme variables that UI5 defines on :root.
+ * The [data-theme] attribute holds the resolved theme ID and is set by ThemeModeProvider
+ * (tech spec §7); the selectors' higher specificity overrides the UI5 theme variables that
+ * UI5 defines on :root.
  */
-:root[data-theme='light'] {
+
+/* Accent tokens for every theme: plain UI5 themes take their brand color (CR-8) */
+:root[data-theme] {
+  --accent-1: var(--sapBrandColor);
+  --accent-2: var(--sapHighlightColor);
+  --on-accent: var(--sapButton_Emphasized_TextColor);
+  --accent-gradient: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+}
+
+/* Accent theme "Sunset Coral" on top of SAP Horizon (TD-9, AC-07.1, AC-09.2) */
+:root[data-theme='sunset-coral-light'] {
   --accent-1: #e11d48;
   --accent-2: #f59e0b;
   --on-accent: #ffffff;
 }
 
-:root[data-theme='dark'] {
+:root[data-theme='sunset-coral-dark'] {
   --accent-1: #fb7185;
   --accent-2: #fbbf24;
   --on-accent: #12171c;
 }
 
-:root[data-theme] {
-  --accent-gradient: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-
+:root[data-theme^='sunset-coral'] {
   --sapBrandColor: var(--accent-1);
   --sapHighlightColor: var(--accent-1);
   --sapContent_FocusColor: var(--accent-1);

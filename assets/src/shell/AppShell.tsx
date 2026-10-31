@@ -9,14 +9,13 @@ import {
   UserMenuItem,
 } from '@ui5/webcomponents-react'
 import '@ui5/webcomponents-icons/dist/hint.js'
-import '@ui5/webcomponents-icons/dist/dark-mode.js'
-import '@ui5/webcomponents-icons/dist/light-mode.js'
+import '@ui5/webcomponents-icons/dist/action-settings.js'
 import { useState, type ReactNode } from 'react'
 import { profile } from '../data/profile.ts'
 import { notifications } from '../data/notifications.ts'
 import { AboutDialog } from './AboutDialog.tsx'
 import { NotificationsPopover } from './NotificationsPopover.tsx'
-import { useThemeMode } from './useThemeMode.ts'
+import { SettingsDialog } from './SettingsDialog.tsx'
 
 const initials = profile.name
   .split(' ')
@@ -29,8 +28,8 @@ const PAGE_TITLE = 'Overview'
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const { mode, toggleMode } = useThemeMode()
   const [menuOpener, setMenuOpener] = useState<HTMLElement | null>(null)
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const [aboutOpen, setAboutOpen] = useState(false)
   const [notificationsOpener, setNotificationsOpener] = useState<HTMLElement | null>(null)
   // Only for this visit: opening the list clears the badge, closing it marks the items read (AC-10.3)
@@ -91,7 +90,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         }
         onItemClick={(event) => {
           const action = event.detail.item.dataset.action
-          if (action === 'toggle-theme') toggleMode()
+          if (action === 'settings') setSettingsOpen(true)
           if (action === 'about') setAboutOpen(true)
           setMenuOpener(null)
         }}
@@ -104,13 +103,12 @@ export function AppShell({ children }: { children: ReactNode }) {
           </Button>
         }
       >
-        <UserMenuItem
-          data-action="toggle-theme"
-          icon={mode === 'dark' ? 'light-mode' : 'dark-mode'}
-          text={mode === 'dark' ? 'Light mode' : 'Dark mode'}
-        />
+        {/* Theme choice lives in Settings › Appearance, as in the Fiori launchpad (D-15) */}
+        <UserMenuItem data-action="settings" icon="action-settings" text="Settings" />
         <UserMenuItem data-action="about" icon="hint" text="About" />
       </UserMenu>
+
+      <SettingsDialog open={settingsOpen} onClose={() => setSettingsOpen(false)} />
 
       <AboutDialog open={aboutOpen} onClose={() => setAboutOpen(false)} />
 

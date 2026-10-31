@@ -67,3 +67,33 @@ export interface NotificationDef {
   /** Opened in a new tab when the notification is clicked */
   href?: string
 }
+
+/** Group in Settings › Appearance (AC-11.2) */
+export type ThemeGroup = 'Today' | 'SAP Fiori' | 'SAP GUI'
+
+export type ThemeId =
+  | 'sunset-coral-auto'
+  | 'sunset-coral-light'
+  | 'sunset-coral-dark'
+  | 'horizon-morning'
+  | 'horizon-evening'
+  | 'quartz-light'
+  | 'quartz-dark'
+  | 'belize'
+  | 'blue-crystal'
+  | 'corbu'
+  | 'signature'
+  | 'enjoy'
+  | 'classic'
+
+export interface ThemeDef {
+  id: ThemeId
+  name: string
+  /** Year the theme first appeared at SAP (D-15) */
+  year: number
+  group: ThemeGroup
+  /** UI5 base theme; omitted for "Auto", which follows the system mode */
+  ui5Theme?: string
+  /** Recreated via UI5 CSS variables, not shipped by UI5 (TD-13) */
+  emulated?: boolean
+}

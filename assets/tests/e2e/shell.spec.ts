@@ -27,7 +27,7 @@ test.describe('fiori shell', () => {
     await page.goto('/')
     await page.getByTestId('shell-avatar').click()
     await page.locator('ui5-user-menu-item[data-action="about"]').click()
-    const dialog = page.locator('ui5-dialog')
+    const dialog = page.locator('ui5-dialog[header-text="About this site"]')
     await expect(dialog).toBeVisible()
     await expect(dialog).toContainText('Built with React & SAP UI5 Web Components')
     await expect(dialog.locator('ui5-link')).toHaveAttribute(
@@ -47,11 +47,12 @@ test.describe('fiori shell', () => {
     expect(popup.url()).toContain('github.com/Voelkerdo')
   })
 
-  test('AC-09.1 theme toggle in the avatar menu switches the mode', async ({ page }) => {
-    await page.emulateMedia({ colorScheme: 'light' })
+  test('AC-06.9 avatar menu offers Settings and About, but no theme toggle', async ({ page }) => {
     await page.goto('/')
     await page.getByTestId('shell-avatar').click()
-    await page.locator('ui5-user-menu-item[data-action="toggle-theme"]').click()
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+    const items = page.locator('ui5-user-menu-item')
+    await expect(items).toHaveCount(2)
+    await expect(items.nth(0)).toHaveAttribute('text', 'Settings')
+    await expect(items.nth(1)).toHaveAttribute('text', 'About')
   })
 })

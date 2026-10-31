@@ -37,7 +37,7 @@
 | T-13 | Responsive-Feinschliff | AC-01.6, AC-08.1 | [x] |
 | T-26 | CR-7: Benachrichtigungsglocke | AC-10.1–AC-10.5 | [x] |
 | T-27 | CR-7: „Currently building“-Status | AC-01.10 | [x] |
-| T-28 | CR-8: Settings-Dialog & Theme-Wahl | AC-06.2, AC-06.9, AC-09.1, AC-09.2, AC-11.1–AC-11.4, AC-11.8 | [ ] |
+| T-28 | CR-8: Settings-Dialog & Theme-Wahl | AC-06.2, AC-06.9, AC-09.1, AC-09.2, AC-11.1–AC-11.4, AC-11.8 | [x] |
 | T-29 | CR-8: Nachempfundene SAP-Themes | AC-11.2, AC-11.5 | [ ] |
 | T-30 | CR-8: Zeitreise-Overlay | AC-11.6–AC-11.8 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
