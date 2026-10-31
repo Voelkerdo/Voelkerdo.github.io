@@ -27,6 +27,7 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-01.8 Die erste Card ist eine Profil-Card **„About me“** mit Avatar, Name und Positionierung (eine Zeile) (D-9).
 - AC-01.9 Abstände folgen den Fiori Design Guidelines für die Overview Page (D-9): 1rem zwischen den Cards, 1rem unter der ShellBar, seitlicher Rand responsiv 1rem (S) / 2rem (M, L) / 3rem (XL); die Cards nutzen die volle Fensterbreite.
 - AC-01.10 Die Profil-Card zeigt unter der Positionierung eine Statuszeile **„Currently building: …“** mit Werkzeug-Icon. Der Text wird in den Profildaten gepflegt; initial: „this portfolio – spec-driven with React & SAP UI5“ (D-14).
+- AC-01.11 Am Desktop (≥ 1024 px Breite) passt die Overview Page im Ausgangszustand ohne vertikales Scrollen in ein Browserfenster mit 780 px Höhe. Aufgeklappte Listen dürfen die Seite verlängern (D-17).
 
 ### REQ-02 Git-Projekte
 **Story:** Als Entwickler will ich Dominiks Projekte sehen und direkt ins Repo springen.
@@ -35,6 +36,7 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-02.2 Jedes Projekt verlinkt in einem neuen Tab auf das GitHub-Repository.
 - AC-02.3 Die Projekte stammen aus einer kuratierten, statischen Datendatei (D-1). Reihenfolge und Texte bestimmt Dominik.
 - AC-02.4 Bis echte Inhalte vorliegen, gibt es Platzhalter-Projekte, im Code mit `TODO` markiert.
+- AC-02.5 Auf breiten Bildschirmen (≥ 1024 px) zeigt die Projects-Card anfangs die **ersten 3 Projekte**. Ein Link **„Show all (5)“** klappt die übrigen animiert auf, **„Show less“** klappt sie wieder zu. Der Umschalter ist per Tastatur bedienbar und meldet `aria-expanded`. Unter 1024 px sind alle Projekte sichtbar, ohne Umschalter. Bei Reduced Motion ohne Animation (AC-08.3) (D-17).
 
 ### REQ-03 Skills
 **Story:** Als Besucher will ich auf einen Blick sehen, welche Technologien Dominik beherrscht.
@@ -53,7 +55,7 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 **Story:** Als Besucher will ich Dominiks beruflichen Weg nachvollziehen.
 **Akzeptanzkriterien:**
 - AC-04.1 Die Career-Card zeigt die Stationen chronologisch (neueste zuerst) als Timeline: Zeitraum, Rolle, Firma, 1–3 Highlights. Auf breiten Bildschirmen sind anfangs nicht alle Stationen sichtbar (AC-04.3). _(präzisiert in CR-9)_
-- AC-04.3 Auf breiten Bildschirmen (≥ 1024 px, 4-spaltiges Raster) zeigt die Career-Card anfangs nur die **aktuelle Station** mit ihren Highlights. Ein Link **„Show all (3)“** klappt die älteren Stationen animiert auf, **„Show less“** klappt sie wieder zu. Der Umschalter ist per Tastatur bedienbar und meldet seinen Zustand (`aria-expanded`). Unter 1024 px sind alle Stationen sichtbar, und es gibt keinen Umschalter. Bei Reduced Motion klappt die Liste ohne Animation (AC-08.3) (D-16).
+- AC-04.3 Auf breiten Bildschirmen (≥ 1024 px, 4-spaltiges Raster) zeigt die Career-Card anfangs nur die **aktuelle Station** mit Rolle, Firma und Zeitraum, ohne Highlights. Ein Link **„Show all (3)“** klappt die Highlights und die älteren Stationen animiert auf, **„Show less“** klappt sie wieder zu. Der Umschalter ist per Tastatur bedienbar und meldet seinen Zustand (`aria-expanded`). Unter 1024 px sind alle Stationen sichtbar, und es gibt keinen Umschalter. Bei Reduced Motion klappt die Liste ohne Animation (AC-08.3) (D-16). _(präzisiert in CR-10)_
 - AC-04.2 Inhalte liegen als Daten vor. Vorerst Platzhalter, mit `TODO` markiert (D-3).
 
 ### REQ-05 Kontakt
@@ -145,6 +147,7 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 | D-14 | Welche Eye Catcher kommen zuerst? | Zwei kleine: eine augenzwinkernde Fiori-Benachrichtigungsglocke (Insider-Gag für die SAP-Community) und eine „Currently building“-Zeile in der Profil-Card (wirkt aktuell und persönlich). Größere Ideen (Heatmap, Standort-Card) bleiben für später. (CR-7) |
 | D-15 | Wo und wie wählt man das Theme? | Wie im Fiori Launchpad unter **Avatar › Settings › Appearance** statt per Umschalter im Avatar-Menü. Als Eye Catcher reist die Liste mit Jahreszahlen und Zähl-Overlay durch die SAP-Themes von SAP Classic (1992) bis Horizon (2022). Themes, die UI5 nicht mehr mitliefert, werden über CSS-Variablen nachempfunden. Sunset Coral bleibt Default; Hell und Dunkel sind Theme-Varianten. Jahreszahl = erstes Erscheinen bei SAP (UI5/Fiori oder SAP GUI). (CR-8) |
 | D-16 | Wie bleibt die Career-Card kompakt? | Auf dem Desktop anfangs nur die aktuelle Station, dazu „Show all“ wie bei den Skills (D-12). Keinen Scrollbalken, weil scrollende Inhalte in Cards nicht Fiori-konform sind und auf Touch-Geräten hakeln. Auf schmalen Bildschirmen ist die Höhe unkritisch, dort bleibt alles sichtbar. (CR-9) |
+| D-17 | Wie passt die Overview Page ohne Scrollen auf den Desktop? | Die Seitenhöhe ergibt sich aus About + Career + Skills und aus der Projects-Card. Eingeklappt zeigt Career deshalb nur Rolle, Firma und Zeitraum der aktuellen Station, und Projects zeigt anfangs 3 Projekte, beide mit „Show all“, nur auf dem Desktop. Zielhöhe 780 px Fenster (kleines MacBook mit Lesezeichenleiste). (CR-10) |
 
 ## 6. Offene Fragen
 _Keine._
@@ -161,3 +164,4 @@ _Keine._
 | CR-7 | 2026-10-30 | Eye Catcher: Benachrichtigungsglocke in der ShellBar, „Currently building“-Status in der Profil-Card. | AC-01.10, REQ-10, D-14 |
 | CR-8 | 2026-10-31 | Theme-Zeitreise durch die SAP-Themes in Settings › Appearance (Fiori-Einstellungsdialog); Hell/Dunkel-Umschalter wandert dorthin. | AC-06.2, AC-06.9, AC-09.1, AC-09.2, REQ-11, D-15 |
 | CR-9 | 2026-10-31 | Career-Card zeigt auf dem Desktop anfangs nur die aktuelle Station, „Show all“ klappt die übrigen auf. | AC-04.1, AC-04.3, D-16 |
+| CR-10 | 2026-10-31 | Overview Page passt am Desktop ohne Scrollen: Career eingeklappt ohne Highlights, Projects anfangs 3 mit „Show all“. | AC-01.11, AC-02.5, AC-04.3, D-17 |

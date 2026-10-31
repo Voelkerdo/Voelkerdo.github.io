@@ -42,6 +42,8 @@
 | T-30 | CR-8: Zeitreise-Overlay | AC-11.6–AC-11.8 | [x] |
 | T-31 | Echte Inhalte einpflegen | AC-01.8, AC-02.3, AC-02.4, AC-04.2, AC-05.1, AC-05.2 | [x] |
 | T-32 | CR-9: Career-Card mit „Show all“ auf dem Desktop | AC-04.1, AC-04.3, AC-08.3 | [x] |
+| T-33 | CR-10: Career eingeklappt ohne Highlights | AC-04.3, AC-08.3 | [ ] |
+| T-34 | CR-10: Projects mit „Show all“ und Zielhöhe | AC-01.11, AC-02.5, AC-08.3 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
@@ -190,6 +192,15 @@ Inhalte von Dominik (Abfrage am 2026-10-31), ersetzen die Platzhalter aus D-3 un
 - `career.ts`: `VISIBLE_STATIONS = 1`.
 - `CareerCard`: Container um die Timeline mit gemessener Höhe (Tech Spec §6), verborgene Stationen `inert`, Umschalter „Show all (3)“ / „Show less“ mit `aria-expanded`, nur ab 1024 px.
 - **Tests:** E2E bei 1280 px: anfangs nur die aktuelle Station sichtbar, die älteren `inert` und abgeschnitten; „Show all (3)“ zeigt alle drei, „Show less“ klappt wieder zu; Bedienung per Tastatur und `aria-expanded`; mit `reduced-motion` ohne Transition. Bei 800 px und 390 px alle drei Stationen sichtbar und kein Umschalter. AC-04.1-Test unverändert grün.
+
+### T-33 CR-10: Career eingeklappt ohne Highlights
+- `CareerCard`: Highlights jeder Station in einem Wrapper; eingeklappt ist auch der der aktuellen Station zu. Container-Höhen laut Tech Spec §6.
+- **Tests:** E2E bei 1280 px – eingeklappt sind Rolle, Firma und Zeitraum der aktuellen Station sichtbar, ihre Highlights nicht; „Show all (3)“ zeigt alle Highlights und Stationen; „Show less“ klappt wieder zu; Reduced Motion ohne Transition. Bei 800 px und 390 px weiterhin alles sichtbar.
+
+### T-34 CR-10: Projects mit „Show all“ und Zielhöhe
+- `projects.ts`: `VISIBLE_PROJECTS = 3`.
+- `ProjectsCard`: zwei Listen, die zweite im aufklappbaren Wrapper; Umschalter „Show all (5)“ / „Show less“ mit `aria-expanded`, nur ab 1024 px.
+- **Tests:** E2E bei 1280 px – anfangs 3 Projekte sichtbar, die übrigen `inert`; Auf-/Zuklappen per Maus und Tastatur, `aria-expanded`; Reduced Motion ohne Transition; bei 800 px und 390 px alle 5 Projekte ohne Umschalter. AC-01.11: bei 1280 × 780 und 1440 × 780 kein vertikales Scrollen. AC-02.1/02.2 weiterhin grün.
 
 ### T-14 Manuelle Abnahme
 - Production-Build lokal per `npm run preview`.
