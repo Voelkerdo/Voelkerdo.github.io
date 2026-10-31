@@ -58,6 +58,7 @@
 | T-46 | CR-18: Erstveröffentlichung und Abnahme der Live-Seite | AC-14.1, AC-14.6 | [x] |
 | T-47 | CR-19: README-Bilder per Script (Screenshot, Zeitreise-GIF) | AC-15.5 | [x] |
 | T-48 | CR-19: README, Lizenz und Repo-Metadaten | AC-15.1–AC-15.4, AC-15.6, AC-15.7 | [x] |
+| T-49 | CR-20: „Buy me a coffee“ in der Contact-Card | AC-05.1, AC-05.3, AC-13.1, AC-13.5 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
@@ -284,6 +285,12 @@ Inhalte von Dominik (Abfrage am 2026-10-31), ersetzen die Platzhalter aus D-3 un
 - `LICENSE` (MIT, Copyright Dominik Völker, Ausnahme für persönliche Inhalte).
 - Unit-Test: lokale Bildlinks der README existieren, GIF ≤ 3 MB.
 - Nach Dominiks OK: pushen; Repo-Beschreibung, Website `https://voelkerdo.github.io/` und Topics per `gh` setzen.
+
+### T-49 CR-20: „Buy me a coffee“ in der Contact-Card
+- `data/contact.ts`: Kanal `coffee` (Label „Buy me a coffee“, Icon `meal`, Beschreibung „Support my work“, Platzhalter-URL mit `// TODO(content): BMC-URL`); `ContactCard.tsx`: Icon `meal` importieren.
+- **Tests:** E2E – AC-05.1 Reihenfolge GitHub, LinkedIn, Buy me a coffee, nur GitHub hervorgehoben; AC-05.3 Klick öffnet `buymeacoffee.com` in einem neuen Tab ohne Zugriff auf die Seite (`window.opener` ist `null`); Security-Projekt bleibt grün (keine Requests an `buymeacoffee.com` beim Laden); AC-01.11 bei 1280 × 780 weiterhin ohne Scrollen.
+- Screenshot-Check Desktop und 390 px.
+- Vor dem Push: echte URL von Dominik eintragen, `TODO(content)` entfernen.
 
 ### T-14 Manuelle Abnahme
 - Production-Build lokal per `npm run preview`.

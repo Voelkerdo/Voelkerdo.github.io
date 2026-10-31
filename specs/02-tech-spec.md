@@ -111,6 +111,7 @@ interface ThemeDef { id: ThemeId; name: string; year: number; group: ThemeGroup;
 ```
 - `themes.ts` enthält die 13 Themes aus AC-11.2 in Anzeigereihenfolge. `ui5Theme` ist das UI5-Basis-Theme; bei `sunset-coral-auto` entfällt es, weil es aus dem System-Modus folgt. `DEFAULT_THEME = 'sunset-coral-auto'` (AC-11.3).
 - `ContactChannel.description` ersetzt in der Contact-Card die angezeigte URL, z. B. „Dominik Völker“ statt der langen LinkedIn-Adresse. Ohne `description` wird die URL ohne Protokoll gezeigt. _(ergänzt nach T-31)_
+- `contactChannels` in `data/contact.ts` enthält den Kanal `coffee` (AC-05.3). Solange Dominik keinen Account hat, ist die URL `https://buymeacoffee.com/` mit `// TODO(content): BMC-URL` markiert. (CR-20)
 - Platzhalter-Inhalte (REQ-02/04/05) sind mit `// TODO(content): …` markiert, damit sie per Suche auffindbar sind.
 - Die Balkenlänge je Stufe (AC-03.5) ist eine Konstante `LEVEL_PERCENT` in `data/skills.ts` (Expert 100, Advanced 75, Intermediate 50, Familiar 25).
 - `VISIBLE_PROJECTS = 3` in `data/projects.ts` legt fest, wie viele Projekte auf dem Desktop anfangs sichtbar sind (AC-02.5).
@@ -137,7 +138,7 @@ interface ThemeDef { id: ThemeId; name: string; year: number; group: ThemeGroup;
 | Projects-Seiten | Zwei native `<button>`-Punkte in einer Gruppe (`role="group"`, `aria-label` „Project pages“), je `aria-label` mit dem Seitennamen und `aria-current` auf der aktiven Seite; aktiver Punkt gefüllt mit `--accent-1`, inaktiver als Ring; mittig unten in der Card. Davor und dahinter je ein UI5-`Button` (design `Transparent`, Icons `slim-arrow-left` / `slim-arrow-right`, `accessibleName` „Previous page“ / „Next page“, `disabled` auf der ersten bzw. letzten Seite) (CR-15). Inhalte des Transport Log wie in CR-13 | AC-02.7–AC-02.11 |
 | Skills-Card | eine Liste (anfangs `VISIBLE_SKILLS` Einträge, Umschalter als `Button` design `Transparent` mit `aria-expanded`): je Skill Name + `ProgressIndicator` (`value` aus `LEVEL_PERCENT`, `displayValue` = Stufe), Balkenfarbe = Akzent (TD-12) | REQ-03 |
 | Career-Card | `Timeline` + `TimelineItem` (fiori); auf dem Desktop in einem Scroll-Bereich mit zwei `Button`s (design `Transparent`, Icons `navigation-up-arrow` / `navigation-down-arrow`, `accessibleName` „Previous station“ / „Next station“) (AC-04.4) | REQ-04 |
-| Contact-Card | `List` / `ListItemStandard` mit Icons, GitHub hervorgehoben | REQ-05 |
+| Contact-Card | `List` / `ListItemStandard` mit Icons, GitHub hervorgehoben; dritter Eintrag „Buy me a coffee“ (Icon `meal`, `description` „Support my work“) öffnet per `window.open(url, '_blank', 'noopener')` wie die anderen Kanäle (CR-20) | REQ-05 |
 | ~~GitHub-Card~~ | entfällt (D-13, CR-6) | – |
 
 ## 6. Layout & Animationen
