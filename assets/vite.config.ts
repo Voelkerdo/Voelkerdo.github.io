@@ -1,7 +1,7 @@
 import react from '@vitejs/plugin-react'
 import { execSync } from 'node:child_process'
 import { readdirSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { join, resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import { buildStats, buildTransports, parseCommits } from './src/data/transportLog.ts'
 
@@ -63,6 +63,14 @@ export default defineConfig({
   base: './',
   // Test servers use their own dependency cache so they never invalidate a running `npm run dev`
   cacheDir: process.env.VITE_CACHE_DIR ?? 'node_modules/.vite',
+  resolve: {
+    alias: {
+      // Self-hosted SAP font "72" (AC-13.1, styles/fonts.css)
+      '@sap-fonts': resolve(
+        'node_modules/@sap-theming/theming-base-content/content/Base/baseLib/baseTheme/fonts',
+      ),
+    },
+  },
   define: {
     __SYSTEM_INFO__: JSON.stringify(systemInfo),
     __TRANSPORT_LOG__: JSON.stringify(transportLog),

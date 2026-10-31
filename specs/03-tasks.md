@@ -51,7 +51,7 @@
 | T-39 | CR-14: Seitenpunkte und automatischer Seitenwechsel | AC-01.11, AC-02.10, AC-02.11, AC-08.3 | [x] |
 | T-40 | CR-15: Pfeile neben den Seitenpunkten | AC-02.10, AC-02.11 | [x] |
 | T-41 | CR-16: Gleich hohe Seiten und Überblendung in der Projects-Card | AC-02.5, AC-02.9, AC-02.12, AC-08.3 | [x] |
-| T-42 | CR-17: Schrift „72“ selbst hosten | AC-13.1 | [ ] |
+| T-42 | CR-17: Schrift „72“ selbst hosten | AC-13.1 | [x] |
 | T-43 | CR-17: CSP, Referrer-Policy und Security-Tests gegen den Build | AC-13.1–AC-13.5, AC-13.7 | [ ] |
 | T-44 | CR-17: `npm run security` und Regel in CLAUDE.md | AC-13.6 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
