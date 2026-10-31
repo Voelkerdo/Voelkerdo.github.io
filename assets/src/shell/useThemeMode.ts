@@ -51,10 +51,23 @@ export function subscribeToSystemMode(onChange: (mode: ThemeMode) => void): () =
   return () => query.removeEventListener('change', listener)
 }
 
+/** A theme change across years, shown by the time travel overlay (AC-11.6) */
+export interface Travel {
+  fromYear: number
+  toYear: number
+  /** Name of the theme travelled to */
+  toName: string
+}
+
 export interface ThemeModeContextValue {
   /** The chosen theme, "Auto" included */
   theme: ThemeId
   selectTheme: (id: ThemeId) => void
+  travel: Travel | null
+  /** The overlay covers the page: switch the theme now */
+  arrive: () => void
+  /** The overlay has faded out */
+  endTravel: () => void
 }
 
 export const ThemeModeContext = createContext<ThemeModeContextValue | null>(null)

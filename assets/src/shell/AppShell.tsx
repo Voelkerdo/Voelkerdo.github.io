@@ -16,6 +16,7 @@ import { notifications } from '../data/notifications.ts'
 import { AboutDialog } from './AboutDialog.tsx'
 import { NotificationsPopover } from './NotificationsPopover.tsx'
 import { SettingsDialog } from './SettingsDialog.tsx'
+import { TimeTravelOverlay } from './TimeTravelOverlay.tsx'
 
 const initials = profile.name
   .split(' ')
@@ -109,6 +110,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       </UserMenu>
 
       <SettingsDialog open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      {/* After the dialog, so it opens above it in the top layer (TD-14) */}
+      <TimeTravelOverlay />
 
       <AboutDialog open={aboutOpen} onClose={() => setAboutOpen(false)} />
 

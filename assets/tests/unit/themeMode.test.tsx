@@ -32,12 +32,18 @@ function changeSystem(dark: boolean) {
 }
 
 function Probe() {
-  const { theme, selectTheme } = useThemeMode()
+  const { theme, selectTheme, travel, arrive, endTravel } = useThemeMode()
   return (
     <>
       <output>theme:{theme}</output>
+      <p data-testid="travel">
+        {travel ? `${travel.fromYear}→${travel.toYear} ${travel.toName}` : 'none'}
+      </p>
       <button onClick={() => selectTheme('quartz-dark')}>Quartz Dark</button>
+      <button onClick={() => selectTheme('classic')}>Classic</button>
       <button onClick={() => selectTheme('sunset-coral-dark')}>Sunset Coral Dark</button>
+      <button onClick={arrive}>arrive</button>
+      <button onClick={endTravel}>end</button>
     </>
   )
 }
@@ -75,13 +81,33 @@ describe('theme choice', () => {
     expect(setTheme).toHaveBeenLastCalledWith('sap_horizon_dark')
   })
 
-  it('AC-11.4 selecting a theme applies the UI5 theme and is remembered', async () => {
+  it('AC-11.6 a theme of another year starts a time travel and switches on arrival', async () => {
     renderProbe()
     await userEvent.click(screen.getByRole('button', { name: 'Quartz Dark' }))
+    expect(screen.getByTestId('travel')).toHaveTextContent('2026→2019 SAP Quartz Dark')
+    expect(dataTheme()).toBe('sunset-coral-light')
+    await userEvent.click(screen.getByRole('button', { name: 'arrive' }))
     expect(screen.getByRole('status')).toHaveTextContent('theme:quartz-dark')
     expect(setTheme).toHaveBeenLastCalledWith('sap_fiori_3_dark')
     expect(dataTheme()).toBe('quartz-dark')
     expect(window.localStorage.getItem(STORAGE_KEY)).toBe('quartz-dark')
+    await userEvent.click(screen.getByRole('button', { name: 'end' }))
+    expect(screen.getByTestId('travel')).toHaveTextContent('none')
+  })
+
+  it('AC-11.6 a selection made while travelling becomes the destination', async () => {
+    renderProbe()
+    await userEvent.click(screen.getByRole('button', { name: 'Quartz Dark' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Classic' }))
+    await userEvent.click(screen.getByRole('button', { name: 'arrive' }))
+    expect(dataTheme()).toBe('classic')
+  })
+
+  it('AC-11.6 the same year switches without a time travel', async () => {
+    renderProbe()
+    await userEvent.click(screen.getByRole('button', { name: 'Sunset Coral Dark' }))
+    expect(screen.getByTestId('travel')).toHaveTextContent('none')
+    expect(dataTheme()).toBe('sunset-coral-dark')
   })
 
   it('AC-11.4 the stored theme is restored and wins over the system theme', () => {
