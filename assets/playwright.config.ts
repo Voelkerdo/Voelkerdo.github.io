@@ -8,6 +8,9 @@ const SECURITY_DIST = 'node_modules/.security-dist'
 export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
+  // The CI runner is slower and has fewer cores: fewer workers, one retry for timing-sensitive tests
+  workers: process.env.CI ? 2 : undefined,
+  retries: process.env.CI ? 1 : 0,
   reporter: 'list',
   use: {
     baseURL: `http://localhost:${PORT}`,

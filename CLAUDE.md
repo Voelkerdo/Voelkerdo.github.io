@@ -14,7 +14,7 @@ Dieses Projekt wird spec-driven entwickelt. Die Specs in `specs/` sind die Quell
 - Kein Code ohne zugehörigen Task, kein Task ohne Requirement-ID.
 - Specs und Code werden im selben Commit geändert, wenn sie zusammengehören.
 - Commit-Messages referenzieren Requirement-/Task-IDs (z. B. `feat(T-04): ... [REQ-02]`).
-- Nichts Ausführbares in `specs/` oder im Repo-Root ablegen – alles gehört nach `assets/`.
+- Nichts Ausführbares in `specs/` oder im Repo-Root ablegen – alles gehört nach `assets/`. Einzige Ausnahme: `.github/` (Deploy-Workflow, Dependabot), weil GitHub es dort erwartet (TD-19).
 - Nach jeder Quellcode-Änderung `npm run verify` (in `assets/`) ausführen (typecheck, lint, Vitest, Playwright inkl. Security-Tests gegen den Production-Build). Erst wenn alles grün ist, gilt die Änderung als fertig.
 - Sicherheit (REQ-13): Bei jedem Change Request und vor jedem Deployment `npm run security` (in `assets/`) ausführen (`npm audit` + Registry-Signaturen, braucht Netzwerk). Befunde nie ignorieren: als `fix` oder eigener CR behandeln. Keine Requests an Drittanbieter einbauen (auch keine CDNs, Fonts, Analytics).
 - Eigene Hilfs-Server (Screenshots, Diagnose) nur mit eigenem Cache starten: `VITE_CACHE_DIR=node_modules/.vite-tmp npx vite --port 5175`. Den Dev-Server des Users (Port 5173) nie stoppen oder dessen Cache (`node_modules/.vite`) verändern.
@@ -39,5 +39,5 @@ Dieses Projekt wird spec-driven entwickelt. Die Specs in `specs/` sind die Quell
 ## Arbeitsweise mit Dominik
 - Einen Task nach dem anderen umsetzen, Ergebnis (inkl. Screenshot-Pfad) zeigen und auf Freigabe warten.
 - Geschmacksfragen (Farben, Texte, Layout) als Optionen vorlegen, nicht selbst entscheiden.
-- Dominiks Mac hat „Bewegung reduzieren“ aktiv → er sieht Animationen nur mit DevTools-Emulation oder auf anderen Geräten.
-- Mobile-Test im WLAN: `npm run dev -- --host` – bewusst nicht fest in der Config, damit der Dev-Server in fremden Netzen nicht offen ist.
+- Deployment (REQ-14): Jeder Push auf `main` geht nach grünen Prüfungen automatisch live auf `https://voelkerdo.github.io/`. Pushen nur mit Dominiks ausdrücklichem OK.
+- Den Dev-Server nie dauerhaft im Netz öffnen (`server.host` nicht in die Vite-Config).
