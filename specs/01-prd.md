@@ -126,8 +126,20 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-11.7 Bei `prefers-reduced-motion` wird nicht gezählt: Das Overlay zeigt direkt das Zieljahr und wird nur ein- und ausgeblendet (AC-08.3).
 - AC-11.8 Dialog und Theme-Liste sind per Tastatur bedienbar. Screenreader sagen die Zeitreise als Statusmeldung an (z. B. „Travelling to 1992 – SAP Classic“).
 
+### REQ-12 Systeminformationen (Einstellungen)
+**Story:** Als Entwickler will ich sehen, womit diese Seite gebaut ist und wo sie läuft, so wie in den Systeminformationen eines Fiori Launchpads.
+**Akzeptanzkriterien:**
+- AC-12.1 Der Einstellungsdialog (AC-11.1) hat nach **Appearance** eine zweite Kategorie **System**, wie im Fiori Launchpad.
+- AC-12.2 System zeigt schreibgeschützte Angaben in vier Gruppen:
+  - **Tech Stack:** React, TypeScript, Vite, SAP UI5 Web Components und Motion, jeweils mit Versionsnummer. Die Versionen werden beim Build automatisch ermittelt und nicht von Hand gepflegt.
+  - **Hosting:** GitHub Pages – „Static site, no backend“.
+  - **Build:** Build-Datum (`YYYY-MM-DD`) und Git-Commit (Kurz-Hash).
+  - **Theme:** das aktive Theme mit Namen und technischem UI5-Theme (z. B. „Sunset Coral Light · sap_horizon“). Die Angabe wechselt mit der Theme-Wahl (REQ-11).
+- AC-12.3 Die Angaben sind per Tastatur erreichbar. Auf schmalen Bildschirmen verhält sich System wie Appearance (Vollbild, erst die Kategorienliste).
+- AC-12.4 Der About-Dialog im Avatar-Menü bleibt unverändert (AC-06.9, AC-07.4): About ist der kurze Hinweis für alle, System sind die technischen Details (D-19).
+
 ## 4. Außerhalb des Scopes (v1)
-CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics, Hosting/Deployment.
+CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics, ~~Hosting/~~Deployment. _(Hoster festgelegt in CR-12: GitHub Pages; das Deployment folgt in einem eigenen CR.)_
 
 ## 5. Entscheidungen
 | ID | Frage | Entscheidung |
@@ -150,6 +162,7 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 | D-16 | Wie bleibt die Career-Card kompakt? | Auf dem Desktop anfangs nur die aktuelle Station, dazu „Show all“ wie bei den Skills (D-12). Keinen Scrollbalken, weil scrollende Inhalte in Cards nicht Fiori-konform sind und auf Touch-Geräten hakeln. Auf schmalen Bildschirmen ist die Höhe unkritisch, dort bleibt alles sichtbar. (CR-9)  _Teilweise abgelöst durch D-18 (CR-11)._ |
 | D-17 | Wie passt die Overview Page ohne Scrollen auf den Desktop? | Die Seitenhöhe ergibt sich aus About + Career + Skills und aus der Projects-Card. Eingeklappt zeigt Career deshalb nur Rolle, Firma und Zeitraum der aktuellen Station, und Projects zeigt anfangs 3 Projekte, beide mit „Show all“, nur auf dem Desktop. Zielhöhe 780 px Fenster (kleines MacBook mit Lesezeichenleiste). (CR-10) |
 | D-18 | Wie zeigt die Career-Card ältere Stationen? | Statt „Show all“, das die Card vergrößert, bleibt die Card so klein wie eingeklappt, und Pfeil-Buttons scrollen Station für Station durch die Timeline. Nur Klicks auf die Pfeile scrollen, damit das Mausrad nicht in der Card hängen bleibt. So bleibt die Seitenhöhe konstant (AC-01.11), und die gezielte Bewegung ersetzt den in D-16 abgelehnten freien Scrollbalken. Auf schmalen Bildschirmen bleibt alles sichtbar. (CR-11) |
+| D-19 | Wo stehen technische Details zur Seite, und wo wird sie gehostet? | In einer Kategorie **System** im Einstellungsdialog, wie die Systeminformationen im Fiori Launchpad: Tech-Stack mit automatisch ermittelten Versionen, Hosting, Build-Infos und aktives UI5-Theme. Der About-Dialog bleibt als kurzer Hinweis. Hoster ist **GitHub Pages**, passend zum Repo `Voelkerdo.github.io`. (CR-12) |
 
 ## 6. Offene Fragen
 _Keine._
@@ -168,3 +181,4 @@ _Keine._
 | CR-9 | 2026-10-31 | Career-Card zeigt auf dem Desktop anfangs nur die aktuelle Station, „Show all“ klappt die übrigen auf. | AC-04.1, AC-04.3, D-16 |
 | CR-10 | 2026-10-31 | Overview Page passt am Desktop ohne Scrollen: Career eingeklappt ohne Highlights, Projects anfangs 3 mit „Show all“. | AC-01.11, AC-02.5, AC-04.3, D-17 |
 | CR-11 | 2026-10-31 | Career-Card scrollt auf dem Desktop per Pfeil-Buttons Station für Station statt „Show all“. | AC-04.1, AC-04.3, AC-04.4, D-16, D-18 |
+| CR-12 | 2026-10-31 | Settings › System mit Tech-Stack, Hosting, Build-Infos und aktivem Theme; Hoster GitHub Pages festgelegt. | Intent (Hosting), §4, REQ-12, D-19 |

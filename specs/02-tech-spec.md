@@ -76,6 +76,7 @@ src/
 │  ├─ career.ts
 │  ├─ contact.ts
 │  ├─ themes.ts             # Theme-Katalog mit Jahr, Gruppe, UI5-Basis-Theme (REQ-11)
+│  ├─ system.ts             # Tech-Stack, Hosting, Build-Infos für Settings › System (REQ-12)
 │  └─ cards.ts              # Card-Definitionen inkl. Größe (leitet KPIs aus den Daten ab)
 ├─ motion/
 │  └─ transitions.ts        # Animations-Varianten, reduced-motion-Handling
@@ -110,6 +111,7 @@ interface ThemeDef { id: ThemeId; name: string; year: number; group: ThemeGroup;
 - `VISIBLE_PROJECTS = 3` in `data/projects.ts` legt fest, wie viele Projekte auf dem Desktop anfangs sichtbar sind (AC-02.5).
 - ~~`VISIBLE_STATIONS = 1` in `data/career.ts` legt fest, wie viele Stationen auf dem Desktop anfangs sichtbar sind (AC-04.3).~~ – entfällt (CR-11).
 - `skills` ist eine flache Liste `Skill[]` (CR-4) mit den 7 SAP-Skills (CR-5); jeder Skill kommt genau einmal vor. `sortedSkills()` sortiert stabil absteigend nach `LEVEL_PERCENT` (AC-03.8). `VISIBLE_SKILLS = 5` legt fest, wie viele anfangs sichtbar sind (AC-03.9).
+- **Systeminformationen (REQ-12):** `vite.config.ts` ermittelt beim Start bzw. Build die Versionen aus den `package.json`-Dateien der Pakete in `node_modules`, das Datum und den Commit (`git rev-parse --short HEAD`, ohne Git: `unknown`). Es reicht sie per `define` als Konstante `__SYSTEM_INFO__` weiter. `data/system.ts` liest sie typisiert aus und ergänzt das Hosting. Vitest nutzt dieselbe Vite-Konfiguration.
 - Die KPIs der Cards (AC-01.3) werden aus den Daten berechnet (z. B. `projects.length`), nicht doppelt gepflegt.
 
 ## 5. Komponenten-Mapping
@@ -118,6 +120,7 @@ interface ThemeDef { id: ThemeId; name: string; year: number; group: ThemeGroup;
 | Shell-Header | `ShellBar` (Branding mit Logo/Name, Titel „Overview“, `profile`-Slot für Avatar) | AC-06.2, AC-06.11 |
 | Benutzermenü | `UserMenu` (fiori) mit den Einträgen „Settings“ und „About“; ~~Theme-Umschalter~~ entfällt (D-15, CR-8) | AC-06.9 |
 | Einstellungen | `UserSettingsDialog` (fiori) mit einem `UserSettingsItem` „Appearance“ (Icon `palette`), darin `UserSettingsAppearanceView` mit je einer `UserSettingsAppearanceViewGroup` pro Gruppe und je einem `UserSettingsAppearanceViewItem` pro Theme (`itemKey` = Theme-ID, `text` = „Name · Jahr“, aktives Theme `selected`). Ohne `saveMode`: Ein Klick wendet das Theme sofort an (`selection-change`). | AC-11.1–AC-11.4 |
+| System | zweites `UserSettingsItem` „System“ (Icon `it-system`) mit einer `UserSettingsView`, darin eine `List` mit `ListItemGroup`s (Tech Stack, Hosting, Build, Theme) und `ListItemStandard` (`text` = Bezeichnung, `additionalText` = Wert, `type` `Inactive`); Daten aus `data/system.ts` | REQ-12 |
 | Zeitreise-Overlay | eigene Komponente im Top Layer (siehe §6), `role="status"` mit `aria-live="polite"` | AC-11.6–AC-11.8 |
 | About | `Dialog` | AC-07.4 |
 | Card (alle) | UI5 `Card` + `CardHeader` (`titleText`, `subtitleText`, Icon im `avatar`-Slot, KPI als `additionalText`) – umhüllt von Motion (TD-10) | AC-01.2, AC-01.3, AC-07.3 |
@@ -239,6 +242,7 @@ Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 | TD-12 | Skill-Balken | UI5 `ProgressIndicator` statt eigener Balken oder Chart-Bibliothek | Fiori-Standardkomponente mit eingebauter Breiten-Animation und `displayValue` für den Stufennamen; keine neue Abhängigkeit (CR-3) |
 | TD-13 | Alte SAP-Themes | Nachbau über UI5-CSS-Variablen auf Basis `sap_fiori_3` statt alter UI5-Versionen oder Screenshots | UI5 Web Components 2.x liefern nur Quartz und Horizon. So bleibt es echtes UI5 mit „anderem Anstrich“, ohne neue Abhängigkeit (CR-8) |
 | TD-14 | Overlay über UI5-Dialogen | Overlay als `popover="manual"` im Browser-Top-Layer | UI5-Dialoge liegen im Top Layer; mit `z-index` kommt man nicht darüber (CR-8) |
+| TD-15 | Versionen in Settings › System | Zur Build-Zeit aus `node_modules` per Vite-`define` statt von Hand gepflegt | Stimmen nach jedem Update automatisch; keine zusätzliche Abhängigkeit (CR-12) |
 
 ## 12. Offene Fragen
 _Keine._

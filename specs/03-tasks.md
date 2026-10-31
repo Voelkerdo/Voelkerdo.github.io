@@ -45,6 +45,7 @@
 | T-33 | CR-10: Career eingeklappt ohne Highlights | AC-04.3, AC-08.3 | [x] |
 | T-35 | CR-11: Career-Card mit Scroll-Pfeilen | AC-04.1, AC-04.4, AC-08.3 | [x] |
 | T-34 | CR-10: Projects mit „Show all“ und Zielhöhe | AC-01.11, AC-02.5, AC-08.3 | [x] |
+| T-36 | CR-12: Settings › System | AC-12.1–AC-12.4 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
@@ -207,6 +208,12 @@ Inhalte von Dominik (Abfrage am 2026-10-31), ersetzen die Platzhalter aus D-3 un
 - `projects.ts`: `VISIBLE_PROJECTS = 3`.
 - `ProjectsCard`: zwei Listen, die zweite im aufklappbaren Wrapper; Umschalter „Show all (5)“ / „Show less“ mit `aria-expanded`, nur ab 1024 px.
 - **Tests:** E2E bei 1280 px – anfangs 3 Projekte sichtbar, die übrigen `inert`; Auf-/Zuklappen per Maus und Tastatur, `aria-expanded`; Reduced Motion ohne Transition; bei 800 px und 390 px alle 5 Projekte ohne Umschalter. AC-01.11: bei 1280 × 780 und 1440 × 780 kein vertikales Scrollen. AC-02.1/02.2 weiterhin grün.
+
+### T-36 CR-12: Settings › System
+- `vite.config.ts`: `__SYSTEM_INFO__` per `define` (Versionen, Build-Datum, Commit) laut Tech Spec §4; Typdeklaration.
+- `data/system.ts`: Tech-Stack, Hosting „GitHub Pages – Static site, no backend“, Build-Infos.
+- `SettingsDialog`: zweite Kategorie „System“ mit gruppierter Liste; die Theme-Zeile kommt aus `useThemeMode` (aufgelöstes Theme).
+- **Tests:** Unit – Stack enthält die fünf Pakete mit Versionsnummer im Format `x.y.z`, Hosting-Text, Datum im Format `YYYY-MM-DD`. E2E – Settings zeigt Appearance und System; System zeigt die vier Gruppen; die Theme-Zeile wechselt nach einer Theme-Wahl (z. B. „SAP Quartz Dark · sap_fiori_3_dark“); Bedienung per Tastatur; bei 390 px erst die Kategorienliste. About-Dialog-Test bleibt grün.
 
 ### T-14 Manuelle Abnahme
 - Production-Build lokal per `npm run preview`.
