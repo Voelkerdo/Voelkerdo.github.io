@@ -211,7 +211,7 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 | D-25 | Wie kommt die Seite online? | GitHub Actions baut und veröffentlicht auf GitHub Pages, aber nur nach denselben Prüfungen wie lokal (`verify` + `security`). Lieber ein paar Minuten länger als ein kaputtes oder unsicheres Deployment. Push auf `main` löst aus, damit nichts vergessen wird; der manuelle Knopf bleibt für Wiederholungen. Persönliche Arbeitsnotizen wandern aus CLAUDE.md ins lokale Memory, weil das Repo öffentlich wird. (CR-18) |
 
 ## 6. Offene Fragen
-_Keine._
+- **OQ-1 Mobile Performance (AC-08.2, AC-14.6):** Die Live-Seite erreicht in Lighthouse mobil 85–89 statt ≥ 90 (Desktop 100). Der Rest liegt am Grundgewicht von React und UI5 vor dem ersten Inhalt (Analyse in T-46, Tech Spec §9b). Mögliche Wege: **A** Build-Snapshot inklusive Shadow DOM (hoher Aufwand, CSP-Konflikt durch Inline-Styles), **B** statische Erstansicht (doppelte Pflege), **C** Cards unterhalb des sichtbaren Bereichs nachladen. Auf Wunsch von Dominik zurückgestellt (2026-10-31); später als eigener CR, Start mit einem Spike zu A und C.
 
 ## 7. Änderungshistorie
 | ID | Datum | Änderung | Betroffen |

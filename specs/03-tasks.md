@@ -55,7 +55,7 @@
 | T-43 | CR-17: CSP, Referrer-Policy und Security-Tests gegen den Build | AC-13.1–AC-13.5, AC-13.7 | [x] |
 | T-44 | CR-17: `npm run security` und Regel in CLAUDE.md | AC-13.6 | [x] |
 | T-45 | CR-18: Deploy-Workflow, Dependabot, CLAUDE.md | AC-14.2–AC-14.5 | [x] |
-| T-46 | CR-18: Erstveröffentlichung und Abnahme der Live-Seite | AC-14.1, AC-14.6 | [~] |
+| T-46 | CR-18: Erstveröffentlichung und Abnahme der Live-Seite | AC-14.1, AC-14.6 | [x] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
@@ -271,6 +271,7 @@ Inhalte von Dominik (Abfrage am 2026-10-31), ersetzen die Platzhalter aus D-3 un
 - Nach Dominiks ausdrücklichem OK: Repo `Voelkerdo/Voelkerdo.github.io` (öffentlich) anlegen, Pages-Source „GitHub Actions“ setzen, `main` pushen.
 - Workflow-Lauf beobachten bis grün.
 - Live-Seite prüfen (AC-14.6): vollständig geladen, keine Requests an Dritte, CSP-Meta aktiv, Lighthouse ≥ 90; Ergebnis in T-14 dokumentieren.
+- **Ergebnis:** live seit 2026-10-31; alles erfüllt außer Lighthouse mobil (85–89 nach `fix(T-46)`, vorher 77–81) – als offene Frage OQ-1 zurückgestellt.
 
 ### T-14 Manuelle Abnahme
 - Production-Build lokal per `npm run preview`.
@@ -295,3 +296,13 @@ Offene Hinweise aus Lighthouse (kein AC verletzt):
 - `robots-txt`: Es gibt keine `robots.txt`; der Preview-Server liefert stattdessen die Startseite aus.
 
 - **Wow-Test (Intent-Erfolgskriterium):** offen – Dominik zeigt die Seite Kollegen, Freunden und Familie.
+
+#### Ergebnisse Live-Seite (2026-10-31, `https://voelkerdo.github.io/`, Lighthouse 13.6, nach `fix(T-46)`)
+| Prüfung | Ziel | Mobile | Desktop | Ergebnis |
+|---|---|---|---|---|
+| Performance (AC-08.2) | ≥ 90 | 85–89 (3 Läufe) | 100 | ⚠️ mobil offen, OQ-1 |
+| Accessibility (AC-08.2) | ≥ 90 | 95 | 95 | ✅ |
+| Best Practices / SEO | – | 100 / 100 | 100 / 100 | (informativ) |
+| Requests an Dritte, CSP-Verstöße (AC-13.1, AC-13.2) | 0 | 0 | 0 | ✅ |
+
+Verbliebene Lighthouse-Hinweise: `aria-prohibited-attr` (UI5-intern im `CardHeader`), `heading-order` (Card-Titel vor der `<h1>` der Profil-Card).
