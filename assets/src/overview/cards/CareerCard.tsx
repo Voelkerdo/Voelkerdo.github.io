@@ -3,25 +3,13 @@ import '@ui5/webcomponents-icons/dist/suitcase.js'
 import '@ui5/webcomponents-icons/dist/navigation-up-arrow.js'
 import '@ui5/webcomponents-icons/dist/navigation-down-arrow.js'
 import { useReducedMotion } from 'motion/react'
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { formatPeriod, sortedCareer } from '../../data/career.ts'
+import { useDesktop } from '../useDesktop.ts'
 
 const stations = sortedCareer()
-// Only the 4-column grid places Career next to the short cards (AC-04.4, tech spec §6)
-const DESKTOP_QUERY = '(min-width: 1024px)'
 // Room for the ▲ arrow above a station title after scrolling (px)
 const ARROW_SPACE = 32
-
-function useDesktop(): boolean {
-  return useSyncExternalStore(
-    (onChange) => {
-      const query = window.matchMedia(DESKTOP_QUERY)
-      query.addEventListener('change', onChange)
-      return () => query.removeEventListener('change', onChange)
-    },
-    () => window.matchMedia(DESKTOP_QUERY).matches,
-  )
-}
 
 /** Scroll positions at which each station starts, below the ▲ arrow */
 function stationStops(area: HTMLElement): number[] {

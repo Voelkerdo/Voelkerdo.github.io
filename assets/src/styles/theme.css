@@ -210,6 +210,8 @@ body {
 
 @media (min-width: 1024px) {
   .bento-grid {
+    /* No minimum row height: rows follow the cards, so the page fits a 780 px window (AC-01.11) */
+    grid-auto-rows: auto;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-areas:
       'about about career contact'
@@ -304,6 +306,40 @@ body {
 }
 
 /* Projects card (REQ-02) */
+/* Desktop: projects beyond VISIBLE_PROJECTS open like the extra skills (AC-02.5) */
+.project-more {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease-out;
+}
+
+.project-more[data-open='true'] {
+  grid-template-rows: 1fr;
+}
+
+.project-more > .project-more-list {
+  min-height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility 0s linear 0.3s;
+  /* Separator to the top projects, as between the items of one list */
+  border-top: 1px solid var(--sapList_BorderColor);
+}
+
+.project-more[data-open='true'] > .project-more-list {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.no-collapse-animation .project-more,
+.no-collapse-animation .project-more > .project-more-list {
+  transition: none;
+}
+
+.projects-toggle {
+  margin: 0.25rem 0 0.5rem 0.5rem;
+}
+
 .project-item {
   display: flex;
   flex-direction: column;

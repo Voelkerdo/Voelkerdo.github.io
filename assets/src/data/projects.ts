@@ -3,6 +3,9 @@ import { profile } from './profile.ts'
 
 const repo = (name: string) => `${profile.githubUrl}/${name}`
 
+/** Projects visible on desktop before "Show all" (AC-02.5) */
+export const VISIBLE_PROJECTS = 3
+
 // Curated by Dominik, SAP projects first (D-1, AC-02.3)
 export const projects: Project[] = [
   {
