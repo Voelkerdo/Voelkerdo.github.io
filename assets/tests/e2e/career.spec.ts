@@ -108,6 +108,34 @@ test.describe('career card', () => {
       await expect(up(page)).toBeHidden()
     })
 
+    test('AC-04.4 the scroll area grows with the card when Projects is expanded', async ({
+      page,
+    }) => {
+      await page.goto('/')
+      // Gap between the bottom of the visible area and the bottom of the career card
+      const layout = () =>
+        page.evaluate(() => {
+          const area = document.querySelector('[data-testid="career-scroll-area"]')!
+          const card = area.closest('[ui5-card]')!
+          const a = area.getBoundingClientRect()
+          return {
+            height: Math.round(a.height),
+            gap: card.getBoundingClientRect().bottom - a.bottom,
+          }
+        })
+      const initial = await layout()
+      expect(initial.height).toBe(224)
+
+      await page.getByTestId('projects-toggle').click()
+      await page.mouse.move(0, 0)
+      await expect.poll(async () => (await layout()).height).toBeGreaterThan(initial.height + 50)
+      await expect.poll(async () => Math.abs((await layout()).gap - initial.gap)).toBeLessThan(2)
+
+      await page.getByTestId('projects-toggle').click()
+      await page.mouse.move(0, 0)
+      await expect.poll(async () => (await layout()).height).toBe(224)
+    })
+
     test('AC-04.4 the mouse wheel scrolls the page, not the card', async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 600 })
       await page.goto('/')

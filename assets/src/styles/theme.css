@@ -456,10 +456,18 @@ body {
 /* Desktop: fixed height, moved only by the arrow buttons (AC-04.4, D-18) */
 .career-scroll {
   position: relative;
+  /* Placeholder that sets the card's share of the grid row (AC-04.4) */
+  height: 14rem;
+}
+
+/* Absolutely positioned, so growing with a stretched card never raises the row itself */
+.career-scroll-frame {
+  position: absolute;
+  inset: 0 0 auto;
 }
 
 .career-scroll-area {
-  height: 14rem;
+  height: 100%;
   overflow: hidden;
 }
 
