@@ -48,6 +48,7 @@
 | T-36 | CR-12: Settings › System | AC-12.1–AC-12.4 | [x] |
 | T-37 | CR-13: Transport-Log-Daten zur Build-Zeit | AC-02.7, AC-02.8 | [x] |
 | T-38 | CR-13: Projects-Card mit Ansicht „Transport Log“ | AC-01.3, AC-01.11, AC-02.5, AC-02.6, AC-02.9, AC-08.3 | [x] |
+| T-39 | CR-14: Seitenpunkte und automatischer Seitenwechsel | AC-01.11, AC-02.10, AC-02.11, AC-08.3 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
@@ -226,6 +227,10 @@ Inhalte von Dominik (Abfrage am 2026-10-31), ersetzen die Platzhalter aus D-3 un
 - Context für die Ansicht; `AnimatedCard` übernimmt Untertitel/KPI der Ansicht.
 - `ProjectsCard`: `SegmentedButton`, Überblenden, Ansicht „Transport Log“ mit Kennzahlen und Liste, Show all für Transporte.
 - **Tests:** E2E – Default „Repositories“ (Inhalt und KPI wie bisher); Wechsel zu „Transport Log“ zeigt vier Kennzahlen, neuesten Transport oben, DVK900001 „Initial release“ (nach Show all), Untertitel „Built spec-driven“ und KPI = Anzahl Transporte; Tastaturbedienung; Reduced Motion; Desktop 3 Transporte + Show all, bei 390 px alle; AC-01.11 bei 1280 × 780 in beiden Ansichten.
+
+### T-39 CR-14: Seitenpunkte und automatischer Seitenwechsel
+- `ProjectsCard`: `SegmentedButton` durch Seitenpunkte unten ersetzen; Timer mit Pause-/Stopp-Regeln laut Tech Spec §6; „Show all“ meldet das Aufklappen.
+- **Tests:** E2E (Timer per `page.clock`) – Default Repositories, aktiver Punkt `aria-current`; nach 8 s Transport Log, nach weiteren 8 s wieder Repositories; Hover pausiert, nach dem Verlassen wieder 8 s; Fokus pausiert; Klick auf einen Punkt wechselt und stoppt den Auto-Wechsel; „Show all“ stoppt; Reduced Motion ohne Auto-Wechsel; Punkte per Tastatur bedienbar. Bestehende Transport-Log-Tests auf Punkte umstellen; AC-01.11 bei 1280 × 780 in beiden Seiten.
 
 ### T-14 Manuelle Abnahme
 - Production-Build lokal per `npm run preview`.
