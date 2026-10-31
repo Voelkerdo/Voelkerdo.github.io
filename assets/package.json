@@ -17,7 +17,7 @@
     "security": "npm audit --audit-level=low && npm audit signatures"
   },
   "dependencies": {
-    "@sap-theming/theming-base-content": "11.36.4",
+    "@sap-theming/theming-base-content": "11.36.5",
     "@ui5/webcomponents": "^2.28.1",
     "@ui5/webcomponents-base": "^2.28.1",
     "@ui5/webcomponents-fiori": "^2.28.1",
