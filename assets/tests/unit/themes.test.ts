@@ -11,6 +11,12 @@ describe('theme catalog', () => {
       ['SAP Fiori', 'SAP Evening Horizon · 2022'],
       ['SAP Fiori', 'SAP Quartz Light · 2019'],
       ['SAP Fiori', 'SAP Quartz Dark · 2019'],
+      ['SAP Fiori', 'SAP Belize · 2016'],
+      ['SAP Fiori', 'SAP Blue Crystal · 2013'],
+      ['SAP GUI', 'SAP Corbu · 2012'],
+      ['SAP GUI', 'SAP Signature · 2004'],
+      ['SAP GUI', 'SAP Enjoy · 1999'],
+      ['SAP GUI', 'SAP Classic · 1992'],
     ])
   })
 
@@ -26,12 +32,23 @@ describe('theme catalog', () => {
 
   it('AC-11.5 Horizon and Quartz are real UI5 themes', () => {
     expect(
-      themes.filter((t) => t.group === 'SAP Fiori').map((t) => [t.id, t.ui5Theme, t.emulated]),
+      themes.filter((t) => !t.emulated && t.group === 'SAP Fiori').map((t) => [t.id, t.ui5Theme]),
     ).toEqual([
-      ['horizon-morning', 'sap_horizon', undefined],
-      ['horizon-evening', 'sap_horizon_dark', undefined],
-      ['quartz-light', 'sap_fiori_3', undefined],
-      ['quartz-dark', 'sap_fiori_3_dark', undefined],
+      ['horizon-morning', 'sap_horizon'],
+      ['horizon-evening', 'sap_horizon_dark'],
+      ['quartz-light', 'sap_fiori_3'],
+      ['quartz-dark', 'sap_fiori_3_dark'],
+    ])
+  })
+
+  it('AC-11.5 older themes are recreated on top of SAP Quartz Light', () => {
+    expect(themes.filter((t) => t.emulated).map((t) => [t.id, t.ui5Theme])).toEqual([
+      ['belize', 'sap_fiori_3'],
+      ['blue-crystal', 'sap_fiori_3'],
+      ['corbu', 'sap_fiori_3'],
+      ['signature', 'sap_fiori_3'],
+      ['enjoy', 'sap_fiori_3'],
+      ['classic', 'sap_fiori_3'],
     ])
   })
 

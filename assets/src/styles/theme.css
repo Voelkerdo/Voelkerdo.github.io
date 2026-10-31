@@ -84,6 +84,8 @@ body {
 
 .shell-page-title {
   font-weight: 600;
+  /* UI5 Text uses the content color; in the shell it must follow the shell (dark shells) */
+  --sapTextColor: var(--sapShell_TextColor);
 }
 
 .about-content {

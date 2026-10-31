@@ -176,11 +176,11 @@ interface ThemeDef { id: ThemeId; name: string; year: number; group: ThemeGroup;
 | Theme | Jahr | Leitfarbe | Shell | Seitenhintergrund | Schrift | Ecken |
 |---|---|---|---|---|---|---|
 | SAP Classic | 1992 | `#000080` | `#D4D0C8` | `#D4D0C8` | Tahoma, Arial | 0 (kantig, Bevel-Rahmen) |
-| SAP Enjoy | 1999 | `#3A6EA5` | `#6B8CB5` | `#E8E4D8` | Tahoma, Arial | 2px |
+| SAP Enjoy | 1999 | `#3A6EA5` | `#6B8CB5` (Shell-Schrift schwarz wegen Kontrast, _ergänzt in T-29_) | `#E8E4D8` | Tahoma, Arial | 2px |
 | SAP Signature | 2004 | `#F0AB00` | `#1F4E79` | `#DCE8F4` | Arial | 3px |
 | SAP Corbu | 2012 | `#346187` | `#3F3F3F` | `#F2F2F2` | Arial | 2px |
 | SAP Blue Crystal | 2013 | `#009DE0` | `#2B323A` | `#F7F7F7` | Arial | 2px |
-| SAP Belize | 2016 | `#427CAC` | `#354A5F` | `#EFF4F9` | „72“ (aus UI5), Arial | 4px |
+| SAP Belize | 2016 | `#427CAC` | `#354A5F` | `#EFF4F9`, dazu Verlauf `#DFE9F4` → `#F7F7F7` wie im Original-Launchpad _(ergänzt in T-29)_ | „72“ (aus UI5), Arial | 4px |
 
 ## 8. Teststrategie
 - **Nachvollziehbarkeit:** Jeder Test nennt im Namen die AC-ID, z. B. `it('AC-02.2 opens repo link in new tab', …)`. So ist jedes Akzeptanzkriterium einem Test zugeordnet.

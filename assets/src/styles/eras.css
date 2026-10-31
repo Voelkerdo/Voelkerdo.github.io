@@ -1,0 +1,167 @@
+/*
+ * SAP themes that UI5 Web Components no longer ship, recreated via UI5 CSS variables on top
+ * of SAP Quartz Light (TD-13, AC-11.5). Recognizable, not pixel-perfect. Only system fonts.
+ * ThemeModeProvider sets [data-theme] to the theme ID (tech spec §7).
+ */
+:root[data-theme='belize'],
+:root[data-theme='blue-crystal'],
+:root[data-theme='corbu'],
+:root[data-theme='signature'],
+:root[data-theme='enjoy'],
+:root[data-theme='classic'] {
+  --sapHighlightColor: var(--sapBrandColor);
+  --sapShell_Background: var(--sapShellColor);
+  --sapShell_InteractiveTextColor: var(--sapShell_TextColor);
+  --sapShell_SubBrand_TextColor: var(--sapShell_TextColor);
+  --sapShell_Active_TextColor: var(--sapShell_TextColor);
+  --sapShell_Navigation_TextColor: var(--sapShell_TextColor);
+  --sapShell_Hover_Background: color-mix(in srgb, var(--sapShellColor) 85%, white);
+  --sapShell_Active_Background: color-mix(in srgb, var(--sapShellColor) 85%, black);
+  --sapGroup_ContentBackground: var(--sapTile_Background);
+  --sapList_Background: var(--sapTile_Background);
+  --sapList_HeaderBackground: var(--sapTile_Background);
+  --sapList_GroupHeaderBackground: var(--sapTile_Background);
+  --sapPageHeader_Background: var(--sapTile_Background);
+  --sapPageFooter_Background: var(--sapTile_Background);
+  --sapTile_TextColor: var(--sapTextColor);
+  --sapTile_TitleTextColor: var(--sapTextColor);
+  --sapTile_IconColor: var(--accent-1);
+  --sapContent_FocusColor: var(--accent-1);
+  --sapButton_Emphasized_Background: var(--accent-1);
+  --sapButton_Emphasized_BorderColor: var(--accent-1);
+  --sapButton_Emphasized_TextColor: var(--on-accent);
+  --sapButton_Lite_TextColor: var(--sapLinkColor);
+  --sapLink_Hover_Color: var(--sapLinkColor);
+  --sapFontHeaderFamily: var(--sapFontFamily);
+  --sapButton_BorderCornerRadius: var(--sapElement_BorderCornerRadius);
+  --sapField_BorderCornerRadius: var(--sapElement_BorderCornerRadius);
+  --sapPopover_BorderCornerRadius: var(--sapElement_BorderCornerRadius);
+  --sapTile_BorderCornerRadius: var(--sapElement_BorderCornerRadius);
+  /* Avatars use color scheme Accent1, re-colored to the accent (Quartz reads sapAccentColor1) */
+  --sapAccentColor1: var(--accent-1);
+  --sapAvatar_1_Background: var(--accent-1);
+  --sapAvatar_1_BorderColor: var(--accent-1);
+  --sapAvatar_1_Hover_Background: var(--accent-1);
+  --sapAvatar_1_TextColor: var(--on-accent);
+  --on-accent: #ffffff;
+}
+
+/* SAP Belize (2016): Fiori 2.0, blue-grey shell, light blue gradient background */
+:root[data-theme='belize'] {
+  --sapBrandColor: #427cac;
+  --sapShellColor: #354a5f;
+  --sapShell_TextColor: #ffffff;
+  --sapBackgroundColor: #eff4f9;
+  --sapTile_Background: #ffffff;
+  --sapTextColor: #333333;
+  --sapContent_LabelColor: #666666;
+  --sapLinkColor: #0070b1;
+  --sapFontFamily: '72', '72full', Arial, Helvetica, sans-serif;
+  --sapElement_BorderCornerRadius: 4px;
+  --accent-1: #0070b1;
+  --accent-2: #91c8f6;
+}
+
+:root[data-theme='belize'] body {
+  background: linear-gradient(180deg, #dfe9f4, #f7f7f7 60vh) fixed;
+}
+
+/* SAP Blue Crystal (2013): Fiori 1, dark shell, crystal blue */
+:root[data-theme='blue-crystal'] {
+  --sapBrandColor: #009de0;
+  --sapShellColor: #2b323a;
+  --sapShell_TextColor: #ffffff;
+  --sapBackgroundColor: #f7f7f7;
+  --sapTile_Background: #ffffff;
+  --sapTextColor: #333333;
+  --sapContent_LabelColor: #666666;
+  --sapLinkColor: #00679e;
+  --sapFontFamily: Arial, Helvetica, sans-serif;
+  --sapElement_BorderCornerRadius: 2px;
+  --accent-1: #00679e;
+  --accent-2: #009de0;
+}
+
+/* SAP Corbu (2012): SAP GUI 7.30, calm greys with a muted blue */
+:root[data-theme='corbu'] {
+  --sapBrandColor: #346187;
+  --sapShellColor: #3f3f3f;
+  --sapShell_TextColor: #ffffff;
+  --sapBackgroundColor: #f2f2f2;
+  --sapTile_Background: #ffffff;
+  --sapTextColor: #333333;
+  --sapContent_LabelColor: #666666;
+  --sapLinkColor: #346187;
+  --sapFontFamily: Arial, Helvetica, sans-serif;
+  --sapElement_BorderCornerRadius: 2px;
+  --accent-1: #346187;
+  --accent-2: #5d8db8;
+}
+
+/* SAP Signature (2004): blue shades with SAP gold */
+:root[data-theme='signature'] {
+  --sapBrandColor: #f0ab00;
+  --sapShellColor: #1f4e79;
+  --sapShell_TextColor: #ffffff;
+  --sapBackgroundColor: #dce8f4;
+  --sapTile_Background: #ffffff;
+  --sapTextColor: #000000;
+  --sapContent_LabelColor: #4d5a66;
+  --sapLinkColor: #1f4e79;
+  --sapFontFamily: Arial, Helvetica, sans-serif;
+  --sapElement_BorderCornerRadius: 3px;
+  /* Gold is too light for text: navy carries text, gold the gradients */
+  --accent-1: #1f4e79;
+  --accent-2: #f0ab00;
+}
+
+/* SAP Enjoy (1999): EnjoySAP, sand background with steel blue */
+:root[data-theme='enjoy'] {
+  --sapBrandColor: #3a6ea5;
+  --sapShellColor: #6b8cb5;
+  --sapShell_TextColor: #000000;
+  --sapBackgroundColor: #e8e4d8;
+  --sapTile_Background: #faf8f2;
+  --sapTextColor: #000000;
+  --sapContent_LabelColor: #545454;
+  --sapLinkColor: #2c5a8c;
+  --sapFontFamily: Tahoma, Arial, sans-serif;
+  --sapElement_BorderCornerRadius: 2px;
+  --accent-1: #2c5a8c;
+  --accent-2: #6fa0c8;
+}
+
+/* SAP Classic (1992): R/3 on Windows, grey 3D surfaces and navy title bars */
+:root[data-theme='classic'] {
+  --sapBrandColor: #000080;
+  --sapShellColor: #d4d0c8;
+  --sapShell_TextColor: #000000;
+  --sapBackgroundColor: #d4d0c8;
+  --sapTile_Background: #d4d0c8;
+  --sapTextColor: #000000;
+  --sapContent_LabelColor: #404040;
+  --sapLinkColor: #000080;
+  --sapList_BorderColor: #808080;
+  --sapFontFamily: Tahoma, 'MS Sans Serif', Arial, sans-serif;
+  --sapElement_BorderCornerRadius: 0;
+  --sapContent_Shadow0: none;
+  /* Windows title bar gradient */
+  --accent-1: #000080;
+  --accent-2: #1084d0;
+}
+
+/* Bevelled 3D frames instead of soft shadows */
+:root[data-theme='classic'] .overview-card::part(root) {
+  border: 2px solid;
+  border-color: #ffffff #808080 #808080 #ffffff;
+  box-shadow: none;
+}
+
+:root[data-theme='classic'] .app-shellbar {
+  border-bottom: 2px solid;
+  border-color: #808080;
+}
+
+:root[data-theme='classic'] .shell-logo {
+  border-radius: 0;
+}
