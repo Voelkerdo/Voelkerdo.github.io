@@ -43,6 +43,7 @@
 | T-31 | Echte Inhalte einpflegen | AC-01.8, AC-02.3, AC-02.4, AC-04.2, AC-05.1, AC-05.2 | [x] |
 | T-32 | CR-9: Career-Card mit „Show all“ auf dem Desktop | AC-04.1, AC-04.3, AC-08.3 | [x] |
 | T-33 | CR-10: Career eingeklappt ohne Highlights | AC-04.3, AC-08.3 | [x] |
+| T-35 | CR-11: Career-Card mit Scroll-Pfeilen | AC-04.1, AC-04.4, AC-08.3 | [ ] |
 | T-34 | CR-10: Projects mit „Show all“ und Zielhöhe | AC-01.11, AC-02.5, AC-08.3 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
@@ -196,6 +197,11 @@ Inhalte von Dominik (Abfrage am 2026-10-31), ersetzen die Platzhalter aus D-3 un
 ### T-33 CR-10: Career eingeklappt ohne Highlights
 - `CareerCard`: Highlights jeder Station in einem Wrapper; eingeklappt ist auch der der aktuellen Station zu. Container-Höhen laut Tech Spec §6.
 - **Tests:** E2E bei 1280 px – eingeklappt sind Rolle, Firma und Zeitraum der aktuellen Station sichtbar, ihre Highlights nicht; „Show all (3)“ zeigt alle Highlights und Stationen; „Show less“ klappt wieder zu; Reduced Motion ohne Transition. Bei 800 px und 390 px weiterhin alles sichtbar.
+
+### T-35 CR-11: Career-Card mit Scroll-Pfeilen
+- `CareerCard`: Show-all-Umschalter, Höhenmessung und Highlight-Wrapper aus T-32/T-33 entfernen; `VISIBLE_STATIONS` entfällt.
+- Scroll-Bereich mit ▲/▼ laut Tech Spec §6, nur ab 1024 px.
+- **Tests:** E2E bei 1280 px – Card-Höhe wie eingeklappt in CR-10 (± 1 rem); anfangs nur ▼; ▼ scrollt zum Anfang der zweiten Station, danach sind ▲ und ▼ sichtbar; am Ende nur ▲; ▲ scrollt zurück; Mausrad über der Card scrollt die Seite, nicht die Card; Bedienung per Tastatur, Namen der Pfeile; mit Reduced Motion ohne Animation. Bei 800 px und 390 px alle Stationen ohne Pfeile. AC-04.1 weiterhin grün.
 
 ### T-34 CR-10: Projects mit „Show all“ und Zielhöhe
 - `projects.ts`: `VISIBLE_PROJECTS = 3`.
