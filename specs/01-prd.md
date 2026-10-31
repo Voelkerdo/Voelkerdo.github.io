@@ -178,6 +178,17 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-14.5 Dependabot prüft wöchentlich die npm-Abhängigkeiten in `assets/` und die GitHub Actions und schlägt Updates als Pull Request vor. `@sap-theming/theming-base-content` ist davon ausgenommen: Seine Version folgt UI5 (Fonts, AC-13.1) und wird mit UI5-Updates mitgezogen; ein Test prüft die Übereinstimmung. _(präzisiert nach T-46)_
 - AC-14.6 Nach der Erstveröffentlichung wird die Live-Seite geprüft: lädt vollständig, keine Requests an Dritte, CSP aktiv, Lighthouse Performance und Accessibility ≥ 90 (AC-08.2).
 
+### REQ-15 Repository-README
+**Story:** Als Entwickler, der auf das Repo stößt, will ich in Sekunden sehen, was diese Seite besonders macht und wie sie gebaut ist, und Lust bekommen, sie live anzuschauen und Dominik zu folgen.
+**Akzeptanzkriterien:**
+- AC-15.1 Im Repo-Root liegt eine **englische** `README.md`. Oben stehen Name, Positionierung, ein gut sichtbarer Link zur Live-Seite, Badges für Deploy-Status und Lizenz sowie ein großer Screenshot, der sich an das helle bzw. dunkle GitHub-Theme anpasst.
+- AC-15.2 Der Abschnitt **Highlights** zeigt die Besonderheiten: Fiori-Overview-Page im Bento-Grid, **Theme-Zeitreise** durch die SAP-Themes (mit GIF: 2026 → 1992, Seite im SAP-Classic-Look), Transport Log, Benachrichtigungs-Gag und Settings im Fiori-Stil.
+- AC-15.3 Der Abschnitt **Spec-Driven Development** erklärt kurz die Kette Intent → PRD → Tech Spec → Tasks, Change Requests und die Prüfungen, verlinkt die Specs (Hinweis: auf Deutsch) und nennt die Zusammenarbeit mit KI offen.
+- AC-15.4 Der Abschnitt **Tech Stack & Quality** nennt den Stack und die Qualitäts- und Sicherheitsmaßnahmen: `verify` mit Unit-, E2E- und Security-Tests gegen den Build, CSP, keine Drittanbieter, gehärtete Pipeline, Dependabot.
+- AC-15.5 Screenshots und GIF werden per Script **reproduzierbar** aus dem Production-Build erzeugt und liegen in `.github/readme/`, also nicht in der ausgelieferten Website. Das GIF ist höchstens 3 MB groß.
+- AC-15.6 **Lizenz:** Der Code steht unter MIT (`LICENSE`). Persönliche Inhalte (Texte, Werdegang, Name, Profil-Daten) sind ausdrücklich ausgenommen; das steht in README und `LICENSE`.
+- AC-15.7 Das Repo hat auf GitHub eine Beschreibung, den Link zur Live-Seite als Website und passende Topics.
+
 ## 4. Außerhalb des Scopes (v1)
 CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics, ~~Hosting/Deployment~~. _(Hoster festgelegt in CR-12, Deployment umgesetzt in CR-18, REQ-14.)_
 
@@ -209,6 +220,7 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 | D-23 | Wie bleibt die Projects-Card beim Seitenwechsel ruhig? | Beide Seiten liegen übereinander im selben Bereich, die Card ist so hoch wie die höhere – ohne Messen. Damit die Repositories-Seite dabei nicht leer wirkt, zeigen beide Listen auch auf schmalen Bildschirmen anfangs 3 Einträge mit „Show all“. Die alte Seite blendet aus, die neue ein, statt hart zu wechseln. (CR-16) |
 | D-24 | Wie wird die Seite geschützt, und welche Restrisiken akzeptieren wir? | Fonts selbst hosten, weil die Weitergabe der IP-Adresse an ein CDN datenschutzrechtlich heikel ist (vgl. LG München, Google Fonts, 2022). Eine strenge CSP per Meta-Tag entschärft künftige XSS-Fehler, weil GitHub Pages keine eigenen HTTP-Header erlaubt. Security-Tests laufen in `npm run verify` gegen einen echten Production-Build, `npm audit` bei jedem CR. **Akzeptiertes Restrisiko:** Die Seite lässt sich in fremde iframes einbetten (Clickjacking), denn `frame-ancestors` geht nicht per Meta-Tag. Ohne Login und ohne Formulare gibt es aber nichts, was sich so missbrauchen ließe. (CR-17) |
 | D-25 | Wie kommt die Seite online? | GitHub Actions baut und veröffentlicht auf GitHub Pages, aber nur nach denselben Prüfungen wie lokal (`verify` + `security`). Lieber ein paar Minuten länger als ein kaputtes oder unsicheres Deployment. Push auf `main` löst aus, damit nichts vergessen wird; der manuelle Knopf bleibt für Wiederholungen. Persönliche Arbeitsnotizen wandern aus CLAUDE.md ins lokale Memory, weil das Repo öffentlich wird. (CR-18) |
+| D-26 | Wie präsentiert sich das Repo? | Eine englische README als zweites Schaufenster: Visuals und Highlights zuerst, dann Spec-Driven Development und Qualität – keine Installationsanleitung, weil das Repo kein Template ist. Code unter MIT, persönliche Inhalte vorbehalten. Bilder werden per Script erzeugt, damit sie bei Änderungen leicht aktualisiert werden können. (CR-19) |
 
 ## 6. Offene Fragen
 - **OQ-1 Mobile Performance (AC-08.2, AC-14.6):** Die Live-Seite erreicht in Lighthouse mobil 85–89 statt ≥ 90 (Desktop 100). Der Rest liegt am Grundgewicht von React und UI5 vor dem ersten Inhalt (Analyse in T-46, Tech Spec §9b). Mögliche Wege: **A** Build-Snapshot inklusive Shadow DOM (hoher Aufwand, CSP-Konflikt durch Inline-Styles), **B** statische Erstansicht (doppelte Pflege), **C** Cards unterhalb des sichtbaren Bereichs nachladen. Auf Wunsch von Dominik zurückgestellt (2026-10-31); später als eigener CR, Start mit einem Spike zu A und C.
@@ -234,3 +246,4 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 | CR-16 | 2026-10-31 | Projects-Card: gleiche Höhe beider Seiten und echte Überblendung, auch auf dem Smartphone; Listen dort ebenfalls 3 + „Show all“. | AC-02.5, AC-02.9, AC-02.12, D-17, D-23 |
 | CR-17 | 2026-10-31 | Sicherheit & Datenschutz nach Security-Check: Fonts selbst gehostet, CSP und Referrer-Policy, Security-Tests in verify, `npm run security` bei jedem CR. | Intent (Leitplanken), REQ-13, D-24 |
 | CR-18 | 2026-10-31 | Deployment auf GitHub Pages per GitHub Actions mit Prüfungen vor jedem Release, gehärteter Pipeline und Dependabot. | Intent (Hosting), §4, REQ-14, D-25 |
+| CR-19 | 2026-10-31 | Repository-README mit Screenshot, Zeitreise-GIF, Highlights, Spec-Driven Development und Qualität; MIT-Lizenz für Code; Repo-Metadaten. | REQ-15, D-26 |

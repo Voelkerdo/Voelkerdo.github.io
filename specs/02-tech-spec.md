@@ -244,6 +244,15 @@ Nach der Erstveröffentlichung lag Lighthouse mobil bei 77–81. Umgesetzt:
 - **Dependabot** `.github/dependabot.yml`: `npm` (Verzeichnis `/assets`) und `github-actions`, wöchentlich (AC-14.5). `@sap-theming/theming-base-content` wird ignoriert (folgt UI5); ein Unit-Test vergleicht unsere Version mit der Abhängigkeit von `@ui5/webcomponents-theming`. _(präzisiert nach T-46)_
 - **Pages-Einstellung:** Source „GitHub Actions“. Die Seite liegt im Root der Domain; `base: './'` funktioniert unverändert.
 
+## 9c. README (REQ-15)
+- `README.md` und `LICENSE` liegen im Repo-Root (keine ausführbaren Dateien). Bilder liegen in `.github/readme/`.
+- **Bilder per Script** `assets/scripts/readme-media.mjs` (`npm run readme:media`): baut die Seite in einen Temp-Ordner, startet `vite preview` auf einem eigenen Port und erzeugt per Playwright:
+  - `hero-light.png` / `hero-dark.png` (Desktop 1280 × 780, Default-Theme, Cards eingeblendet);
+  - `time-travel.gif`: Video der Zeitreise zu SAP Classic (Settings öffnen → „SAP Classic · 1992“), per `ffmpeg` mit eigener Palette in ein GIF mit ≤ 3 MB umgewandelt, Breite 960 px, 15 fps.
+  - `ffmpeg` ist nur für dieses Script nötig, nicht für `verify` oder die Pipeline.
+- Die README nutzt `<picture>` mit `prefers-color-scheme` für Hell/Dunkel und den Badge `actions/workflows/deploy.yml/badge.svg`.
+- Ein Unit-Test prüft, dass alle in der README verlinkten lokalen Bilder existieren und das GIF höchstens 3 MB groß ist.
+
 ## 10. Nachvollziehbarkeit (Traceability)
 | Anforderung | Umsetzung (Abschnitt) | Testart |
 |---|---|---|
@@ -261,6 +270,7 @@ Nach der Erstveröffentlichung lag Lighthouse mobil bei 77–81. Umgesetzt:
 | REQ-12 Systeminformationen | 4, 5 | Unit + E2E |
 | REQ-13 Sicherheit & Datenschutz | 9 | E2E gegen Production-Build + `npm run security` |
 | REQ-14 Deployment | 11 | Pipeline selbst + manuelle Abnahme der Live-Seite (T-46) |
+| REQ-15 Repository-README | 9c | Unit (Bilder vorhanden, Größe) + Durchsicht |
 
 ## 11. Technische Entscheidungen
 | ID | Thema | Entscheidung | Begründung |

@@ -56,6 +56,8 @@
 | T-44 | CR-17: `npm run security` und Regel in CLAUDE.md | AC-13.6 | [x] |
 | T-45 | CR-18: Deploy-Workflow, Dependabot, CLAUDE.md | AC-14.2–AC-14.5 | [x] |
 | T-46 | CR-18: Erstveröffentlichung und Abnahme der Live-Seite | AC-14.1, AC-14.6 | [x] |
+| T-47 | CR-19: README-Bilder per Script (Screenshot, Zeitreise-GIF) | AC-15.5 | [ ] |
+| T-48 | CR-19: README, Lizenz und Repo-Metadaten | AC-15.1–AC-15.4, AC-15.6, AC-15.7 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
@@ -272,6 +274,16 @@ Inhalte von Dominik (Abfrage am 2026-10-31), ersetzen die Platzhalter aus D-3 un
 - Workflow-Lauf beobachten bis grün.
 - Live-Seite prüfen (AC-14.6): vollständig geladen, keine Requests an Dritte, CSP-Meta aktiv, Lighthouse ≥ 90; Ergebnis in T-14 dokumentieren.
 - **Ergebnis:** live seit 2026-10-31; alles erfüllt außer Lighthouse mobil (85–89 nach `fix(T-46)`, vorher 77–81) – als offene Frage OQ-1 zurückgestellt.
+
+### T-47 CR-19: README-Bilder per Script
+- `assets/scripts/readme-media.mjs` und npm-Script `readme:media` laut Tech Spec §9c; Ausgabe nach `.github/readme/`.
+- Bilder erzeugen und Dominik zur Abnahme zeigen (Bildausschnitt, Länge und Tempo des GIFs).
+
+### T-48 CR-19: README, Lizenz und Repo-Metadaten
+- `README.md` (Englisch) laut AC-15.1–AC-15.4; Entwurf zuerst Dominik zeigen (Texte sind seine Entscheidung).
+- `LICENSE` (MIT, Copyright Dominik Völker, Ausnahme für persönliche Inhalte).
+- Unit-Test: lokale Bildlinks der README existieren, GIF ≤ 3 MB.
+- Nach Dominiks OK: pushen; Repo-Beschreibung, Website `https://voelkerdo.github.io/` und Topics per `gh` setzen.
 
 ### T-14 Manuelle Abnahme
 - Production-Build lokal per `npm run preview`.
