@@ -2,7 +2,7 @@ import react from '@vitejs/plugin-react'
 import { execSync } from 'node:child_process'
 import { readdirSync, readFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import { buildStats, buildTransports, parseCommits } from './src/data/transportLog.ts'
 
 const version = (pkg: string): string =>
@@ -57,6 +57,39 @@ const transportLog = {
   ),
 }
 
+// Content Security Policy and referrer policy as meta tags: GitHub Pages allows no own headers.
+// Build only, the dev server needs an inline script for React Fast Refresh (AC-13.2, AC-13.3, TD-17)
+export const CONTENT_SECURITY_POLICY = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self'",
+  "font-src 'self'",
+  "img-src 'self' data:",
+  "connect-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'none'",
+].join('; ')
+
+function securityMetaTags(): Plugin {
+  return {
+    name: 'security-meta-tags',
+    apply: 'build',
+    transformIndexHtml: () => [
+      {
+        tag: 'meta',
+        attrs: { 'http-equiv': 'Content-Security-Policy', content: CONTENT_SECURITY_POLICY },
+        injectTo: 'head-prepend',
+      },
+      {
+        tag: 'meta',
+        attrs: { name: 'referrer', content: 'strict-origin-when-cross-origin' },
+        injectTo: 'head-prepend',
+      },
+    ],
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig({
   // Relative base so the static build works on any host and sub-path
@@ -75,5 +108,5 @@ export default defineConfig({
     __SYSTEM_INFO__: JSON.stringify(systemInfo),
     __TRANSPORT_LOG__: JSON.stringify(transportLog),
   },
-  plugins: [react()],
+  plugins: [react(), securityMetaTags()],
 })
