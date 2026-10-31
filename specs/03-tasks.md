@@ -56,7 +56,7 @@
 | T-44 | CR-17: `npm run security` und Regel in CLAUDE.md | AC-13.6 | [x] |
 | T-45 | CR-18: Deploy-Workflow, Dependabot, CLAUDE.md | AC-14.2–AC-14.5 | [x] |
 | T-46 | CR-18: Erstveröffentlichung und Abnahme der Live-Seite | AC-14.1, AC-14.6 | [x] |
-| T-47 | CR-19: README-Bilder per Script (Screenshot, Zeitreise-GIF) | AC-15.5 | [ ] |
+| T-47 | CR-19: README-Bilder per Script (Screenshot, Zeitreise-GIF) | AC-15.5 | [x] |
 | T-48 | CR-19: README, Lizenz und Repo-Metadaten | AC-15.1–AC-15.4, AC-15.6, AC-15.7 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 

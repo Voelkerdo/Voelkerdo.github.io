@@ -14,7 +14,8 @@
     "test:watch": "vitest",
     "e2e": "playwright test",
     "verify": "npm run typecheck && npm run lint && npm run test && npm run e2e",
-    "security": "npm audit --audit-level=low && npm audit signatures"
+    "security": "npm audit --audit-level=low && npm audit signatures",
+    "readme:media": "node scripts/readme-media.mjs"
   },
   "dependencies": {
     "@sap-theming/theming-base-content": "11.36.4",
