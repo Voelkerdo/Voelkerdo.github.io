@@ -50,6 +50,7 @@
 | T-38 | CR-13: Projects-Card mit Ansicht „Transport Log“ | AC-01.3, AC-01.11, AC-02.5, AC-02.6, AC-02.9, AC-08.3 | [x] |
 | T-39 | CR-14: Seitenpunkte und automatischer Seitenwechsel | AC-01.11, AC-02.10, AC-02.11, AC-08.3 | [x] |
 | T-40 | CR-15: Pfeile neben den Seitenpunkten | AC-02.10, AC-02.11 | [x] |
+| T-41 | CR-16: Gleich hohe Seiten und Überblendung in der Projects-Card | AC-02.5, AC-02.9, AC-02.12, AC-08.3 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
@@ -236,6 +237,10 @@ Inhalte von Dominik (Abfrage am 2026-10-31), ersetzen die Platzhalter aus D-3 un
 ### T-40 CR-15: Pfeile neben den Seitenpunkten
 - `ProjectsCard`: Pfeil-Buttons vor und hinter den Punkten laut Tech Spec §5; Fokus wandert zum anderen Pfeil, wenn der fokussierte deaktiviert wird; ein Pfeil-Klick stoppt den automatischen Wechsel.
 - **Tests:** E2E – auf Seite 1 ist ‹ deaktiviert und › aktiv; › blättert zum Transport Log, dann ist › deaktiviert und ‹ aktiv; ‹ blättert zurück; Namen für Screenreader; per Tastatur: Fokus auf ›, Enter → Fokus liegt danach auf ‹; ein Pfeil-Klick stoppt den Auto-Wechsel (`page.clock`). AC-01.11 weiterhin grün.
+
+### T-41 CR-16: Gleich hohe Seiten und Überblendung in der Projects-Card
+- `ProjectsCard`: beide Seiten übereinander rendern laut Tech Spec §6, inaktive Seite `inert`/verborgen, Überblendung per CSS; Header aus der aktiven Seite; „Show all“ auf allen Breiten (`useDesktop` entfällt für Projects).
+- **Tests:** E2E bei 390 px und 1280 px – Card-Höhe vor und nach dem Seitenwechsel gleich (manuell und automatisch); während des Wechsels sind beide Seiten teilweise sichtbar (Opacity zwischen 0 und 1); inaktive Seite `inert`; Reduced Motion ohne Transition; bei 390 px 3 Projekte bzw. 3 Transporte mit „Show all“. Bestehende Tests „alle sichtbar unter 1024 px“ anpassen; AC-01.11 weiterhin grün.
 
 ### T-14 Manuelle Abnahme
 - Production-Build lokal per `npm run preview`.
