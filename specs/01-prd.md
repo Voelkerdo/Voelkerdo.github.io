@@ -224,6 +224,7 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 
 ## 6. Offene Fragen
 - **OQ-1 Mobile Performance (AC-08.2, AC-14.6):** Die Live-Seite erreicht in Lighthouse mobil 85–89 statt ≥ 90 (Desktop 100). Der Rest liegt am Grundgewicht von React und UI5 vor dem ersten Inhalt (Analyse in T-46, Tech Spec §9b). Mögliche Wege: **A** Build-Snapshot inklusive Shadow DOM (hoher Aufwand, CSP-Konflikt durch Inline-Styles), **B** statische Erstansicht (doppelte Pflege), **C** Cards unterhalb des sichtbaren Bereichs nachladen. Auf Wunsch von Dominik zurückgestellt (2026-10-31); später als eigener CR, Start mit einem Spike zu A und C.
+- **OQ-2 „Buy me a coffee“ (REQ-05):** Der „Buy me a coffee“-Eintrag in der Contact-Card ist als CR-20 fertig spezifiziert und umgesetzt, aber noch nicht auf `main`: Dominik hat noch keinen Buy-me-a-coffee-Account, und er möchte selbst entscheiden, wann der Eintrag live geht. Geparkt auf der Branch `feature/cr-20-buy-me-a-coffee` als Draft-PR #3 (AC-05.3, D-27, T-49). Die IDs CR-20, D-27, AC-05.3 und T-49 sind dort vergeben; neue CRs auf `main` beginnen bei CR-21 / D-28 / T-50. Weg: echte URL eintragen, auf `main` rebasen, `verify` + `security`, nach Dominiks OK mergen und OQ-2 dabei durchstreichen. Status: zurückgestellt (2026-10-31).
 
 ## 7. Änderungshistorie
 | ID | Datum | Änderung | Betroffen |
