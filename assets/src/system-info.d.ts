@@ -4,3 +4,9 @@ declare const __SYSTEM_INFO__: {
   buildDate: string
   commit: string
 }
+
+/** Injected by vite.config.ts at build time (AC-02.7, AC-02.8, TD-16) */
+declare const __TRANSPORT_LOG__: {
+  transports: import('./data/types.ts').Transport[]
+  stats: import('./data/types.ts').BuildStats
+}

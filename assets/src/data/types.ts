@@ -99,3 +99,23 @@ export interface ThemeDef {
   /** Recreated via UI5 CSS variables, not shipped by UI5 (TD-13) */
   emulated?: boolean
 }
+
+/** A change of this site shown as SAP transport in the Transport Log (AC-02.7) */
+export interface Transport {
+  /** e.g. "DVK900014" */
+  number: string
+  /** Change request number; omitted for the initial release */
+  cr?: number
+  text: string
+  /** Format `YYYY-MM-DD` */
+  date: string
+  status: 'Imported' | 'Released'
+}
+
+/** Spec-driven numbers above the Transport Log, counted at build time (AC-02.8) */
+export interface BuildStats {
+  changeRequests: number
+  tasks: number
+  tests: number
+  commits: number
+}

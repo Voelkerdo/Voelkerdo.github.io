@@ -41,7 +41,7 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-02.7 Das **Transport Log** zeigt die Entstehung dieser Website als SAP-Transporte, neuester zuerst. Je Eintrag: Transportnummer, Status, Datum (`YYYY-MM-DD`) und Text.
   - **DVK900001** ist die erste Version („Initial release“, Datum des ersten Commits), passend zur Benachrichtigung „Transport DVK900001 … imported“ (AC-10.2).
   - Jeder Change Request CR-N ist Transport **DVK9000(N+1)**, sechsstellig aufgefüllt, mit dem Text „CR-N“ + Beschreibung.
-  - Status **„Imported“** (✓), sobald es zum CR einen Umsetzungs-Commit gibt; sonst **„Released“**.
+  - Status **„Imported“** (✓), sobald es zum CR einen Umsetzungs-Commit gibt; sonst **„Released“**. Als Umsetzung zählt ein späterer `feat`/`fix`-Commit, der den CR oder eine seiner Entscheidungen (D-/TD-IDs aus dem Spec-Commit) nennt. _(präzisiert in T-37: Frühe Umsetzungs-Commits nennen nur die Entscheidung, z. B. CR-2 → D-9.)_
   - Die Einträge entstehen beim Build automatisch aus den Git-Commits; neue CRs erscheinen ohne Pflege (D-20).
 - AC-02.8 Über dem Transport Log stehen vier Kennzahlen, beim Build gezählt: **Change Requests**, erledigte **Tasks**, **Tests** (definierte Testfälle in `tests/`) und **Commits**.
 - AC-02.9 Am Desktop zeigt das Transport Log anfangs die 3 neuesten Transporte mit „Show all (N)“ / „Show less“ wie bei den Repositories (AC-02.5). Unter 1024 px sind alle sichtbar. AC-01.11 (kein Scrollen bei 780 px) gilt für beide Ansichten im Ausgangszustand.

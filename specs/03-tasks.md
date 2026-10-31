@@ -46,7 +46,7 @@
 | T-35 | CR-11: Career-Card mit Scroll-Pfeilen | AC-04.1, AC-04.4, AC-08.3 | [x] |
 | T-34 | CR-10: Projects mit „Show all“ und Zielhöhe | AC-01.11, AC-02.5, AC-08.3 | [x] |
 | T-36 | CR-12: Settings › System | AC-12.1–AC-12.4 | [x] |
-| T-37 | CR-13: Transport-Log-Daten zur Build-Zeit | AC-02.7, AC-02.8 | [ ] |
+| T-37 | CR-13: Transport-Log-Daten zur Build-Zeit | AC-02.7, AC-02.8 | [x] |
 | T-38 | CR-13: Projects-Card mit Ansicht „Transport Log“ | AC-01.3, AC-01.11, AC-02.5, AC-02.6, AC-02.9, AC-08.3 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
