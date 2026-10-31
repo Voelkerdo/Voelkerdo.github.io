@@ -35,6 +35,7 @@ Dieses Projekt wird spec-driven entwickelt. Die Specs in `specs/` sind die Quell
 6. **Security-Check** nach dem letzten Task des CR: `npm run security`; neue Abhängigkeiten, externe URLs, `innerHTML`/`eval` oder neue Eingaben (Storage, URL) gezielt prüfen und Ergebnis kurz berichten.
 - Fehler nach Abschluss eines Tasks: Commit `fix(T-N): …`; falls ein AC unscharf war, AC präzisieren (Spec im selben Commit).
 - Abweichungen, die sich bei der Umsetzung zeigen (z. B. UI5-Verhalten), erst in der Spec festhalten, dann umsetzen.
+- Zurückgestellte Punkte (z. B. ein nicht erreichtes AC, das Dominik verschiebt) als `OQ-N` (Open Question) in PRD §6 „Offene Fragen“ festhalten: Problem, Ursache, mögliche Wege, Status. IDs werden nie neu vergeben; erledigte OQs werden ~~durchgestrichen~~ mit Verweis auf den lösenden CR.
 
 ## Arbeitsweise mit Dominik
 - Einen Task nach dem anderen umsetzen, Ergebnis (inkl. Screenshot-Pfad) zeigen und auf Freigabe warten.
