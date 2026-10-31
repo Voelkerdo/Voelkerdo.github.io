@@ -227,6 +227,14 @@ Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 
 **Isolierter Vite-Cache:** Der E2E-Server von Playwright nutzt einen eigenen Dependency-Cache (`node_modules/.vite-e2e`, über `VITE_CACHE_DIR`). So überschreibt ein Testlauf nie den Cache eines parallel laufenden `npm run dev` (sonst Fehler „504 Outdated Optimize Dep“ und weiße Seite). Erkannt nach T-16.
 
+## 9a. Deployment (REQ-14)
+- **Workflow** `.github/workflows/deploy.yml`, ausgelöst durch `push` auf `main` und `workflow_dispatch`; `concurrency: pages`, laufende Deployments werden nicht abgebrochen.
+- **Job `check`** (`permissions: contents: read`): Checkout mit `fetch-depth: 0` (AC-14.4) → Node 26 (wie lokal) mit npm-Cache → `npm ci` in `assets/` → `npm run security` → `npx playwright install --with-deps chromium` → `npm run verify`. Danach `vite build` nach `assets/dist` und Upload als Pages-Artefakt.
+- **Job `deploy`** (`needs: check`, `permissions: pages: write, id-token: write`, Environment `github-pages`): veröffentlicht das Artefakt.
+- **Actions:** nur offizielle `actions/*` (checkout, setup-node, configure-pages, upload-pages-artifact, deploy-pages), jeweils auf einen Commit-SHA gepinnt mit Versionskommentar (TD-20). `persist-credentials: false` beim Checkout.
+- **Dependabot** `.github/dependabot.yml`: `npm` (Verzeichnis `/assets`) und `github-actions`, wöchentlich (AC-14.5).
+- **Pages-Einstellung:** Source „GitHub Actions“. Die Seite liegt im Root der Domain; `base: './'` funktioniert unverändert.
+
 ## 10. Nachvollziehbarkeit (Traceability)
 | Anforderung | Umsetzung (Abschnitt) | Testart |
 |---|---|---|
@@ -243,6 +251,7 @@ Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 | REQ-11 Theme-Zeitreise | 4, 5, 6, 7 | Unit + E2E + manuell (Optik der Nachbauten) |
 | REQ-12 Systeminformationen | 4, 5 | Unit + E2E |
 | REQ-13 Sicherheit & Datenschutz | 9 | E2E gegen Production-Build + `npm run security` |
+| REQ-14 Deployment | 11 | Pipeline selbst + manuelle Abnahme der Live-Seite (T-46) |
 
 ## 11. Technische Entscheidungen
 | ID | Thema | Entscheidung | Begründung |
@@ -265,6 +274,8 @@ Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 | TD-16 | Daten für das Transport Log | Zur Build-Zeit per Vite-`define` (`__TRANSPORT_LOG__`): `git log` der Commits `docs(cr-N): …` (Text, Datum); ein späterer `feat`/`fix`-Commit, der `CR-N` oder eine D-/TD-ID aus dem Spec-Commit nennt, setzt den Status auf „Imported“ (REQ-IDs zählen nicht, sie kommen in zu vielen Commits vor) _(präzisiert in T-37)_; erster Commit = DVK900001. Kennzahlen: CRs = Anzahl `docs(cr-N)`-Commits, Tasks = Zeilen mit `[x]` in der Übersicht von `specs/03-tasks.md`, Tests = Vorkommen von `it(`/`test(` in `tests/`, Commits = `git rev-list --count HEAD`. Ohne Git: leere Liste, Kennzahlen 0. | Keine Pflege, keine Abhängigkeit; gleiche Technik wie TD-15. Der Build braucht die volle Git-History (beim Deployment `fetch-depth: 0`). (CR-13) |
 | TD-17 | CSP-Auslieferung | `<meta http-equiv="Content-Security-Policy">` per Vite-Plugin nur im Build | GitHub Pages erlaubt keine HTTP-Header; der Dev-Server braucht ein Inline-Skript für Fast Refresh (CR-17) |
 | TD-18 | Security-Tests | Zweites Playwright-Projekt `security` mit eigenem `webServer` (`vite build` in einen Temp-Ordner, dann `vite preview` auf eigenem Port) | Nur der echte Build zeigt CSP, gebündelte Fonts und fehlende Sourcemaps (CR-17) |
+| TD-19 | Ort der Workflows | `.github/` im Repo-Root | GitHub erwartet Workflows und Dependabot-Konfiguration dort; bewusste Ausnahme von „nichts Ausführbares im Root“ (CR-18) |
+| TD-20 | Pinning der Actions | Commit-SHA statt Tag, Updates per Dependabot | Ein verschobenes oder kompromittiertes Tag kann so keinen fremden Code in die Pipeline bringen (CR-18) |
 
 ## 12. Offene Fragen
 _Keine._

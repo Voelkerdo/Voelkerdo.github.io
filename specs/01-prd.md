@@ -164,8 +164,22 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-13.6 Die Abhängigkeiten haben **keine bekannten Schwachstellen** (`npm audit`) und gültige Registry-Signaturen (`npm audit signatures`). Geprüft wird bei jedem Change Request und vor jedem Deployment.
 - AC-13.7 Der Production-Build enthält **keine Sourcemaps** und keine Geheimnisse.
 
+### REQ-14 Deployment
+**Story:** Als Dominik will ich, dass jede geprüfte Änderung automatisch und sicher live geht, ohne dass ich etwas von Hand hochlade.
+**Akzeptanzkriterien:**
+- AC-14.1 Die Website ist öffentlich unter **`https://voelkerdo.github.io/`** erreichbar. Sie wird aus dem öffentlichen Repo `Voelkerdo/Voelkerdo.github.io` per GitHub Actions auf GitHub Pages veröffentlicht.
+- AC-14.2 Veröffentlicht wird bei jedem Push auf `main` und manuell per Knopf in GitHub Actions – aber **nur, wenn `npm run verify` (inklusive Security-Tests) und `npm run security` grün sind**. Schlägt eine Prüfung fehl, bleibt die bisherige Version online.
+- AC-14.3 Die Pipeline ist gehärtet:
+  - minimale Rechte: Standard nur `contents: read`; `pages: write` und `id-token: write` nur im Deploy-Job;
+  - alle Actions auf einen festen Commit (SHA) gepinnt;
+  - keine Secrets nötig;
+  - höchstens ein Deployment gleichzeitig.
+- AC-14.4 Der Build nutzt die vollständige Git-History, damit Transport Log und Settings › System vollständig sind (TD-16).
+- AC-14.5 Dependabot prüft wöchentlich die npm-Abhängigkeiten in `assets/` und die GitHub Actions und schlägt Updates als Pull Request vor.
+- AC-14.6 Nach der Erstveröffentlichung wird die Live-Seite geprüft: lädt vollständig, keine Requests an Dritte, CSP aktiv, Lighthouse Performance und Accessibility ≥ 90 (AC-08.2).
+
 ## 4. Außerhalb des Scopes (v1)
-CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics, ~~Hosting/~~Deployment. _(Hoster festgelegt in CR-12: GitHub Pages; das Deployment folgt in einem eigenen CR.)_
+CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics, ~~Hosting/Deployment~~. _(Hoster festgelegt in CR-12, Deployment umgesetzt in CR-18, REQ-14.)_
 
 ## 5. Entscheidungen
 | ID | Frage | Entscheidung |
@@ -194,6 +208,7 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 | D-22 | Wie wird klarer, dass die Projects-Card eine zweite Seite hat? | Pfeile ‹ › links und rechts der Seitenpunkte, wie beim UI5-`Carousel` mit `arrowsPlacement="Navigation"`: eindeutig klickbar, größeres Ziel als die Punkte, Fiori-konform. Am Rand deaktiviert statt endlos, damit die Pfeile zusätzlich zeigen, auf welcher Seite man ist. (CR-15) |
 | D-23 | Wie bleibt die Projects-Card beim Seitenwechsel ruhig? | Beide Seiten liegen übereinander im selben Bereich, die Card ist so hoch wie die höhere – ohne Messen. Damit die Repositories-Seite dabei nicht leer wirkt, zeigen beide Listen auch auf schmalen Bildschirmen anfangs 3 Einträge mit „Show all“. Die alte Seite blendet aus, die neue ein, statt hart zu wechseln. (CR-16) |
 | D-24 | Wie wird die Seite geschützt, und welche Restrisiken akzeptieren wir? | Fonts selbst hosten, weil die Weitergabe der IP-Adresse an ein CDN datenschutzrechtlich heikel ist (vgl. LG München, Google Fonts, 2022). Eine strenge CSP per Meta-Tag entschärft künftige XSS-Fehler, weil GitHub Pages keine eigenen HTTP-Header erlaubt. Security-Tests laufen in `npm run verify` gegen einen echten Production-Build, `npm audit` bei jedem CR. **Akzeptiertes Restrisiko:** Die Seite lässt sich in fremde iframes einbetten (Clickjacking), denn `frame-ancestors` geht nicht per Meta-Tag. Ohne Login und ohne Formulare gibt es aber nichts, was sich so missbrauchen ließe. (CR-17) |
+| D-25 | Wie kommt die Seite online? | GitHub Actions baut und veröffentlicht auf GitHub Pages, aber nur nach denselben Prüfungen wie lokal (`verify` + `security`). Lieber ein paar Minuten länger als ein kaputtes oder unsicheres Deployment. Push auf `main` löst aus, damit nichts vergessen wird; der manuelle Knopf bleibt für Wiederholungen. Persönliche Arbeitsnotizen wandern aus CLAUDE.md ins lokale Memory, weil das Repo öffentlich wird. (CR-18) |
 
 ## 6. Offene Fragen
 _Keine._
@@ -218,3 +233,4 @@ _Keine._
 | CR-15 | 2026-10-31 | Pfeile ‹ › neben den Seitenpunkten der Projects-Card, am Rand deaktiviert. | AC-02.10, AC-02.11, D-22 |
 | CR-16 | 2026-10-31 | Projects-Card: gleiche Höhe beider Seiten und echte Überblendung, auch auf dem Smartphone; Listen dort ebenfalls 3 + „Show all“. | AC-02.5, AC-02.9, AC-02.12, D-17, D-23 |
 | CR-17 | 2026-10-31 | Sicherheit & Datenschutz nach Security-Check: Fonts selbst gehostet, CSP und Referrer-Policy, Security-Tests in verify, `npm run security` bei jedem CR. | Intent (Leitplanken), REQ-13, D-24 |
+| CR-18 | 2026-10-31 | Deployment auf GitHub Pages per GitHub Actions mit Prüfungen vor jedem Release, gehärteter Pipeline und Dependabot. | Intent (Hosting), §4, REQ-14, D-25 |

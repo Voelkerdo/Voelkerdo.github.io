@@ -54,6 +54,8 @@
 | T-42 | CR-17: Schrift „72“ selbst hosten | AC-13.1 | [x] |
 | T-43 | CR-17: CSP, Referrer-Policy und Security-Tests gegen den Build | AC-13.1–AC-13.5, AC-13.7 | [x] |
 | T-44 | CR-17: `npm run security` und Regel in CLAUDE.md | AC-13.6 | [x] |
+| T-45 | CR-18: Deploy-Workflow, Dependabot, CLAUDE.md | AC-14.2–AC-14.5 | [ ] |
+| T-46 | CR-18: Erstveröffentlichung und Abnahme der Live-Seite | AC-14.1, AC-14.6 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
@@ -258,6 +260,17 @@ Inhalte von Dominik (Abfrage am 2026-10-31), ersetzen die Platzhalter aus D-3 un
 ### T-44 CR-17: `npm run security` und Regel in CLAUDE.md
 - Script `security` = `npm audit --audit-level=low && npm audit signatures`.
 - CLAUDE.md: Change-Request-Ablauf und Regeln um „`npm run security` bei jedem CR und vor jedem Deployment“ ergänzen; Befunde führen zu einem eigenen CR bzw. Fix.
+
+### T-45 CR-18: Deploy-Workflow, Dependabot, CLAUDE.md
+- `.github/workflows/deploy.yml` und `.github/dependabot.yml` laut Tech Spec §9a; SHAs der Actions ermitteln und mit Versionskommentar eintragen.
+- `playwright.config.ts`: auf CI ggf. weniger Worker und ein Retry für zeitkritische Tests.
+- CLAUDE.md: Ausnahme `.github/` (TD-19), Hinweis auf das automatische Deployment; persönliche Hinweise (Reduced Motion am Mac, WLAN-Test) ins lokale Memory verschieben.
+- **Prüfung:** Workflow lokal auf Syntax prüfen (`actionlint`, falls verfügbar, sonst YAML-Parse) und gegen AC-14.3 durchsehen: Rechte, Pinning, keine Secrets.
+
+### T-46 CR-18: Erstveröffentlichung und Abnahme der Live-Seite
+- Nach Dominiks ausdrücklichem OK: Repo `Voelkerdo/Voelkerdo.github.io` (öffentlich) anlegen, Pages-Source „GitHub Actions“ setzen, `main` pushen.
+- Workflow-Lauf beobachten bis grün.
+- Live-Seite prüfen (AC-14.6): vollständig geladen, keine Requests an Dritte, CSP-Meta aktiv, Lighthouse ≥ 90; Ergebnis in T-14 dokumentieren.
 
 ### T-14 Manuelle Abnahme
 - Production-Build lokal per `npm run preview`.
