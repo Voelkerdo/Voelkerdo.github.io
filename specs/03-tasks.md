@@ -41,7 +41,7 @@
 | T-29 | CR-8: Nachempfundene SAP-Themes | AC-11.2, AC-11.5 | [x] |
 | T-30 | CR-8: Zeitreise-Overlay | AC-11.6–AC-11.8 | [x] |
 | T-31 | Echte Inhalte einpflegen | AC-01.8, AC-02.3, AC-02.4, AC-04.2, AC-05.1, AC-05.2 | [x] |
-| T-32 | CR-9: Career-Card mit „Show all“ auf dem Desktop | AC-04.1, AC-04.3, AC-08.3 | [ ] |
+| T-32 | CR-9: Career-Card mit „Show all“ auf dem Desktop | AC-04.1, AC-04.3, AC-08.3 | [x] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details

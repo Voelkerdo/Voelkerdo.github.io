@@ -35,6 +35,9 @@ export const career: CareerStation[] = [
   },
 ]
 
+/** Stations visible on desktop before "Show all" (AC-04.3) */
+export const VISIBLE_STATIONS = 1
+
 /** Newest station first, by start month (AC-04.1). */
 export function sortedCareer(stations: CareerStation[] = career): CareerStation[] {
   return [...stations].sort((a, b) => b.from.localeCompare(a.from))

@@ -413,8 +413,25 @@ body {
 }
 
 /* Career card (REQ-04) */
+.career {
+  padding-bottom: 0.5rem;
+}
+
 .career-timeline {
   padding: 0 0.5rem 1rem;
+}
+
+/* Desktop: older stations are clipped until "Show all" (AC-04.3, D-16) */
+.career-stations {
+  overflow: hidden;
+}
+
+.career-stations[data-animated='true'] {
+  transition: height 0.3s ease-out;
+}
+
+.career-toggle {
+  margin-left: 0.5rem;
 }
 
 .career-highlights {
