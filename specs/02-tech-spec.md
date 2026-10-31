@@ -237,11 +237,11 @@ Nach der Erstveröffentlichung lag Lighthouse mobil bei 77–81. Umgesetzt:
 - Ergebnis lokal: Start-JavaScript 352 → 285 KB (gzip), mobil 83–86. Experimente zeigen: Der verbleibende LCP (≈ 4 s simuliert) kommt vom Grundgewicht aus React und UI5 vor dem ersten Inhalt, nicht von Animation oder versteckter Projects-Seite.
 
 ## 9a. Deployment (REQ-14)
-- **Workflow** `.github/workflows/deploy.yml`, ausgelöst durch `push` auf `main` und `workflow_dispatch`; `concurrency: pages`, laufende Deployments werden nicht abgebrochen.
+- **Workflow** `.github/workflows/deploy.yml`, ausgelöst durch `push` auf `main`, `workflow_dispatch` und `pull_request` auf `main` (dann nur Job `check`, der Upload und `deploy` laufen nicht – `if: github.event_name != 'pull_request'`) _(präzisiert nach T-46)_; `concurrency: pages`, laufende Deployments werden nicht abgebrochen.
 - **Job `check`** (`permissions: contents: read`): Checkout mit `fetch-depth: 0` (AC-14.4) → Node 26 (wie lokal) mit npm-Cache → `npm ci` in `assets/` → `npm run security` → `npx playwright install --with-deps chromium` → `npm run verify`. Danach `vite build` nach `assets/dist` und Upload als Pages-Artefakt.
 - **Job `deploy`** (`needs: check`, `permissions: pages: write, id-token: write`, Environment `github-pages`): veröffentlicht das Artefakt.
 - **Actions:** nur offizielle `actions/*` (checkout, setup-node, configure-pages, upload-pages-artifact, deploy-pages), jeweils auf einen Commit-SHA gepinnt mit Versionskommentar (TD-20). `persist-credentials: false` beim Checkout.
-- **Dependabot** `.github/dependabot.yml`: `npm` (Verzeichnis `/assets`) und `github-actions`, wöchentlich (AC-14.5).
+- **Dependabot** `.github/dependabot.yml`: `npm` (Verzeichnis `/assets`) und `github-actions`, wöchentlich (AC-14.5). `@sap-theming/theming-base-content` wird ignoriert (folgt UI5); ein Unit-Test vergleicht unsere Version mit der Abhängigkeit von `@ui5/webcomponents-theming`. _(präzisiert nach T-46)_
 - **Pages-Einstellung:** Source „GitHub Actions“. Die Seite liegt im Root der Domain; `base: './'` funktioniert unverändert.
 
 ## 10. Nachvollziehbarkeit (Traceability)

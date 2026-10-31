@@ -168,14 +168,14 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 **Story:** Als Dominik will ich, dass jede geprüfte Änderung automatisch und sicher live geht, ohne dass ich etwas von Hand hochlade.
 **Akzeptanzkriterien:**
 - AC-14.1 Die Website ist öffentlich unter **`https://voelkerdo.github.io/`** erreichbar. Sie wird aus dem öffentlichen Repo `Voelkerdo/Voelkerdo.github.io` per GitHub Actions auf GitHub Pages veröffentlicht.
-- AC-14.2 Veröffentlicht wird bei jedem Push auf `main` und manuell per Knopf in GitHub Actions – aber **nur, wenn `npm run verify` (inklusive Security-Tests) und `npm run security` grün sind**. Schlägt eine Prüfung fehl, bleibt die bisherige Version online.
+- AC-14.2 Veröffentlicht wird bei jedem Push auf `main` und manuell per Knopf in GitHub Actions – aber **nur, wenn `npm run verify` (inklusive Security-Tests) und `npm run security` grün sind**. Schlägt eine Prüfung fehl, bleibt die bisherige Version online. **Pull Requests** (z. B. von Dependabot) durchlaufen dieselben Prüfungen, werden aber nicht veröffentlicht. _(präzisiert nach T-46)_
 - AC-14.3 Die Pipeline ist gehärtet:
   - minimale Rechte: Standard nur `contents: read`; `pages: write` und `id-token: write` nur im Deploy-Job;
   - alle Actions auf einen festen Commit (SHA) gepinnt;
   - keine Secrets nötig;
   - höchstens ein Deployment gleichzeitig.
 - AC-14.4 Der Build nutzt die vollständige Git-History, damit Transport Log und Settings › System vollständig sind (TD-16).
-- AC-14.5 Dependabot prüft wöchentlich die npm-Abhängigkeiten in `assets/` und die GitHub Actions und schlägt Updates als Pull Request vor.
+- AC-14.5 Dependabot prüft wöchentlich die npm-Abhängigkeiten in `assets/` und die GitHub Actions und schlägt Updates als Pull Request vor. `@sap-theming/theming-base-content` ist davon ausgenommen: Seine Version folgt UI5 (Fonts, AC-13.1) und wird mit UI5-Updates mitgezogen; ein Test prüft die Übereinstimmung. _(präzisiert nach T-46)_
 - AC-14.6 Nach der Erstveröffentlichung wird die Live-Seite geprüft: lädt vollständig, keine Requests an Dritte, CSP aktiv, Lighthouse Performance und Accessibility ≥ 90 (AC-08.2).
 
 ## 4. Außerhalb des Scopes (v1)
