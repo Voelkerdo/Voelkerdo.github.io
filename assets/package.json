@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "playwright test",
-    "verify": "npm run typecheck && npm run lint && npm run test && npm run e2e"
+    "verify": "npm run typecheck && npm run lint && npm run test && npm run e2e",
+    "security": "npm audit --audit-level=low && npm audit signatures"
   },
   "dependencies": {
     "@sap-theming/theming-base-content": "11.36.4",
