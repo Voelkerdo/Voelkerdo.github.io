@@ -62,6 +62,8 @@ export interface Travel {
 export interface ThemeModeContextValue {
   /** The chosen theme, "Auto" included */
   theme: ThemeId
+  /** The theme actually shown; "Auto" resolved to light or dark */
+  resolvedTheme: ThemeDef
   selectTheme: (id: ThemeId) => void
   travel: Travel | null
   /** The overlay covers the page: switch the theme now */

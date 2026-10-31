@@ -16,8 +16,10 @@ test.describe('settings › appearance', () => {
   test('AC-11.1 Settings opens the Fiori settings dialog with Appearance', async ({ page }) => {
     await page.goto('/')
     await openSettings(page)
-    const appearance = page.locator('ui5-user-settings-item')
-    await expect(appearance).toHaveAttribute('text', 'Appearance')
+    const categories = page.locator('ui5-user-settings-item')
+    await expect(categories).toHaveCount(2)
+    await expect(categories.nth(0)).toHaveAttribute('text', 'Appearance')
+    await expect(categories.nth(1)).toHaveAttribute('text', 'System')
     await expect(page.locator('ui5-user-settings-appearance-view')).toBeVisible()
   })
 
@@ -93,5 +95,68 @@ test.describe('settings › appearance', () => {
     })
     expect(box.width).toBeGreaterThanOrEqual(388)
     expect(box.height).toBeGreaterThanOrEqual(840)
+  })
+
+  test.describe('system', () => {
+    const openSystem = async (page: Page) => {
+      await openSettings(page)
+      await page.getByTestId('settings').getByRole('listitem', { name: 'System' }).click()
+      await expect(page.getByTestId('system-info')).toBeVisible()
+    }
+    const entry = (page: Page, label: string) => page.locator(`[data-system-entry="${label}"]`)
+
+    test('AC-12.1 / AC-12.2 System shows tech stack, hosting, build and theme', async ({
+      page,
+    }) => {
+      await page.goto('/')
+      await openSystem(page)
+      const groups = page.locator('[data-system-group]')
+      await expect(groups).toHaveCount(4)
+      expect(
+        await groups.evaluateAll((els) =>
+          els.map((el) => el.getAttribute('headerText') ?? el.getAttribute('header-text')),
+        ),
+      ).toEqual(['Tech Stack', 'Hosting', 'Build', 'Theme'])
+      await expect(entry(page, 'React')).toHaveAttribute('additional-text', /^\d+\.\d+\.\d+/)
+      await expect(entry(page, 'SAP UI5 Web Components')).toHaveAttribute('additional-text', /^2\./)
+      await expect(entry(page, 'Provider')).toHaveAttribute('additional-text', 'GitHub Pages')
+      await expect(entry(page, 'Build date')).toHaveAttribute(
+        'additional-text',
+        /^\d{4}-\d{2}-\d{2}$/,
+      )
+      await expect(entry(page, 'Active theme')).toHaveAttribute(
+        'additional-text',
+        'Sunset Coral Light · sap_horizon',
+      )
+    })
+
+    test('AC-12.2 the theme entry follows the theme choice', async ({ page }) => {
+      await page.addInitScript(() => window.localStorage.setItem('theme', 'classic'))
+      await page.goto('/')
+      await openSystem(page)
+      await expect(entry(page, 'Active theme')).toHaveAttribute(
+        'additional-text',
+        'SAP Classic · sap_fiori_3 (recreated)',
+      )
+    })
+
+    test('AC-12.3 System can be reached with the keyboard', async ({ page }) => {
+      await page.goto('/')
+      await openSettings(page)
+      // Focus starts in the category list: move to System and open it
+      await page.keyboard.press('ArrowDown')
+      await page.keyboard.press('Enter')
+      await expect(page.getByTestId('system-info')).toBeVisible()
+    })
+
+    test('AC-12.3 on narrow screens System is listed among the categories first', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 390, height: 844 })
+      await page.goto('/')
+      await openSettings(page)
+      await expect(page.getByTestId('system-info')).toBeHidden()
+      await expect(page.locator('ui5-user-settings-item[text="System"]')).toHaveCount(1)
+    })
   })
 })

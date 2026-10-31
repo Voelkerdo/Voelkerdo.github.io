@@ -60,6 +60,7 @@ test.describe('recreated SAP themes', () => {
         ['--sapTextColor', '--sapBackgroundColor'],
         ['--sapTextColor', '--sapTile_Background'],
         ['--sapContent_LabelColor', '--sapTile_Background'],
+        ['--sapNeutralTextColor', '--sapTile_Background'],
         ['--sapLinkColor', '--sapTile_Background'],
         ['--accent-1', '--sapTile_Background'],
         ['--sapShell_TextColor', '--sapShellColor'],

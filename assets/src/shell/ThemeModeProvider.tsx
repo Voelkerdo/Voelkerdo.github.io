@@ -25,13 +25,14 @@ export function ThemeModeProvider({ children }: { children: ReactNode }) {
   // Theme to arrive at; a selection made while travelling replaces it
   const travelTarget = useRef<ThemeId | null>(null)
   const theme = chosenTheme ?? DEFAULT_THEME
+  const resolvedTheme = resolveTheme(theme, systemMode)
 
   // "Auto" follows system changes (AC-09.1)
   useEffect(() => subscribeToSystemMode(setSystemMode), [])
 
   useEffect(() => {
-    void applyTheme(resolveTheme(theme, systemMode))
-  }, [theme, systemMode])
+    void applyTheme(resolvedTheme)
+  }, [resolvedTheme])
 
   const selectTheme = useCallback(
     (id: ThemeId) => {
@@ -71,8 +72,8 @@ export function ThemeModeProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const value = useMemo(
-    () => ({ theme, selectTheme, travel, arrive, endTravel }),
-    [theme, selectTheme, travel, arrive, endTravel],
+    () => ({ theme, resolvedTheme, selectTheme, travel, arrive, endTravel }),
+    [theme, resolvedTheme, selectTheme, travel, arrive, endTravel],
   )
 
   return <ThemeModeContext.Provider value={value}>{children}</ThemeModeContext.Provider>

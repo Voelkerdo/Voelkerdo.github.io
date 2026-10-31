@@ -24,6 +24,8 @@
   --sapPageHeader_Background: var(--sapTile_Background);
   --sapPageFooter_Background: var(--sapTile_Background);
   --sapTile_TextColor: var(--sapTextColor);
+  /* Secondary texts (e.g. list values in Settings › System) as readable as labels (AC-11.5) */
+  --sapNeutralTextColor: var(--sapContent_LabelColor);
   --sapTile_TitleTextColor: var(--sapTextColor);
   --sapTile_IconColor: var(--accent-1);
   --sapContent_FocusColor: var(--accent-1);

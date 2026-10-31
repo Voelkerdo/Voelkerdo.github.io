@@ -1,11 +1,17 @@
 import {
+  List,
+  ListItemGroup,
+  ListItemStandard,
   UserSettingsAppearanceView,
   UserSettingsAppearanceViewGroup,
   UserSettingsAppearanceViewItem,
   UserSettingsDialog,
   UserSettingsItem,
+  UserSettingsView,
 } from '@ui5/webcomponents-react'
 import '@ui5/webcomponents-icons/dist/palette.js'
+import '@ui5/webcomponents-icons/dist/it-system.js'
+import { build, hosting, techStack, type SystemEntry } from '../data/system.ts'
 import { findTheme, THEME_GROUPS, themeLabel, themes } from '../data/themes.ts'
 import type { ThemeGroup } from '../data/types.ts'
 import { useThemeMode } from './useThemeMode.ts'
@@ -54,6 +60,41 @@ export function SettingsDialog({ open, onClose }: Props) {
           ))}
         </UserSettingsAppearanceView>
       </UserSettingsItem>
+      <UserSettingsItem text="System" headerText="System" icon="it-system">
+        <UserSettingsView>
+          <SystemInfo />
+        </UserSettingsView>
+      </UserSettingsItem>
     </UserSettingsDialog>
+  )
+}
+
+function SystemGroup({ title, entries }: { title: string; entries: SystemEntry[] }) {
+  return (
+    <ListItemGroup headerText={title} data-system-group={title}>
+      {entries.map((entry) => (
+        <ListItemStandard
+          key={entry.label}
+          type="Inactive"
+          text={entry.label}
+          additionalText={entry.value}
+          data-system-entry={entry.label}
+        />
+      ))}
+    </ListItemGroup>
+  )
+}
+
+// Read-only system information (REQ-12); the theme follows the time travel (AC-12.2)
+function SystemInfo() {
+  const { resolvedTheme } = useThemeMode()
+  const themeValue = `${resolvedTheme.name} · ${resolvedTheme.ui5Theme}${resolvedTheme.emulated ? ' (recreated)' : ''}`
+  return (
+    <List className="system-info" accessibleName="System information" data-testid="system-info">
+      <SystemGroup title="Tech Stack" entries={techStack} />
+      <SystemGroup title="Hosting" entries={hosting} />
+      <SystemGroup title="Build" entries={build} />
+      <SystemGroup title="Theme" entries={[{ label: 'Active theme', value: themeValue }]} />
+    </List>
   )
 }
