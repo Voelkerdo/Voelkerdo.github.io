@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from 'motion/react'
 import { useState, type ReactNode } from 'react'
 import type { CardDef } from '../data/types.ts'
 import { CardEntryContext } from '../motion/cardEntry.ts'
+import { CardHeaderContext, type HeaderOverride } from './cardHeader.ts'
 import {
   entryVariants,
   LIFT,
@@ -30,6 +31,8 @@ export function AnimatedCard({ def, children }: { def: CardDef; children?: React
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
   const [entered, setEntered] = useState(false)
+  // A card with several views shows the subtitle and KPI of the current view (AC-02.6)
+  const [headerOverride, setHeaderOverride] = useState<HeaderOverride | null>(null)
   const active = hovered || focused
 
   return (
@@ -58,13 +61,15 @@ export function AnimatedCard({ def, children }: { def: CardDef; children?: React
           header={
             <CardHeader
               titleText={def.title}
-              subtitleText={def.subtitle}
-              additionalText={def.kpi}
+              subtitleText={headerOverride?.subtitle ?? def.subtitle}
+              additionalText={headerOverride?.kpi ?? def.kpi}
               avatar={<Icon name={def.icon} />}
             />
           }
         >
-          <CardEntryContext.Provider value={entered}>{children}</CardEntryContext.Provider>
+          <CardHeaderContext.Provider value={setHeaderOverride}>
+            <CardEntryContext.Provider value={entered}>{children}</CardEntryContext.Provider>
+          </CardHeaderContext.Provider>
         </Card>
       </motion.div>
     </motion.div>

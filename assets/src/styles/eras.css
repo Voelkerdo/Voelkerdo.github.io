@@ -144,6 +144,9 @@
   --sapContent_LabelColor: #404040;
   --sapLinkColor: #000080;
   --sapList_BorderColor: #808080;
+  /* Darker status colors stay readable on the grey surfaces (AC-11.5) */
+  --sapPositiveTextColor: #006400;
+  --sapInformativeTextColor: #000080;
   --sapFontFamily: Tahoma, 'MS Sans Serif', Arial, sans-serif;
   --sapElement_BorderCornerRadius: 0;
   --sapContent_Shadow0: none;

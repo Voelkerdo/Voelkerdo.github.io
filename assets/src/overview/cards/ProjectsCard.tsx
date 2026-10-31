@@ -1,13 +1,34 @@
-import { Button, Link, List, ListItemCustom, Tag, Text } from '@ui5/webcomponents-react'
-import { useReducedMotion } from 'motion/react'
-import { useState } from 'react'
+import {
+  Button,
+  Icon,
+  Link,
+  List,
+  ListItemCustom,
+  SegmentedButton,
+  SegmentedButtonItem,
+  Tag,
+  Text,
+} from '@ui5/webcomponents-react'
+import '@ui5/webcomponents-icons/dist/shipping-status.js'
+import { motion, useReducedMotion } from 'motion/react'
+import { useState, type ReactNode } from 'react'
 import { projects, VISIBLE_PROJECTS } from '../../data/projects.ts'
-import type { Project } from '../../data/types.ts'
+import { buildStats, transports } from '../../data/transports.ts'
+import type { Project, Transport } from '../../data/types.ts'
+import { useCardHeader } from '../cardHeader.ts'
 import { useDesktop } from '../useDesktop.ts'
 
-const topProjects = projects.slice(0, VISIBLE_PROJECTS)
-const moreProjects = projects.slice(VISIBLE_PROJECTS)
-const MORE_ID = 'project-list-more'
+type View = 'repositories' | 'transports'
+
+// Repositories and Transport Log show the same number of entries before "Show all" (AC-02.9)
+const VISIBLE_ENTRIES = VISIBLE_PROJECTS
+
+const STATS: { label: string; value: number }[] = [
+  { label: 'Change Requests', value: buildStats.changeRequests },
+  { label: 'Tasks', value: buildStats.tasks },
+  { label: 'Tests', value: buildStats.tests },
+  { label: 'Commits', value: buildStats.commits },
+]
 
 function ProjectItem({ project }: { project: Project }) {
   return (
@@ -30,32 +51,64 @@ function ProjectItem({ project }: { project: Project }) {
   )
 }
 
-export function ProjectsCard() {
-  const reduceMotion = useReducedMotion() ?? false
+// Compact like a line in the transport organizer: number, date and status above the text
+function TransportItem({ transport }: { transport: Transport }) {
+  const imported = transport.status === 'Imported'
+  return (
+    <ListItemCustom
+      type="Inactive"
+      data-transport={transport.number}
+      accessibleName={`${transport.number}, ${transport.text}, ${transport.date}, ${transport.status}`}
+    >
+      <div className="transport">
+        <Icon name="shipping-status" className="transport-icon" />
+        <span className="transport-number">{transport.number}</span>
+        <span className="transport-date">{transport.date}</span>
+        <span className="transport-status" data-status={transport.status}>
+          {imported ? '✓ Imported' : 'Released'}
+        </span>
+        <span className="transport-text">{transport.text}</span>
+      </div>
+    </ListItemCustom>
+  )
+}
+
+/**
+ * The first entries in one list, the rest in a second list that opens like the extra skills;
+ * on desktop only (AC-02.5, AC-02.9)
+ */
+function ShowAllList<T>({
+  items,
+  render,
+  name,
+  id,
+}: {
+  items: T[]
+  render: (item: T) => ReactNode
+  name: string
+  id: Lowercase<string>
+}) {
   const desktop = useDesktop()
   const [showAll, setShowAll] = useState(false)
-  // Below desktop all projects are shown, without toggle (AC-02.5)
-  const collapsible = desktop && moreProjects.length > 0
+  const top = items.slice(0, VISIBLE_ENTRIES)
+  const more = items.slice(VISIBLE_ENTRIES)
+  const collapsible = desktop && more.length > 0
   const open = !collapsible || showAll
+  const moreId = `${id}-more` as const
 
   return (
-    <div className={`projects${reduceMotion ? ' no-collapse-animation' : ''}`}>
-      <List className="projects-list" separators="Inner" accessibleName="Projects">
-        {topProjects.map((project) => (
-          <ProjectItem key={project.id} project={project} />
-        ))}
+    <>
+      <List className="projects-list" separators="Inner" accessibleName={name}>
+        {top.map(render)}
       </List>
-      {moreProjects.length > 0 && (
-        // Always rendered; only the wrapper animates open, like the extra skills (AC-03.9)
-        <div id={MORE_ID} className="project-more" data-open={open} inert={!open}>
+      {more.length > 0 && (
+        <div id={moreId} className="project-more" data-open={open} inert={!open}>
           <List
             className="projects-list project-more-list"
             separators="Inner"
-            accessibleName="More projects"
+            accessibleName={`More ${name.toLowerCase()}`}
           >
-            {moreProjects.map((project) => (
-              <ProjectItem key={project.id} project={project} />
-            ))}
+            {more.map(render)}
           </List>
         </div>
       )}
@@ -63,13 +116,84 @@ export function ProjectsCard() {
         <Button
           design="Transparent"
           className="projects-toggle"
-          data-testid="projects-toggle"
-          accessibilityAttributes={{ expanded: showAll, controls: MORE_ID }}
+          data-testid={`${id}-toggle`}
+          accessibilityAttributes={{ expanded: showAll, controls: moreId }}
           onClick={() => setShowAll((value) => !value)}
         >
-          {showAll ? 'Show less' : `Show all (${projects.length})`}
+          {showAll ? 'Show less' : `Show all (${items.length})`}
         </Button>
       )}
+    </>
+  )
+}
+
+function RepositoriesView() {
+  useCardHeader({ subtitle: 'Selected repositories', kpi: String(projects.length) })
+  return (
+    <ShowAllList
+      items={projects}
+      render={(project) => <ProjectItem key={project.id} project={project} />}
+      name="Projects"
+      id="projects"
+    />
+  )
+}
+
+// The site's change requests as SAP transports (AC-02.7, AC-02.8)
+function TransportLogView() {
+  useCardHeader({ subtitle: 'Built spec-driven', kpi: String(transports.length) })
+  return (
+    <>
+      <dl className="build-stats" data-testid="build-stats">
+        {STATS.map((stat) => (
+          <div key={stat.label} className="build-stat">
+            <dd className="build-stat-value">{stat.value}</dd>
+            <dt className="build-stat-label">{stat.label}</dt>
+          </div>
+        ))}
+      </dl>
+      <ShowAllList
+        items={transports}
+        render={(transport) => <TransportItem key={transport.number} transport={transport} />}
+        name="Transports"
+        id="transports"
+      />
+    </>
+  )
+}
+
+export function ProjectsCard() {
+  const reduceMotion = useReducedMotion() ?? false
+  const [view, setView] = useState<View>('repositories')
+
+  return (
+    <div className={`projects${reduceMotion ? ' no-collapse-animation' : ''}`}>
+      <SegmentedButton
+        className="projects-views"
+        accessibleName="Project views"
+        data-testid="projects-views"
+        onSelectionChange={(event) => {
+          const selected = event.detail.selectedItems[0]?.dataset.view as View | undefined
+          if (selected) setView(selected)
+        }}
+      >
+        <SegmentedButtonItem data-view="repositories" selected={view === 'repositories'}>
+          Repositories
+        </SegmentedButtonItem>
+        <SegmentedButtonItem data-view="transports" selected={view === 'transports'}>
+          Transport Log
+        </SegmentedButtonItem>
+      </SegmentedButton>
+      {/* Cross-fade between the views; without animation on reduced motion (AC-02.6) */}
+      <motion.div
+        key={view}
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.2 }}
+        data-active-view={view}
+      >
+        {view === 'repositories' ? <RepositoriesView /> : <TransportLogView />}
+      </motion.div>
     </div>
   )
 }

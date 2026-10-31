@@ -61,6 +61,9 @@ test.describe('recreated SAP themes', () => {
         ['--sapTextColor', '--sapTile_Background'],
         ['--sapContent_LabelColor', '--sapTile_Background'],
         ['--sapNeutralTextColor', '--sapTile_Background'],
+        // Transport status in the Transport Log (AC-02.7)
+        ['--sapPositiveTextColor', '--sapTile_Background'],
+        ['--sapInformativeTextColor', '--sapTile_Background'],
         ['--sapLinkColor', '--sapTile_Background'],
         ['--accent-1', '--sapTile_Background'],
         ['--sapShell_TextColor', '--sapShellColor'],
