@@ -430,6 +430,37 @@ body {
   transition: height 0.3s ease-out;
 }
 
+/* Highlights open and close like the extra skills (AC-04.3, CR-10) */
+.career-highlights-wrap {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.career-highlights-wrap[data-open='false'] {
+  grid-template-rows: 0fr;
+}
+
+.career-highlights-wrap > .career-highlights {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.career-highlights-wrap[data-open='false'] > .career-highlights {
+  visibility: hidden;
+}
+
+.career-highlights-wrap[data-animated='true'] {
+  transition: grid-template-rows 0.3s ease-out;
+}
+
+.career-highlights-wrap[data-animated='true'] > .career-highlights {
+  transition: visibility 0s linear 0.3s;
+}
+
+.career-highlights-wrap[data-animated='true'][data-open='true'] > .career-highlights {
+  transition-delay: 0s;
+}
+
 .career-toggle {
   margin-left: 0.5rem;
 }

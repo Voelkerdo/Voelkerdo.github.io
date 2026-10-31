@@ -5,7 +5,9 @@ type ItemProps = { title: string; subtitle: string }
 const items = (page: Page) => page.locator('[data-card-id="career"] ui5-timeline-item')
 const station = (page: Page, id: string) => page.locator(`[data-station-id="${id}"]`)
 const toggle = (page: Page) => page.getByTestId('career-toggle')
+const CURRENT = 'meyer-werft-application-expert'
 const OLDER = ['meyer-werft-application-professional', 'meyer-werft-apprenticeship']
+const highlights = (page: Page, id: string) => station(page, id).locator('.career-highlights')
 
 /** Whether the station lies within the clipped stations container */
 const shown = (page: Page, id: string) =>
@@ -47,11 +49,18 @@ test.describe('career card', () => {
   test.describe('desktop (1280 px)', () => {
     test.use({ viewport: { width: 1280, height: 900 } })
 
-    test('AC-04.3 initially only the current station is shown', async ({ page }) => {
+    test('AC-04.3 initially only role, company and period of the current station are shown', async ({
+      page,
+    }) => {
       await page.goto('/')
       await expect(toggle(page)).toHaveText('Show all (3)')
-      expect(await shown(page, 'meyer-werft-application-expert')).toBe(true)
-      await expect(station(page, 'meyer-werft-application-expert')).not.toHaveAttribute('inert')
+      expect(await shown(page, CURRENT)).toBe(true)
+      await expect(station(page, CURRENT)).not.toHaveAttribute('inert')
+      await expect(station(page, CURRENT)).toHaveAttribute(
+        'title-text',
+        'Application Expert SAP Development and SAP Authorizations',
+      )
+      await expect(highlights(page, CURRENT)).toBeHidden()
       for (const id of OLDER) {
         await expect.poll(() => shown(page, id)).toBe(false)
         await expect(station(page, id)).toHaveAttribute('inert')
@@ -62,13 +71,21 @@ test.describe('career card', () => {
       await page.goto('/')
       await toggle(page).click()
       await expect(toggle(page)).toHaveText('Show less')
+      await expect(highlights(page, CURRENT)).toBeVisible()
       for (const id of OLDER) {
         await expect.poll(() => shown(page, id)).toBe(true)
         await expect(station(page, id)).not.toHaveAttribute('inert')
       }
+      // The last highlight of the oldest station is not cut off
+      await expect
+        .poll(() =>
+          page.locator('.career-stations').evaluate((el) => el.scrollHeight - el.clientHeight),
+        )
+        .toBeLessThanOrEqual(1)
       await toggle(page).click()
       await expect(toggle(page)).toHaveText('Show all (3)')
       for (const id of OLDER) await expect.poll(() => shown(page, id)).toBe(false)
+      await expect(highlights(page, CURRENT)).toBeHidden()
     })
 
     test('AC-04.3 the toggle works with the keyboard and reports aria-expanded', async ({
@@ -99,6 +116,8 @@ test.describe('career card', () => {
       await toggle(page).click()
       expect(await containerTransition()).toBe('0s')
       await expect.poll(() => shown(page, OLDER[1])).toBe(true)
+      await toggle(page).click()
+      await expect(highlights(page, CURRENT)).toBeHidden()
     })
   })
 
@@ -112,6 +131,7 @@ test.describe('career card', () => {
         await expect(station(page, id)).not.toHaveAttribute('inert')
         expect(await shown(page, id)).toBe(true)
       }
+      await expect(highlights(page, CURRENT)).toBeVisible()
     })
   }
 })
