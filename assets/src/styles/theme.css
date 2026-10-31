@@ -336,9 +336,59 @@ body {
   transition: none;
 }
 
-/* View switch of the projects card (AC-02.6) */
-.projects-views {
-  margin: 0 1rem 0.5rem;
+/* Page dots, pinned to the bottom of the projects card (AC-02.10) */
+.bento-projects .bento-card {
+  position: relative;
+}
+
+.projects {
+  /* Room for the page dots below the content */
+  padding-bottom: 2rem;
+}
+
+.page-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.625rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.page-dot {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+/* The visible dot is small; the button around it keeps a usable target size */
+.page-dot::before {
+  content: '';
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin: auto;
+  border: 1px solid var(--accent-1);
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.page-dot[aria-current='true']::before {
+  background: var(--accent-1);
+}
+
+.page-dot:focus-visible {
+  outline: 2px solid var(--sapContent_FocusColor);
+  outline-offset: -2px;
+}
+
+.no-collapse-animation .page-dot::before {
+  transition: none;
 }
 
 /* Spec-driven numbers above the Transport Log (AC-02.8) */

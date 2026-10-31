@@ -1,8 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
 const card = (page: Page) => page.locator('[data-card-id="projects"]')
-const viewButton = (page: Page, view: string) =>
-  page.locator(`[data-testid="projects-views"] [data-view="${view}"]`)
+const dot = (page: Page, view: string) => page.locator(`.page-dot[data-page="${view}"]`)
 const header = (page: Page) =>
   card(page)
     .locator('[slot="header"]')
@@ -19,19 +18,21 @@ const visibleTransports = (page: Page) =>
   )
 
 const openTransportLog = async (page: Page) => {
-  await viewButton(page, 'transports').click()
+  await dot(page, 'transports').click()
   await expect(page.getByTestId('build-stats')).toBeVisible()
 }
 
 test.describe('projects card views', () => {
-  test('AC-02.6 "Repositories" is the default view with the project KPI', async ({ page }) => {
+  test('AC-02.10 "Repositories" is the default page with the project KPI', async ({ page }) => {
     await page.goto('/')
-    await expect(viewButton(page, 'repositories')).toHaveAttribute('selected')
+    await expect(dot(page, 'repositories')).toHaveAttribute('aria-current', 'true')
+    await expect(dot(page, 'transports')).not.toHaveAttribute('aria-current')
+    await expect(dot(page, 'transports')).toHaveAttribute('aria-label', 'Transport Log')
     await expect(card(page).locator('[data-project-id]').first()).toBeVisible()
     await expect.poll(() => header(page)).toEqual({ subtitle: 'Selected repositories', kpi: '5' })
   })
 
-  test('AC-02.6 / AC-02.7 / AC-02.8 the Transport Log shows stats and transports', async ({
+  test('AC-02.10 / AC-02.7 / AC-02.8 the Transport Log shows stats and transports', async ({
     page,
   }) => {
     await page.goto('/')
@@ -63,19 +64,18 @@ test.describe('projects card views', () => {
     await expect(card(page).locator('[data-project-id]')).toHaveCount(0)
   })
 
-  test('AC-02.6 the views can be switched with the keyboard', async ({ page }) => {
+  test('AC-02.10 the page dots work with the keyboard', async ({ page }) => {
     await page.goto('/')
-    // The focusable element lives in the item's shadow root
-    await viewButton(page, 'repositories').locator('li').focus()
-    await page.keyboard.press('ArrowRight')
-    await page.keyboard.press('Space')
+    await dot(page, 'transports').focus()
+    await page.keyboard.press('Enter')
     await expect(page.getByTestId('build-stats')).toBeVisible()
-    await page.keyboard.press('ArrowLeft')
+    await expect(dot(page, 'transports')).toHaveAttribute('aria-current', 'true')
+    await page.keyboard.press('Shift+Tab')
     await page.keyboard.press('Space')
     await expect(card(page).locator('[data-project-id]').first()).toBeVisible()
   })
 
-  test('AC-02.6 / AC-08.3 the views cross-fade, without animation on reduced motion', async ({
+  test('AC-02.10 / AC-08.3 the pages cross-fade, without animation on reduced motion', async ({
     page,
   }) => {
     // Lowest opacity of the new view, sampled every frame; the click waits for the card entry first
@@ -94,7 +94,7 @@ test.describe('projects card views', () => {
             requestAnimationFrame(sample)
           }),
       )
-      await viewButton(page, 'transports').click()
+      await dot(page, 'transports').click()
       return sampling
     }
     await page.goto('/')
@@ -144,4 +144,72 @@ test.describe('projects card views', () => {
       expect(overflow).toBeLessThanOrEqual(0)
     })
   }
+
+  test.describe('automatic page change', () => {
+    const activePage = (page: Page) =>
+      card(page).locator('[data-active-view]').getAttribute('data-active-view')
+    const ready = async (page: Page) => {
+      await page.clock.install()
+      await page.goto('/')
+      await expect(dot(page, 'repositories')).toHaveAttribute('aria-current', 'true')
+      // Keep the pointer away from the card
+      await page.mouse.move(0, 0)
+    }
+
+    test('AC-02.11 the card turns the page every 8 seconds', async ({ page }) => {
+      await ready(page)
+      await page.clock.runFor(7_000)
+      expect(await activePage(page)).toBe('repositories')
+      await page.clock.runFor(1_500)
+      await expect.poll(() => activePage(page)).toBe('transports')
+      await expect(dot(page, 'transports')).toHaveAttribute('aria-current', 'true')
+      await page.clock.runFor(8_500)
+      await expect.poll(() => activePage(page)).toBe('repositories')
+    })
+
+    test('AC-02.11 hovering pauses, afterwards the 8 seconds start again', async ({ page }) => {
+      await ready(page)
+      await card(page).hover()
+      await page.clock.runFor(20_000)
+      expect(await activePage(page)).toBe('repositories')
+      await page.mouse.move(0, 0)
+      await page.clock.runFor(7_000)
+      expect(await activePage(page)).toBe('repositories')
+      await page.clock.runFor(1_500)
+      await expect.poll(() => activePage(page)).toBe('transports')
+    })
+
+    test('AC-02.11 keyboard focus in the card pauses', async ({ page }) => {
+      await ready(page)
+      await dot(page, 'repositories').focus()
+      await page.clock.runFor(20_000)
+      expect(await activePage(page)).toBe('repositories')
+    })
+
+    test('AC-02.11 choosing a page stops the rotation', async ({ page }) => {
+      await ready(page)
+      await dot(page, 'transports').click()
+      await page.mouse.move(0, 0)
+      // Clicking focuses the dot; move the focus out of the card
+      await page.locator('body').click({ position: { x: 5, y: 5 } })
+      await page.clock.runFor(30_000)
+      expect(await activePage(page)).toBe('transports')
+    })
+
+    test('AC-02.11 "Show all" stops the rotation', async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 900 })
+      await ready(page)
+      await page.getByTestId('projects-toggle').click()
+      await page.locator('body').click({ position: { x: 5, y: 5 } })
+      await page.clock.runFor(30_000)
+      expect(await activePage(page)).toBe('repositories')
+    })
+
+    test('AC-02.11 / AC-08.3 no automatic change with reduced motion', async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: 'reduce' })
+      await ready(page)
+      await page.clock.runFor(30_000)
+      expect(await activePage(page)).toBe('repositories')
+    })
+  })
 })
