@@ -19,7 +19,7 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 **Akzeptanzkriterien:**
 - ~~AC-01.1 Hero-Bereich mit Name, Positionierung und GitHub-CTA über den Cards~~ – gestrichen (D-9, CR-2); ersetzt durch AC-01.8.
 - AC-01.2 Es gibt je eine Card pro Inhaltsbereich: **Projects**, **Skills**, **Career**, **Contact**. Eine eigene GitHub-Card gibt es nicht; GitHub ist in der Contact-Card hervorgehoben (AC-05.1) und im Avatar-Menü verlinkt (AC-06.10) (D-13). _(angepasst in CR-6)_
-- AC-01.3 Jede Card hat – wie eine Fiori-OVP-Card – einen Header mit Titel, Untertitel und Icon. Die Inhalts-Cards (Projects, Skills, Career, Contact) zeigen zusätzlich eine Kennzahl, die aus den Daten berechnet wird (z. B. Anzahl Projekte, Anzahl Skills, Jahre Erfahrung). Die Profil-Card hat keine Kennzahl. _(präzisiert in CR-2, CR-6)_
+- AC-01.3 Jede Card hat – wie eine Fiori-OVP-Card – einen Header mit Titel, Untertitel und Icon. Die Inhalts-Cards (Projects, Skills, Career, Contact) zeigen zusätzlich eine Kennzahl, die aus den Daten berechnet wird (z. B. Anzahl Projekte, Anzahl Skills, Jahre Erfahrung). Die Profil-Card hat keine Kennzahl. _(präzisiert in CR-2, CR-6)_ Hat eine Card mehrere Ansichten, gehören Untertitel und Kennzahl zur gewählten Ansicht (AC-02.6). _(präzisiert in CR-13)_
 - AC-01.4 Beim Laden erscheinen die Cards mit einer gestaffelten Einblend-Animation.
 - AC-01.5 Die Startseite ist innerhalb von 2 s nach Aufruf vollständig dargestellt (lokal, Production-Build).
 - AC-01.6 Cards haben unterschiedliche Größen (D-7): Projects **groß**, About me und Skills **breit**, Career und Contact **hoch**. _(ergänzt in CR-2, angepasst in CR-6)_
@@ -36,7 +36,15 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-02.2 Jedes Projekt verlinkt in einem neuen Tab auf das GitHub-Repository.
 - AC-02.3 Die Projekte stammen aus einer kuratierten, statischen Datendatei (D-1). Reihenfolge und Texte bestimmt Dominik.
 - AC-02.4 Bis echte Inhalte vorliegen, gibt es Platzhalter-Projekte, im Code mit `TODO` markiert.
-- AC-02.5 Auf breiten Bildschirmen (≥ 1024 px) zeigt die Projects-Card anfangs die **ersten 3 Projekte**. Ein Link **„Show all (5)“** klappt die übrigen animiert auf, **„Show less“** klappt sie wieder zu. Der Umschalter ist per Tastatur bedienbar und meldet `aria-expanded`. Unter 1024 px sind alle Projekte sichtbar, ohne Umschalter. Bei Reduced Motion ohne Animation (AC-08.3) (D-17).
+- AC-02.5 Auf breiten Bildschirmen (≥ 1024 px) zeigt die Projects-Card anfangs die **ersten 3 Projekte**. Ein Link **„Show all (5)“** klappt die übrigen animiert auf, **„Show less“** klappt sie wieder zu. Der Umschalter ist per Tastatur bedienbar und meldet `aria-expanded`. Unter 1024 px sind alle Projekte sichtbar, ohne Umschalter. Bei Reduced Motion ohne Animation (AC-08.3) (D-17). Das gilt für die Ansicht „Repositories“. _(präzisiert in CR-13)_
+- AC-02.6 Die Projects-Card hat zwei Ansichten, umschaltbar über einen **Segmented Button** oben im Card-Inhalt: **„Repositories“** (Default, Inhalt wie bisher) und **„Transport Log“**. Untertitel und Kennzahl im Header passen zur Ansicht: „Selected repositories“ mit der Anzahl Projekte bzw. „Built spec-driven“ mit der Anzahl Transporte. Der Umschalter ist per Tastatur bedienbar. Der Wechsel blendet über, bei Reduced Motion ohne Animation (AC-08.3). Die gewählte Ansicht gilt nur bis zum Neuladen.
+- AC-02.7 Das **Transport Log** zeigt die Entstehung dieser Website als SAP-Transporte, neuester zuerst. Je Eintrag: Transportnummer, Status, Datum (`YYYY-MM-DD`) und Text.
+  - **DVK900001** ist die erste Version („Initial release“, Datum des ersten Commits), passend zur Benachrichtigung „Transport DVK900001 … imported“ (AC-10.2).
+  - Jeder Change Request CR-N ist Transport **DVK9000(N+1)**, sechsstellig aufgefüllt, mit dem Text „CR-N“ + Beschreibung.
+  - Status **„Imported“** (✓), sobald es zum CR einen Umsetzungs-Commit gibt; sonst **„Released“**.
+  - Die Einträge entstehen beim Build automatisch aus den Git-Commits; neue CRs erscheinen ohne Pflege (D-20).
+- AC-02.8 Über dem Transport Log stehen vier Kennzahlen, beim Build gezählt: **Change Requests**, erledigte **Tasks**, **Tests** (definierte Testfälle in `tests/`) und **Commits**.
+- AC-02.9 Am Desktop zeigt das Transport Log anfangs die 3 neuesten Transporte mit „Show all (N)“ / „Show less“ wie bei den Repositories (AC-02.5). Unter 1024 px sind alle sichtbar. AC-01.11 (kein Scrollen bei 780 px) gilt für beide Ansichten im Ausgangszustand.
 
 ### REQ-03 Skills
 **Story:** Als Besucher will ich auf einen Blick sehen, welche Technologien Dominik beherrscht.
@@ -163,6 +171,7 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 | D-17 | Wie passt die Overview Page ohne Scrollen auf den Desktop? | Die Seitenhöhe ergibt sich aus About + Career + Skills und aus der Projects-Card. Eingeklappt zeigt Career deshalb nur Rolle, Firma und Zeitraum der aktuellen Station, und Projects zeigt anfangs 3 Projekte, beide mit „Show all“, nur auf dem Desktop. Zielhöhe 780 px Fenster (kleines MacBook mit Lesezeichenleiste). (CR-10) |
 | D-18 | Wie zeigt die Career-Card ältere Stationen? | Statt „Show all“, das die Card vergrößert, bleibt die Card so klein wie eingeklappt, und Pfeil-Buttons scrollen Station für Station durch die Timeline. Nur Klicks auf die Pfeile scrollen, damit das Mausrad nicht in der Card hängen bleibt. So bleibt die Seitenhöhe konstant (AC-01.11), und die gezielte Bewegung ersetzt den in D-16 abgelehnten freien Scrollbalken. Auf schmalen Bildschirmen bleibt alles sichtbar. (CR-11) |
 | D-19 | Wo stehen technische Details zur Seite, und wo wird sie gehostet? | In einer Kategorie **System** im Einstellungsdialog, wie die Systeminformationen im Fiori Launchpad: Tech-Stack mit automatisch ermittelten Versionen, Hosting, Build-Infos und aktives UI5-Theme. Der About-Dialog bleibt als kurzer Hinweis. Hoster ist **GitHub Pages**, passend zum Repo `Voelkerdo.github.io`. (CR-12) |
+| D-20 | Was zeigt die zweite Seite der Projects-Card? | Ein **Transport Log**: Die Change Requests dieser Website erscheinen als SAP-Transporte, darüber Kennzahlen zum Spec-Driven Development. Es setzt den Transport-Gag der Benachrichtigungen fort und macht das Nebenziel aus dem Intent sichtbar. Die Daten kommen beim Build aus Git und den Specs und bleiben ohne Pflege aktuell. Umschalten per Segmented Button, weil so beide Ansichten auf einen Blick erkennbar sind. (CR-13) |
 
 ## 6. Offene Fragen
 _Keine._
@@ -182,3 +191,4 @@ _Keine._
 | CR-10 | 2026-10-31 | Overview Page passt am Desktop ohne Scrollen: Career eingeklappt ohne Highlights, Projects anfangs 3 mit „Show all“. | AC-01.11, AC-02.5, AC-04.3, D-17 |
 | CR-11 | 2026-10-31 | Career-Card scrollt auf dem Desktop per Pfeil-Buttons Station für Station statt „Show all“. | AC-04.1, AC-04.3, AC-04.4, D-16, D-18 |
 | CR-12 | 2026-10-31 | Settings › System mit Tech-Stack, Hosting, Build-Infos und aktivem Theme; Hoster GitHub Pages festgelegt. | Intent (Hosting), §4, REQ-12, D-19 |
+| CR-13 | 2026-10-31 | Projects-Card mit zweiter Ansicht „Transport Log“ (CRs als SAP-Transporte) und Kennzahlen zum Spec-Driven Development. | AC-01.3, AC-02.5–AC-02.9, D-20 |
