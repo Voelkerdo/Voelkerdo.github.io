@@ -40,6 +40,7 @@
 | T-28 | CR-8: Settings-Dialog & Theme-Wahl | AC-06.2, AC-06.9, AC-09.1, AC-09.2, AC-11.1–AC-11.4, AC-11.8 | [x] |
 | T-29 | CR-8: Nachempfundene SAP-Themes | AC-11.2, AC-11.5 | [x] |
 | T-30 | CR-8: Zeitreise-Overlay | AC-11.6–AC-11.8 | [x] |
+| T-31 | Echte Inhalte einpflegen | AC-01.8, AC-02.3, AC-02.4, AC-04.2, AC-05.1, AC-05.2 | [x] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
@@ -175,6 +176,14 @@ Tile-Komponente, Launchpad-Startseite, App-Rahmen mit Tile-to-App-Transition und
 - `TimeTravelOverlay`: Jahreszahl und Ziel-Theme-Name, `popover="manual"`, `role="status"`; Ablauf laut Tech Spec §6.
 - `selectTheme` mit dem Overlay verbinden: Bei anderem Jahr Overlay → Zählen → Theme-Wechsel → Ausblenden; bei gleichem Jahr direkter Wechsel.
 - **Tests:** E2E – Wechsel von Sunset Coral zu SAP Classic zeigt das Overlay, die Zahl durchläuft Zwischenjahre und endet bei 1992, danach ist das Theme aktiv und das Overlay weg; Light ↔ Dark ohne Overlay; mit `reduced-motion` direkt 1992 ohne Zwischenwerte; Statusmeldung „Travelling to 1992 – SAP Classic“; das Overlay liegt sichtbar über dem Settings-Dialog.
+
+### T-31 Echte Inhalte einpflegen
+Inhalte von Dominik (Abfrage am 2026-10-31), ersetzen die Platzhalter aus D-3 und D-4:
+- **Profil:** Tagline „Fullstack Developer – ABAP, RAP, Linux & UI5“; Avatar bleibt bei den Initialen „DV“; Repo dieser Website: `github.com/Voelkerdo/Voelkerdo.github.io`.
+- **Projekte** (SAP zuerst): Portfolio Website · ABAP Programming Model for SAP Fiori · Simple OData Service · Quote API · Message Mixer, jeweils mit Beschreibung und Tags wie abgestimmt.
+- **Werdegang:** Application Expert SAP Development and SAP Authorizations (MEYER WERFT GmbH, seit 07/2025) · Application Professional (MEYER WERFT GmbH, 08/2019–06/2025) · IT Specialist for Application Development (apprenticeship) (MEYER WERFT GmbH, 08/2016–07/2019), mit den abgestimmten Highlights. „Years of experience“ zählt ab der Ausbildung.
+- **Kontakt:** GitHub und LinkedIn; keine E-Mail (AC-05.2 „optional“). Die LinkedIn-URL reicht Dominik nach und bleibt bis dahin `TODO(content)`.
+- **Tests:** Die E2E-Tests für Projects, Career, Contact und Profil sowie der About-Link prüfen die echten Inhalte; KPIs: 5 Projekte, 2 Kanäle.
 
 ### T-14 Manuelle Abnahme
 - Production-Build lokal per `npm run preview`.

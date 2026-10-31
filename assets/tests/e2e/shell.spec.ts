@@ -32,7 +32,7 @@ test.describe('fiori shell', () => {
     await expect(dialog).toContainText('Built with React & SAP UI5 Web Components')
     await expect(dialog.locator('ui5-link')).toHaveAttribute(
       'href',
-      'https://github.com/Voelkerdo/portfolio-website',
+      'https://github.com/Voelkerdo/Voelkerdo.github.io',
     )
   })
 

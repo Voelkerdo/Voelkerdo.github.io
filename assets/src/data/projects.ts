@@ -1,7 +1,9 @@
 import type { Project } from './types.ts'
 import { profile } from './profile.ts'
 
-// TODO(content): replace placeholder projects with curated repositories (D-1)
+const repo = (name: string) => `${profile.githubUrl}/${name}`
+
+// Curated by Dominik, SAP projects first (D-1, AC-02.3)
 export const projects: Project[] = [
   {
     id: 'portfolio-website',
@@ -12,17 +14,31 @@ export const projects: Project[] = [
     repoUrl: profile.siteRepoUrl,
   },
   {
-    id: 'placeholder-project-2',
-    name: 'Project Two',
-    description: 'Placeholder – short description of the project.',
-    technologies: ['ABAP', 'RAP'],
-    repoUrl: profile.githubUrl,
+    id: 'abap-programming-model-fiori',
+    name: 'ABAP Programming Model for SAP Fiori',
+    description: 'Sample app built with the ABAP Programming Model for SAP Fiori on CDS views.',
+    technologies: ['ABAP', 'CDS', 'SAP Fiori'],
+    repoUrl: repo('SAP-ABAP-Programming-Model-with-SAP-Fiori'),
   },
   {
-    id: 'placeholder-project-3',
-    name: 'Project Three',
-    description: 'Placeholder – short description of the project.',
+    id: 'simple-odata-service',
+    name: 'Simple OData Service',
+    description: 'Sample OData service built with SAP Gateway (SEGW).',
+    technologies: ['ABAP', 'OData', 'SEGW'],
+    repoUrl: repo('abap_simple_odata_service'),
+  },
+  {
+    id: 'quote-api',
+    name: 'Quote API',
+    description: 'A simple quote REST API with Node.js and Express.',
+    technologies: ['Node.js', 'Express', 'JavaScript'],
+    repoUrl: repo('codecademy-quote-api'),
+  },
+  {
+    id: 'message-mixer',
+    name: 'Message Mixer',
+    description: 'Generates random message strings on the Node.js console.',
     technologies: ['Node.js', 'JavaScript'],
-    repoUrl: profile.githubUrl,
+    repoUrl: repo('codecadmey-message-mixer'),
   },
 ]

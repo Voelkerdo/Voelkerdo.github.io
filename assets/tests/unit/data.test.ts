@@ -18,6 +18,11 @@ describe('data', () => {
     expect(cards.contact.kpi).toBe(String(contactChannels.length))
   })
 
+  it('AC-04.2 years of experience count from the apprenticeship (Aug 2016)', () => {
+    expect(yearsOfExperience(career, new Date('2026-07-15'))).toBe(9)
+    expect(yearsOfExperience(career, new Date('2026-10-30'))).toBe(10)
+  })
+
   it('AC-01.3 the profile card has no KPI', () => {
     const cards = Object.fromEntries(buildCards().map((c) => [c.id, c]))
     expect(cards.about.kpi).toBeUndefined()

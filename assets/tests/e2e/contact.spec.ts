@@ -23,7 +23,7 @@ test.describe('contact card', () => {
         }
       }),
     )
-    // LinkedIn and e-mail are placeholders (D-4)
+    // No e-mail on purpose; the LinkedIn URL is still a placeholder (D-4, T-31)
     expect(props).toEqual([
       {
         id: 'github',
@@ -36,13 +36,6 @@ test.describe('contact card', () => {
         id: 'linkedin',
         text: 'LinkedIn',
         description: 'linkedin.com',
-        primary: false,
-        badge: null,
-      },
-      {
-        id: 'email',
-        text: 'E-Mail',
-        description: 'hello@example.com',
         primary: false,
         badge: null,
       },

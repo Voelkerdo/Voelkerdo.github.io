@@ -46,7 +46,7 @@ test.describe('overview page', () => {
     expect((await headerProps(page, 'about')).title).toBe('About me')
     await expect(about.locator('ui5-avatar')).toBeVisible()
     await expect(about.getByRole('heading', { level: 1, name: 'Dominik Völker' })).toBeVisible()
-    await expect(about.getByText('Fullstack Developer – from ABAP to UI5')).toBeVisible()
+    await expect(about.getByText('Fullstack Developer – ABAP, RAP, Linux & UI5')).toBeVisible()
   })
 
   test('AC-01.10 profile card shows the "currently building" status with icon', async ({
@@ -64,10 +64,10 @@ test.describe('overview page', () => {
   test('AC-01.2 / AC-01.3 cards with title and KPI in the header', async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('.bento-cell')).toHaveCount(5)
-    expect(await headerProps(page, 'projects')).toEqual({ title: 'Projects', kpi: '3' })
+    expect(await headerProps(page, 'projects')).toEqual({ title: 'Projects', kpi: '5' })
     expect(await headerProps(page, 'skills')).toEqual({ title: 'Skills', kpi: '7' })
     expect((await headerProps(page, 'career')).title).toBe('Career')
-    expect(await headerProps(page, 'contact')).toEqual({ title: 'Contact', kpi: '3' })
+    expect(await headerProps(page, 'contact')).toEqual({ title: 'Contact', kpi: '2' })
     await expect(card(page, 'github')).toHaveCount(0)
   })
 

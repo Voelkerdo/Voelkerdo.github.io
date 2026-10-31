@@ -4,13 +4,11 @@ const githubUsername = 'Voelkerdo'
 
 export const profile: Profile = {
   name: 'Dominik Völker',
-  // TODO(content): sharpen positioning (see specs/00-intent.md)
-  tagline: 'Fullstack Developer – from ABAP to UI5',
+  tagline: 'Fullstack Developer – ABAP, RAP, Linux & UI5',
   currentlyBuilding: 'this portfolio – spec-driven with React & SAP UI5',
   githubUsername,
   githubUrl: `https://github.com/${githubUsername}`,
-  // TODO(content): add avatar image
+  // Initials instead of a photo, re-colored by every theme (T-31)
   avatarUrl: undefined,
-  // TODO(content): confirm repository name once this site is pushed to GitHub
-  siteRepoUrl: `https://github.com/${githubUsername}/portfolio-website`,
+  siteRepoUrl: `https://github.com/${githubUsername}/${githubUsername}.github.io`,
 }

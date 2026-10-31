@@ -5,11 +5,21 @@ const projects = [
   {
     id: 'portfolio-website',
     name: 'Portfolio Website',
-    repoUrl: 'https://github.com/Voelkerdo/portfolio-website',
+    repoUrl: 'https://github.com/Voelkerdo/Voelkerdo.github.io',
     technologies: ['React', 'TypeScript', 'SAP UI5 Web Components', 'Motion'],
   },
-  { id: 'placeholder-project-2', name: 'Project Two', technologies: ['ABAP', 'RAP'] },
-  { id: 'placeholder-project-3', name: 'Project Three', technologies: ['Node.js', 'JavaScript'] },
+  {
+    id: 'abap-programming-model-fiori',
+    name: 'ABAP Programming Model for SAP Fiori',
+    technologies: ['ABAP', 'CDS', 'SAP Fiori'],
+  },
+  {
+    id: 'simple-odata-service',
+    name: 'Simple OData Service',
+    technologies: ['ABAP', 'OData', 'SEGW'],
+  },
+  { id: 'quote-api', name: 'Quote API', technologies: ['Node.js', 'Express', 'JavaScript'] },
+  { id: 'message-mixer', name: 'Message Mixer', technologies: ['Node.js', 'JavaScript'] },
 ]
 
 test.describe('projects card', () => {
@@ -40,6 +50,6 @@ test.describe('projects card', () => {
     await expect(anchor).toHaveAttribute('rel', /noopener/)
     const popupPromise = page.waitForEvent('popup')
     await link.click()
-    expect((await popupPromise).url()).toContain('github.com/Voelkerdo/portfolio-website')
+    expect((await popupPromise).url()).toContain('github.com/Voelkerdo/Voelkerdo.github.io')
   })
 })

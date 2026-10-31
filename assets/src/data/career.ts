@@ -1,21 +1,37 @@
 import type { CareerStation } from './types.ts'
 
-// TODO(content): replace placeholder stations with real career data (D-3)
+// Provided by Dominik (D-3, AC-04.2)
 export const career: CareerStation[] = [
   {
-    id: 'placeholder-current',
-    from: '2022-01',
-    role: 'Fullstack Developer',
-    company: 'Company A',
-    highlights: ['Placeholder highlight'],
+    id: 'meyer-werft-application-expert',
+    from: '2025-07',
+    role: 'Application Expert SAP Development and SAP Authorizations',
+    company: 'MEYER WERFT GmbH',
+    highlights: [
+      'Build and maintain ABAP applications – RAP, ABAP Programming Model for SAP Fiori, reports and forms',
+      'Manage SAP users and authorization roles',
+      'Improve development processes and workflows',
+    ],
   },
   {
-    id: 'placeholder-previous',
+    id: 'meyer-werft-application-professional',
     from: '2019-08',
-    to: '2021-12',
-    role: 'SAP Developer',
-    company: 'Company B',
-    highlights: ['Placeholder highlight'],
+    to: '2025-06',
+    role: 'Application Professional',
+    company: 'MEYER WERFT GmbH',
+    highlights: [
+      'Maintain SAP authorization concepts and roles',
+      'Develop print forms with SAP Adobe Forms',
+      'Build object-oriented ABAP applications (ABAP OO)',
+    ],
+  },
+  {
+    id: 'meyer-werft-apprenticeship',
+    from: '2016-08',
+    to: '2019-07',
+    role: 'IT Specialist for Application Development (apprenticeship)',
+    company: 'MEYER WERFT GmbH',
+    highlights: ['Implement REST APIs for system integration'],
   },
 ]
 
