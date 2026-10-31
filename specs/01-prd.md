@@ -52,7 +52,8 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 ### REQ-04 Werdegang (Career)
 **Story:** Als Besucher will ich Dominiks beruflichen Weg nachvollziehen.
 **Akzeptanzkriterien:**
-- AC-04.1 Die Career-Card zeigt die Stationen chronologisch (neueste zuerst) als Timeline: Zeitraum, Rolle, Firma, 1–3 Highlights.
+- AC-04.1 Die Career-Card zeigt die Stationen chronologisch (neueste zuerst) als Timeline: Zeitraum, Rolle, Firma, 1–3 Highlights. Auf breiten Bildschirmen sind anfangs nicht alle Stationen sichtbar (AC-04.3). _(präzisiert in CR-9)_
+- AC-04.3 Auf breiten Bildschirmen (≥ 1024 px, 4-spaltiges Raster) zeigt die Career-Card anfangs nur die **aktuelle Station** mit ihren Highlights. Ein Link **„Show all (3)“** klappt die älteren Stationen animiert auf, **„Show less“** klappt sie wieder zu. Der Umschalter ist per Tastatur bedienbar und meldet seinen Zustand (`aria-expanded`). Unter 1024 px sind alle Stationen sichtbar, und es gibt keinen Umschalter. Bei Reduced Motion klappt die Liste ohne Animation (AC-08.3) (D-16).
 - AC-04.2 Inhalte liegen als Daten vor. Vorerst Platzhalter, mit `TODO` markiert (D-3).
 
 ### REQ-05 Kontakt
@@ -143,6 +144,7 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 | D-13 | Braucht es eine eigene GitHub-Card? | Nein – sie war doppelt zur Contact-Card, in der GitHub als primärer Kanal hervorgehoben ist. Contact wird dafür eine hohe Card. (CR-6) |
 | D-14 | Welche Eye Catcher kommen zuerst? | Zwei kleine: eine augenzwinkernde Fiori-Benachrichtigungsglocke (Insider-Gag für die SAP-Community) und eine „Currently building“-Zeile in der Profil-Card (wirkt aktuell und persönlich). Größere Ideen (Heatmap, Standort-Card) bleiben für später. (CR-7) |
 | D-15 | Wo und wie wählt man das Theme? | Wie im Fiori Launchpad unter **Avatar › Settings › Appearance** statt per Umschalter im Avatar-Menü. Als Eye Catcher reist die Liste mit Jahreszahlen und Zähl-Overlay durch die SAP-Themes von SAP Classic (1992) bis Horizon (2022). Themes, die UI5 nicht mehr mitliefert, werden über CSS-Variablen nachempfunden. Sunset Coral bleibt Default; Hell und Dunkel sind Theme-Varianten. Jahreszahl = erstes Erscheinen bei SAP (UI5/Fiori oder SAP GUI). (CR-8) |
+| D-16 | Wie bleibt die Career-Card kompakt? | Auf dem Desktop anfangs nur die aktuelle Station, dazu „Show all“ wie bei den Skills (D-12). Keinen Scrollbalken, weil scrollende Inhalte in Cards nicht Fiori-konform sind und auf Touch-Geräten hakeln. Auf schmalen Bildschirmen ist die Höhe unkritisch, dort bleibt alles sichtbar. (CR-9) |
 
 ## 6. Offene Fragen
 _Keine._
@@ -158,3 +160,4 @@ _Keine._
 | CR-6 | 2026-10-30 | GitHub-Card entfernt (doppelt zur Contact-Card); Contact wird hoch. | AC-01.2, AC-01.3, AC-01.6, D-9, D-13 |
 | CR-7 | 2026-10-30 | Eye Catcher: Benachrichtigungsglocke in der ShellBar, „Currently building“-Status in der Profil-Card. | AC-01.10, REQ-10, D-14 |
 | CR-8 | 2026-10-31 | Theme-Zeitreise durch die SAP-Themes in Settings › Appearance (Fiori-Einstellungsdialog); Hell/Dunkel-Umschalter wandert dorthin. | AC-06.2, AC-06.9, AC-09.1, AC-09.2, REQ-11, D-15 |
+| CR-9 | 2026-10-31 | Career-Card zeigt auf dem Desktop anfangs nur die aktuelle Station, „Show all“ klappt die übrigen auf. | AC-04.1, AC-04.3, D-16 |

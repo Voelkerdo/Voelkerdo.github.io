@@ -41,6 +41,7 @@
 | T-29 | CR-8: Nachempfundene SAP-Themes | AC-11.2, AC-11.5 | [x] |
 | T-30 | CR-8: Zeitreise-Overlay | AC-11.6–AC-11.8 | [x] |
 | T-31 | Echte Inhalte einpflegen | AC-01.8, AC-02.3, AC-02.4, AC-04.2, AC-05.1, AC-05.2 | [x] |
+| T-32 | CR-9: Career-Card mit „Show all“ auf dem Desktop | AC-04.1, AC-04.3, AC-08.3 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
@@ -184,6 +185,11 @@ Inhalte von Dominik (Abfrage am 2026-10-31), ersetzen die Platzhalter aus D-3 un
 - **Werdegang:** Application Expert SAP Development and SAP Authorizations (MEYER WERFT GmbH, seit 07/2025) · Application Professional (MEYER WERFT GmbH, 08/2019–06/2025) · IT Specialist for Application Development (apprenticeship) (MEYER WERFT GmbH, 08/2016–07/2019), mit den abgestimmten Highlights. „Years of experience“ zählt ab der Ausbildung.
 - **Kontakt:** GitHub und LinkedIn; keine E-Mail (AC-05.2 „optional“). Die LinkedIn-URL reicht Dominik nach und bleibt bis dahin `TODO(content)`.
 - **Tests:** Die E2E-Tests für Projects, Career, Contact und Profil sowie der About-Link prüfen die echten Inhalte; KPIs: 5 Projekte, 2 Kanäle.
+
+### T-32 CR-9: Career-Card mit „Show all“ auf dem Desktop
+- `career.ts`: `VISIBLE_STATIONS = 1`.
+- `CareerCard`: Container um die Timeline mit gemessener Höhe (Tech Spec §6), verborgene Stationen `inert`, Umschalter „Show all (3)“ / „Show less“ mit `aria-expanded`, nur ab 1024 px.
+- **Tests:** E2E bei 1280 px: anfangs nur die aktuelle Station sichtbar, die älteren `inert` und abgeschnitten; „Show all (3)“ zeigt alle drei, „Show less“ klappt wieder zu; Bedienung per Tastatur und `aria-expanded`; mit `reduced-motion` ohne Transition. Bei 800 px und 390 px alle drei Stationen sichtbar und kein Umschalter. AC-04.1-Test unverändert grün.
 
 ### T-14 Manuelle Abnahme
 - Production-Build lokal per `npm run preview`.
