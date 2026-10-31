@@ -49,6 +49,7 @@
 | T-37 | CR-13: Transport-Log-Daten zur Build-Zeit | AC-02.7, AC-02.8 | [x] |
 | T-38 | CR-13: Projects-Card mit Ansicht „Transport Log“ | AC-01.3, AC-01.11, AC-02.5, AC-02.6, AC-02.9, AC-08.3 | [x] |
 | T-39 | CR-14: Seitenpunkte und automatischer Seitenwechsel | AC-01.11, AC-02.10, AC-02.11, AC-08.3 | [x] |
+| T-40 | CR-15: Pfeile neben den Seitenpunkten | AC-02.10, AC-02.11 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
@@ -231,6 +232,10 @@ Inhalte von Dominik (Abfrage am 2026-10-31), ersetzen die Platzhalter aus D-3 un
 ### T-39 CR-14: Seitenpunkte und automatischer Seitenwechsel
 - `ProjectsCard`: `SegmentedButton` durch Seitenpunkte unten ersetzen; Timer mit Pause-/Stopp-Regeln laut Tech Spec §6; „Show all“ meldet das Aufklappen.
 - **Tests:** E2E (Timer per `page.clock`) – Default Repositories, aktiver Punkt `aria-current`; nach 8 s Transport Log, nach weiteren 8 s wieder Repositories; Hover pausiert, nach dem Verlassen wieder 8 s; Fokus pausiert; Klick auf einen Punkt wechselt und stoppt den Auto-Wechsel; „Show all“ stoppt; Reduced Motion ohne Auto-Wechsel; Punkte per Tastatur bedienbar. Bestehende Transport-Log-Tests auf Punkte umstellen; AC-01.11 bei 1280 × 780 in beiden Seiten.
+
+### T-40 CR-15: Pfeile neben den Seitenpunkten
+- `ProjectsCard`: Pfeil-Buttons vor und hinter den Punkten laut Tech Spec §5; Fokus wandert zum anderen Pfeil, wenn der fokussierte deaktiviert wird; ein Pfeil-Klick stoppt den automatischen Wechsel.
+- **Tests:** E2E – auf Seite 1 ist ‹ deaktiviert und › aktiv; › blättert zum Transport Log, dann ist › deaktiviert und ‹ aktiv; ‹ blättert zurück; Namen für Screenreader; per Tastatur: Fokus auf ›, Enter → Fokus liegt danach auf ‹; ein Pfeil-Klick stoppt den Auto-Wechsel (`page.clock`). AC-01.11 weiterhin grün.
 
 ### T-14 Manuelle Abnahme
 - Production-Build lokal per `npm run preview`.
