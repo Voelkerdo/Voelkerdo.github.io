@@ -147,7 +147,7 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 | D-1 | Woher kommen die Git-Projekte? | Kuratierte, statische Liste – keine Live-Abfrage der GitHub-API. |
 | D-2 | Was trägt den Wow-Effekt? | ~~Fiori-Launchpad-Twist mit Tiles, die sich zu Apps öffnen.~~ Abgelöst durch D-7 (CR-1). |
 | D-3 | Inhalte für den Werdegang? | Vorerst Platzhalter mit `TODO`-Hinweis. _(Echte Inhalte eingepflegt in T-31.)_ |
-| D-4 | Kontaktkanäle? | Vorerst Platzhalter mit `TODO`-Hinweis. _(In T-31: GitHub und LinkedIn, keine E-Mail; LinkedIn-URL folgt.)_ |
+| D-4 | Kontaktkanäle? | Vorerst Platzhalter mit `TODO`-Hinweis. _(In T-31: GitHub und LinkedIn, keine E-Mail; LinkedIn-URL nachgereicht.)_ |
 | D-5 | Wie sieht die Anwendung aus? | Wie eine Fiori-Anwendung mit Shell-Header. ~~Tiles öffnen Vollbild-Apps mit eigener URL und Zurück-Button.~~ Navigation abgelöst durch D-8 (CR-1). |
 | D-6 | Braucht die Anwendung einen Footer? | Nein – das Fiori Launchpad hat keinen. Der „Built with …“-Hinweis wandert ins About im Avatar-Menü. |
 | D-7 | Tiles oder Cards? | Cards wie auf einer Fiori **Overview Page**, angeordnet als **Bento-Grid** mit unterschiedlichen Größen. Cards lassen sich inhaltlich besser gestalten als Tiles. (CR-1) |

@@ -187,7 +187,7 @@ Inhalte von Dominik (Abfrage am 2026-10-31), ersetzen die Platzhalter aus D-3 un
 - **Profil:** Tagline „Fullstack Developer – ABAP, RAP, Linux & UI5“; Avatar bleibt bei den Initialen „DV“; Repo dieser Website: `github.com/Voelkerdo/Voelkerdo.github.io`.
 - **Projekte** (SAP zuerst): Portfolio Website · ABAP Programming Model for SAP Fiori · Simple OData Service · Quote API · Message Mixer, jeweils mit Beschreibung und Tags wie abgestimmt.
 - **Werdegang:** Application Expert SAP Development and SAP Authorizations (MEYER WERFT GmbH, seit 07/2025) · Application Professional (MEYER WERFT GmbH, 08/2019–06/2025) · IT Specialist for Application Development (apprenticeship) (MEYER WERFT GmbH, 08/2016–07/2019), mit den abgestimmten Highlights. „Years of experience“ zählt ab der Ausbildung.
-- **Kontakt:** GitHub und LinkedIn; keine E-Mail (AC-05.2 „optional“). Die LinkedIn-URL reicht Dominik nach und bleibt bis dahin `TODO(content)`.
+- **Kontakt:** GitHub und LinkedIn (`linkedin.com/in/dominik-völker-01714422b`, ohne Tracking-Parameter); keine E-Mail (AC-05.2 „optional“). _(LinkedIn-URL nachgereicht nach T-31.)_
 - **Tests:** Die E2E-Tests für Projects, Career, Contact und Profil sowie der About-Link prüfen die echten Inhalte; KPIs: 5 Projekte, 2 Kanäle.
 
 ### T-32 CR-9: Career-Card mit „Show all“ auf dem Desktop

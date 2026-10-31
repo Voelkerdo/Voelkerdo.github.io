@@ -23,7 +23,7 @@ test.describe('contact card', () => {
         }
       }),
     )
-    // No e-mail on purpose; the LinkedIn URL is still a placeholder (D-4, T-31)
+    // No e-mail on purpose (D-4, T-31)
     expect(props).toEqual([
       {
         id: 'github',
@@ -35,7 +35,7 @@ test.describe('contact card', () => {
       {
         id: 'linkedin',
         text: 'LinkedIn',
-        description: 'linkedin.com',
+        description: 'linkedin.com/in/dominik-völker-01714422b',
         primary: false,
         badge: null,
       },
@@ -47,6 +47,15 @@ test.describe('contact card', () => {
     const popupPromise = page.waitForEvent('popup')
     await page.locator('[data-channel-id="github"]').click()
     expect((await popupPromise).url()).toContain('github.com/Voelkerdo')
+  })
+
+  test('AC-05.1 the LinkedIn channel opens the profile in a new tab', async ({ page }) => {
+    await page.goto('/')
+    const popupPromise = page.waitForEvent('popup')
+    await page.locator('[data-channel-id="linkedin"]').click()
+    const popup = await popupPromise
+    // Only the requested URL matters; LinkedIn itself may redirect to its login page
+    expect(decodeURI(popup.url())).toContain('linkedin.com/in/dominik-völker-01714422b')
   })
 
   test('AC-05.2 there is no contact form', async ({ page }) => {

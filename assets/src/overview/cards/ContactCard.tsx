@@ -7,7 +7,7 @@ import type { ContactChannel } from '../../data/types.ts'
 
 /** Readable form of a channel URL, e.g. "github.com/Voelkerdo" */
 function displayUrl(url: string): string {
-  return url
+  return decodeURI(url)
     .replace(/^mailto:/, '')
     .replace(/^https?:\/\/(www\.)?/, '')
     .replace(/\/$/, '')
