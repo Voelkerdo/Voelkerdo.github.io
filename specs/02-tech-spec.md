@@ -245,7 +245,7 @@ Nach der Erstveröffentlichung lag Lighthouse mobil bei 77–81. Umgesetzt:
 - **Pages-Einstellung:** Source „GitHub Actions“. Die Seite liegt im Root der Domain; `base: './'` funktioniert unverändert.
 
 ## 9c. README (REQ-15)
-- `README.md` und `LICENSE` liegen im Repo-Root (keine ausführbaren Dateien). Bilder liegen in `.github/readme/`.
+- `README.md`, `LICENSE` (reiner MIT-Text) und `NOTICE` (Ausnahme persönlicher Inhalte, Drittlizenzen) liegen im Repo-Root (keine ausführbaren Dateien). _(präzisiert nach T-48)_ Bilder liegen in `.github/readme/`.
 - **Bilder per Script** `assets/scripts/readme-media.mjs` (`npm run readme:media`): baut die Seite in einen Temp-Ordner, startet `vite preview` auf einem eigenen Port und erzeugt per Playwright:
   - `hero-light.png` / `hero-dark.png` (Desktop 1280 × 780, Default-Theme, Cards eingeblendet);
   - `time-travel.gif`: Video der Zeitreise zu SAP Classic (Settings öffnen → „SAP Classic · 1992“), per `ffmpeg` mit eigener Palette in ein GIF mit ≤ 3 MB umgewandelt, Breite 960 px, 15 fps.

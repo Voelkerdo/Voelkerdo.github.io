@@ -19,13 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-Personal content is not covered by this license: the texts, career data,
-profile and contact data, name and likeness of Dominik Völker (in particular
-in assets/src/data/ and the images in .github/readme/) are © Dominik Völker,
-all rights reserved.
-
-Third-party components keep their own licenses, e.g. SAP UI5 Web Components
-and the SAP font "72" (@sap-theming/theming-base-content), both Apache-2.0.

@@ -32,8 +32,12 @@ describe('repository README', () => {
   })
 
   it('AC-15.6 code is MIT licensed, personal content is excluded', () => {
+    // Plain MIT text, so GitHub detects the license; the exception lives in NOTICE
     const license = readFileSync(join(ROOT, 'LICENSE'), 'utf8')
     expect(license).toMatch(/^MIT License/)
-    expect(license).toContain('Personal content is not covered by this license')
+    expect(license.trim()).toMatch(/OTHER DEALINGS IN THE\nSOFTWARE\.$/)
+    const notice = readFileSync(join(ROOT, 'NOTICE'), 'utf8')
+    expect(notice).toContain('Personal content is not covered by this license')
+    expect(readme).toContain('[NOTICE](NOTICE)')
   })
 })

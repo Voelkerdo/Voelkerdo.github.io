@@ -61,4 +61,4 @@ The specs are written in German. The site was built in pair programming with **C
 ## License
 
 The **source code** is licensed under the [MIT License](LICENSE).
-The **personal content** – texts, career data, profile and contact data, name and likeness – is © Dominik Völker, all rights reserved, and not covered by the license.
+The **personal content** – texts, career data, profile and contact data, name and likeness – is © Dominik Völker, all rights reserved, and not covered by the license (see [NOTICE](NOTICE)).

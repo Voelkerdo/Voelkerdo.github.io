@@ -186,7 +186,7 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-15.3 Der Abschnitt **Spec-Driven Development** erklärt kurz die Kette Intent → PRD → Tech Spec → Tasks, Change Requests und die Prüfungen, verlinkt die Specs (Hinweis: auf Deutsch) und nennt die Zusammenarbeit mit KI offen.
 - AC-15.4 Der Abschnitt **Tech Stack & Quality** nennt den Stack und die Qualitäts- und Sicherheitsmaßnahmen: `verify` mit Unit-, E2E- und Security-Tests gegen den Build, CSP, keine Drittanbieter, gehärtete Pipeline, Dependabot.
 - AC-15.5 Screenshots und GIF werden per Script **reproduzierbar** aus dem Production-Build erzeugt und liegen in `.github/readme/`, also nicht in der ausgelieferten Website. Das GIF ist höchstens 3 MB groß.
-- AC-15.6 **Lizenz:** Der Code steht unter MIT (`LICENSE`). Persönliche Inhalte (Texte, Werdegang, Name, Profil-Daten) sind ausdrücklich ausgenommen; das steht in README und `LICENSE`.
+- AC-15.6 **Lizenz:** Der Code steht unter MIT (`LICENSE`, reiner Standardtext, damit GitHub die Lizenz erkennt). Persönliche Inhalte (Texte, Werdegang, Name, Profil-Daten) sind ausdrücklich ausgenommen; das steht in README und ~~`LICENSE`~~ `NOTICE`, dort auch die Lizenzen der Drittkomponenten. _(präzisiert nach T-48)_
 - AC-15.7 Das Repo hat auf GitHub eine Beschreibung, den Link zur Live-Seite als Website und passende Topics.
 
 ## 4. Außerhalb des Scopes (v1)
