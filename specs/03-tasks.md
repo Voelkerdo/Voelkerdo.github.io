@@ -37,6 +37,9 @@
 | T-13 | Responsive-Feinschliff | AC-01.6, AC-08.1 | [x] |
 | T-26 | CR-7: Benachrichtigungsglocke | AC-10.1–AC-10.5 | [x] |
 | T-27 | CR-7: „Currently building“-Status | AC-01.10 | [x] |
+| T-28 | CR-8: Settings-Dialog & Theme-Wahl | AC-06.2, AC-06.9, AC-09.1, AC-09.2, AC-11.1–AC-11.4, AC-11.8 | [ ] |
+| T-29 | CR-8: Nachempfundene SAP-Themes | AC-11.2, AC-11.5 | [ ] |
+| T-30 | CR-8: Zeitreise-Overlay | AC-11.6–AC-11.8 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
@@ -153,6 +156,25 @@ Tile-Komponente, Launchpad-Startseite, App-Rahmen mit Tile-to-App-Transition und
 - `profile.currentlyBuilding` mit dem Text aus AC-01.10.
 - `ProfileCard`: Statuszeile mit Icon unter der Positionierung.
 - **Tests:** Unit – Text laut AC-01.10. E2E – Statuszeile sichtbar in der Profil-Card.
+
+### T-28 CR-8: Settings-Dialog & Theme-Wahl
+- `data/themes.ts` laut Tech Spec §4, vorerst ohne die nachempfundenen Themes: Today (3) und Horizon/Quartz (4).
+- `useThemeMode` und `ThemeModeProvider` auf eine Theme-ID umstellen: `theme` statt `mode`, `selectTheme(id)` statt `toggleMode()`. Dazu Auflösung von „Auto“ über den System-Modus, Persistenz unter `theme` und Übernahme des alten Werts `theme-mode` (Tech Spec §7).
+- `theme.css`: Sunset-Coral-Selektoren auf `[data-theme^='sunset-coral']` umstellen.
+- `AppShell`: Menüeintrag „Dark/Light mode“ entfernen, „Settings“ (Icon `action-settings`) vor „About“ einfügen.
+- `SettingsDialog`: `UserSettingsDialog` mit Appearance, gruppierter Liste „Name · Jahr“; das aktive Theme ist ausgewählt, ein Klick wendet es sofort an.
+- **Tests:** Unit – Katalog: Reihenfolge, Jahre und Gruppen laut AC-11.2, IDs eindeutig; Default „Auto“ folgt dem System; Auswahl setzt UI5-Theme und `data-theme`, wird gemerkt und wiederhergestellt; Migration von `theme-mode`; kaputter Storage. E2E – Avatar-Menü zeigt Settings und About, aber keinen Theme-Umschalter; Settings öffnet Appearance; Auswahl von „SAP Quartz Dark“ wechselt das Theme und bleibt nach dem Neuladen erhalten; Tastaturbedienung; bei 390 px Vollbild. Bestehende AC-09.1/AC-07.1-Tests anpassen.
+
+### T-29 CR-8: Nachempfundene SAP-Themes
+- `themes.ts` um Belize, Blue Crystal, Corbu, Signature, Enjoy und Classic ergänzen (`emulated: true`, Basis `sap_fiori_3`).
+- `eras.css` mit den Variablen-Sets laut Tech Spec §7, inklusive `--accent-*`.
+- Je Theme einen Screenshot der Overview Page zur Abnahme zeigen und die Farben mit Dominik feinjustieren.
+- **Tests:** Unit – vollständiger Katalog laut AC-11.2 (13 Themes, neueste zuerst je Gruppe). E2E – je nachempfundenem Theme `data-theme` gesetzt, Leitfarbe (`--sapBrandColor`) und Hintergrund wie spezifiziert; Kontrast Text/Hintergrund ≥ 4,5 : 1 für `--sapTextColor` auf `--sapBackgroundColor` und auf dem Card-Hintergrund; kein horizontales Scrollen bei 360 px.
+
+### T-30 CR-8: Zeitreise-Overlay
+- `TimeTravelOverlay`: Jahreszahl und Ziel-Theme-Name, `popover="manual"`, `role="status"`; Ablauf laut Tech Spec §6.
+- `selectTheme` mit dem Overlay verbinden: Bei anderem Jahr Overlay → Zählen → Theme-Wechsel → Ausblenden; bei gleichem Jahr direkter Wechsel.
+- **Tests:** E2E – Wechsel von Sunset Coral zu SAP Classic zeigt das Overlay, die Zahl durchläuft Zwischenjahre und endet bei 1992, danach ist das Theme aktiv und das Overlay weg; Light ↔ Dark ohne Overlay; mit `reduced-motion` direkt 1992 ohne Zwischenwerte; Statusmeldung „Travelling to 1992 – SAP Classic“; das Overlay liegt sichtbar über dem Settings-Dialog.
 
 ### T-14 Manuelle Abnahme
 - Production-Build lokal per `npm run preview`.

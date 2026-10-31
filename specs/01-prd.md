@@ -65,14 +65,14 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 **Story:** Als Besucher will ich mich wie in einer echten Fiori-Anwendung fühlen.
 **Akzeptanzkriterien:**
 - ~~AC-06.1 Tile-to-App-Transition~~ – gestrichen (D-8): Es gibt keine Detail-Seiten mehr.
-- AC-06.2 **Header** im Stil des Fiori-Shell-Headers (D-5), immer sichtbar: Logo/Name, Seitentitel „Overview“, Avatar von Dominik, Theme-Umschalter (REQ-09).
+- AC-06.2 **Header** im Stil des Fiori-Shell-Headers (D-5), immer sichtbar: Logo/Name, Seitentitel „Overview“, Avatar von Dominik, ~~Theme-Umschalter (REQ-09)~~ – die Theme-Wahl liegt in den Einstellungen unter dem Avatar (REQ-11). _(präzisiert in CR-8)_
 - ~~AC-06.3 Eigene URL je App~~ – gestrichen (D-8).
 - ~~AC-06.4 Rückwärts-Animation beim Schließen einer App~~ – gestrichen (D-8).
 - AC-06.5 Cards, Links und Header sind per Tastatur bedienbar.
 - ~~AC-06.6 Fiori-Muster innerhalb einer App~~ – gestrichen (D-8).
 - ~~AC-06.7 Zurück-Button~~ – gestrichen (D-8); ersetzt durch AC-06.11.
 - ~~AC-06.8 Footer~~ – gestrichen (D-6): Das Fiori Launchpad hat keinen Footer.
-- AC-06.9 Ein Klick auf den Avatar öffnet ein Benutzermenü wie im Launchpad, mit dem Eintrag **About** (enthält den Hinweis aus AC-07.4).
+- AC-06.9 Ein Klick auf den Avatar öffnet ein Benutzermenü wie im Launchpad, mit den Einträgen **Settings** (öffnet die Einstellungen, AC-11.1) und **About** (enthält den Hinweis aus AC-07.4). _(ergänzt in CR-8)_
 - AC-06.10 Das Benutzermenü enthält statt „Sign Out“ einen Link „Visit GitHub“ zum GitHub-Profil (kein Login, siehe Nicht-Ziele).
 - AC-06.11 Ein Klick auf Logo/Name scrollt zum Seitenanfang.
 
@@ -92,8 +92,8 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 
 ### REQ-09 Dark / Light Mode
 **Akzeptanzkriterien:**
-- AC-09.1 Die Seite folgt dem System-Theme und bietet einen manuellen Umschalter in der ShellBar.
-- AC-09.2 Beide Modi nutzen das eigene Theme aus AC-07.1.
+- AC-09.1 Die Seite folgt dem System-Theme (hell/dunkel), solange das Default-Theme „Sunset Coral (Auto)“ aktiv ist. Manuell gewählt wird Hell oder Dunkel über die Theme-Varianten in **Settings › Appearance** (AC-11.2); einen eigenen Umschalter im Avatar-Menü gibt es nicht mehr (D-15). _(präzisiert in CR-8)_
+- AC-09.2 Beide Modi des Default-Themes nutzen das eigene Akzent-Theme aus AC-07.1. _(präzisiert in CR-8)_
 
 ### REQ-10 Benachrichtigungen (Fiori-Gag)
 **Story:** Als Besucher aus der SAP-Community will ich schmunzeln, weil ich das Fiori-Benachrichtigungsmuster wiedererkenne.
@@ -106,6 +106,21 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-10.3 Beim Öffnen der Liste gelten alle Benachrichtigungen als gelesen; das Badge verschwindet. Der Zustand gilt nur bis zum Neuladen.
 - AC-10.4 Ein Klick auf „New follower request“ öffnet das GitHub-Profil in einem neuen Tab.
 - AC-10.5 Glocke und Liste sind per Tastatur bedienbar; auf schmalen Bildschirmen öffnet sich die Liste als Vollbild-Dialog.
+
+### REQ-11 Theme-Zeitreise (Einstellungen)
+**Story:** Als Besucher aus der SAP-Community will ich durch die SAP-Themes der letzten Jahrzehnte reisen und die Seite im SAP-Look „meiner“ Zeit sehen.
+**Akzeptanzkriterien:**
+- AC-11.1 Der Eintrag **Settings** im Avatar-Menü öffnet den Einstellungsdialog nach Fiori Design Guidelines (UI5 `UserSettingsDialog`) mit dem Bereich **Appearance**. Auf schmalen Bildschirmen öffnet er sich im Vollbild.
+- AC-11.2 Appearance listet die Themes gruppiert und mit dem neuesten zuerst. Neben jedem Theme-Namen steht das Jahr, in dem es bei SAP erstmals erschien (D-15):
+  - **Today:** Sunset Coral (Auto) 2026 · Sunset Coral Light 2026 · Sunset Coral Dark 2026
+  - **SAP Fiori:** SAP Morning Horizon 2022 · SAP Evening Horizon 2022 · SAP Quartz Light 2019 · SAP Quartz Dark 2019 · SAP Belize 2016 · SAP Blue Crystal 2013
+  - **SAP GUI:** SAP Corbu 2012 · SAP Signature 2004 · SAP Enjoy 1999 · SAP Classic 1992
+- AC-11.3 Default ist **Sunset Coral (Auto)**. Es folgt dem System (AC-09.1). Das aktive Theme ist in der Liste ausgewählt.
+- AC-11.4 Ein Klick auf ein Theme wendet es sofort an, ohne Speichern-Button. Die Wahl gilt auch beim nächsten Besuch; ist der Browser-Speicher nicht verfügbar, funktioniert die Auswahl trotzdem.
+- AC-11.5 Horizon und Quartz sind echte UI5-Themes. Belize, Blue Crystal, Corbu, Signature, Enjoy und Classic liefert UI5 nicht mehr mit; sie werden über UI5-CSS-Variablen nachempfunden (Farben, Schrift, Eckenradius). Sie sollen wiedererkennbar sein, müssen aber nicht pixelgenau sein (D-15). In jedem Theme ist Text mit Kontrast nach WCAG AA lesbar.
+- AC-11.6 **Zeitreise:** Wechselt man zu einem Theme mit anderem Jahr, erscheint ein Overlay mit großer Jahreszahl. Sie zählt in rund 1,5 s vom Jahr des bisherigen Themes bis zum Jahr des neuen (z. B. 2026 → 1992) und nennt das Ziel-Theme. Unter dem Overlay wechselt das Theme, dann blendet das Overlay aus. Haben beide Themes dasselbe Jahr (z. B. Light ↔ Dark), wird nur übergeblendet.
+- AC-11.7 Bei `prefers-reduced-motion` wird nicht gezählt: Das Overlay zeigt direkt das Zieljahr und wird nur ein- und ausgeblendet (AC-08.3).
+- AC-11.8 Dialog und Theme-Liste sind per Tastatur bedienbar. Screenreader sagen die Zeitreise als Statusmeldung an (z. B. „Travelling to 1992 – SAP Classic“).
 
 ## 4. Außerhalb des Scopes (v1)
 CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics, Hosting/Deployment.
@@ -127,6 +142,7 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 | D-12 | Welche Skills zeigt die Website? | Nur die SAP-Skills – allgemeine Webtechnologien entfallen; davon anfangs die Top 5 mit „Show all“, damit die Card kompakt bleibt und das Raster ausgewogen ist. (CR-5) |
 | D-13 | Braucht es eine eigene GitHub-Card? | Nein – sie war doppelt zur Contact-Card, in der GitHub als primärer Kanal hervorgehoben ist. Contact wird dafür eine hohe Card. (CR-6) |
 | D-14 | Welche Eye Catcher kommen zuerst? | Zwei kleine: eine augenzwinkernde Fiori-Benachrichtigungsglocke (Insider-Gag für die SAP-Community) und eine „Currently building“-Zeile in der Profil-Card (wirkt aktuell und persönlich). Größere Ideen (Heatmap, Standort-Card) bleiben für später. (CR-7) |
+| D-15 | Wo und wie wählt man das Theme? | Wie im Fiori Launchpad unter **Avatar › Settings › Appearance** statt per Umschalter im Avatar-Menü. Als Eye Catcher reist die Liste mit Jahreszahlen und Zähl-Overlay durch die SAP-Themes von SAP Classic (1992) bis Horizon (2022). Themes, die UI5 nicht mehr mitliefert, werden über CSS-Variablen nachempfunden. Sunset Coral bleibt Default; Hell und Dunkel sind Theme-Varianten. Jahreszahl = erstes Erscheinen bei SAP (UI5/Fiori oder SAP GUI). (CR-8) |
 
 ## 6. Offene Fragen
 _Keine._
@@ -141,3 +157,4 @@ _Keine._
 | CR-5 | 2026-10-30 | Nur SAP-Skills (ohne HTML5, Node.js, JavaScript), anfangs Top 5 mit „Show all“. | AC-03.2, AC-03.7, AC-03.9, D-12 |
 | CR-6 | 2026-10-30 | GitHub-Card entfernt (doppelt zur Contact-Card); Contact wird hoch. | AC-01.2, AC-01.3, AC-01.6, D-9, D-13 |
 | CR-7 | 2026-10-30 | Eye Catcher: Benachrichtigungsglocke in der ShellBar, „Currently building“-Status in der Profil-Card. | AC-01.10, REQ-10, D-14 |
+| CR-8 | 2026-10-31 | Theme-Zeitreise durch die SAP-Themes in Settings › Appearance (Fiori-Einstellungsdialog); Hell/Dunkel-Umschalter wandert dorthin. | AC-06.2, AC-06.9, AC-09.1, AC-09.2, REQ-11, D-15 |
