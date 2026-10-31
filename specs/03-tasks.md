@@ -58,7 +58,7 @@
 | T-46 | CR-18: Erstveröffentlichung und Abnahme der Live-Seite | AC-14.1, AC-14.6 | [x] |
 | T-47 | CR-19: README-Bilder per Script (Screenshot, Zeitreise-GIF) | AC-15.5 | [x] |
 | T-48 | CR-19: README, Lizenz und Repo-Metadaten | AC-15.1–AC-15.4, AC-15.6, AC-15.7 | [x] |
-| T-49 | CR-20: „Buy me a coffee“ in der Contact-Card | AC-05.1, AC-05.3, AC-13.1, AC-13.5 | [ ] |
+| T-49 | CR-20: „Buy me a coffee“ in der Contact-Card | AC-05.1, AC-05.3, AC-13.1, AC-13.5 | [x] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
