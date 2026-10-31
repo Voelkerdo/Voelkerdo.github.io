@@ -47,6 +47,26 @@ test.describe('time travel', () => {
     expect(years).toEqual([...years].sort((a, b) => b - a))
   })
 
+  test('AC-11.6 travelling from SAP Classic to Horizon counts up from 1992 to 2022', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => window.localStorage.setItem('theme', 'classic'))
+    await page.goto('/')
+    await openSettings(page)
+    await recordYears(page)
+    await page.locator('[data-theme-id="horizon-morning"]').click()
+
+    await expect(page.getByTestId('time-travel-year')).toHaveText('2022')
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'horizon-morning')
+    await expect(overlay(page)).toBeHidden()
+
+    const years = (await seenYears(page)).map(Number)
+    expect(years[0]).toBe(1992)
+    expect(years.at(-1)).toBe(2022)
+    expect(years.length).toBeGreaterThan(5)
+    expect(years).toEqual([...years].sort((a, b) => a - b))
+  })
+
   test('AC-11.6 the overlay lies above the settings dialog', async ({ page }) => {
     await page.goto('/')
     await openSettings(page)
