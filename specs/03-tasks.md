@@ -51,6 +51,9 @@
 | T-39 | CR-14: Seitenpunkte und automatischer Seitenwechsel | AC-01.11, AC-02.10, AC-02.11, AC-08.3 | [x] |
 | T-40 | CR-15: Pfeile neben den Seitenpunkten | AC-02.10, AC-02.11 | [x] |
 | T-41 | CR-16: Gleich hohe Seiten und Überblendung in der Projects-Card | AC-02.5, AC-02.9, AC-02.12, AC-08.3 | [x] |
+| T-42 | CR-17: Schrift „72“ selbst hosten | AC-13.1 | [ ] |
+| T-43 | CR-17: CSP, Referrer-Policy und Security-Tests gegen den Build | AC-13.1–AC-13.5, AC-13.7 | [ ] |
+| T-44 | CR-17: `npm run security` und Regel in CLAUDE.md | AC-13.6 | [ ] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details
@@ -241,6 +244,20 @@ Inhalte von Dominik (Abfrage am 2026-10-31), ersetzen die Platzhalter aus D-3 un
 ### T-41 CR-16: Gleich hohe Seiten und Überblendung in der Projects-Card
 - `ProjectsCard`: beide Seiten übereinander rendern laut Tech Spec §6, inaktive Seite `inert`/verborgen, Überblendung per CSS; Header aus der aktiven Seite; „Show all“ auf allen Breiten (`useDesktop` entfällt für Projects).
 - **Tests:** E2E bei 390 px und 1280 px – Card-Höhe vor und nach dem Seitenwechsel gleich (manuell und automatisch); während des Wechsels sind beide Seiten teilweise sichtbar (Opacity zwischen 0 und 1); inaktive Seite `inert`; Reduced Motion ohne Transition; bei 390 px 3 Projekte bzw. 3 Transporte mit „Show all“. Bestehende Tests „alle sichtbar unter 1024 px“ anpassen; AC-01.11 weiterhin grün.
+
+### T-42 CR-17: Schrift „72“ selbst hosten
+- `@sap-theming/theming-base-content` als feste Abhängigkeit (Version wie von UI5 verwendet); Vite-Alias `@sap-fonts`.
+- `styles/fonts.css` aus UI5s `FontFace.css` ableiten; `setDefaultFontLoading(false)` in `main.tsx`.
+- **Tests:** E2E (Dev-Server) – keine Requests an `cdn.jsdelivr.net`, die Schrift „72“ ist geladen (`document.fonts.check('16px "72"')`); Optik unverändert (Screenshot-Check).
+
+### T-43 CR-17: CSP, Referrer-Policy und Security-Tests gegen den Build
+- Vite-Plugin für die Meta-Tags (nur Build, TD-17).
+- Playwright-Projekt `security` laut TD-18 mit den Tests aus Tech Spec §9; `verify` führt beide Projekte aus.
+- **Tests:** wie in Tech Spec §9 beschrieben; jeder Test nennt sein AC-13.x.
+
+### T-44 CR-17: `npm run security` und Regel in CLAUDE.md
+- Script `security` = `npm audit --audit-level=low && npm audit signatures`.
+- CLAUDE.md: Change-Request-Ablauf und Regeln um „`npm run security` bei jedem CR und vor jedem Deployment“ ergänzen; Befunde führen zu einem eigenen CR bzw. Fix.
 
 ### T-14 Manuelle Abnahme
 - Production-Build lokal per `npm run preview`.

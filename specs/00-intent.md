@@ -43,3 +43,4 @@ Nebenziel: Das Projekt dient als Testfeld für den Spec-Driven-Development-Workf
 - **Sprache der Website:** Englisch.
 - **Hosting:** ~~offen – vorerst nur lokale Entwicklung. Entscheidung später.~~ **GitHub Pages** (Repo `Voelkerdo/Voelkerdo.github.io`). Das Deployment selbst folgt in einem eigenen Change Request. _(entschieden in CR-12)_
 - **Termin:** keiner.
+- **Sicherheit & Datenschutz:** Die Seite lädt nichts von Drittanbietern und wird bei jedem Change und vor jedem Deployment auf Schwachstellen geprüft. _(ergänzt in CR-17)_

@@ -11,6 +11,7 @@
 | UI-Komponenten | `@ui5/webcomponents-react` (inkl. `@ui5/webcomponents`, `-fiori`, `-icons`) | 2.28.x |
 | Theme | SAP Horizon (`sap_horizon` / `sap_horizon_dark`) + eigene Akzentfarben (Default); SAP Quartz (`sap_fiori_3` / `sap_fiori_3_dark`); nachempfundene Themes auf Basis `sap_fiori_3` (TD-13, CR-8) | – |
 | Animationen | Motion (`motion/react`) | 14.x |
+| Schrift „72“ | `@sap-theming/theming-base-content` (selbst gehostet, CR-17) | 11.x |
 | ~~Routing~~ | ~~React Router~~ – entfällt (TD-11, CR-1) | – |
 | Unit-/Komponententests | Vitest + Testing Library (jsdom) | 5.x / 16.x |
 | E2E-Tests | Playwright (Chromium) | 1.x |
@@ -213,7 +214,14 @@ Nach **jeder** Quellcode-Änderung wird in `assets/` ausgeführt:
 1. `typecheck` – `tsc --noEmit`
 2. `lint` – Oxlint + Prettier-Check
 3. `test` – Vitest (einmaliger Lauf)
-4. `e2e` – Playwright gegen den Vite-Dev-Server
+4. `e2e` – Playwright gegen den Vite-Dev-Server, dazu das Projekt **`security`** gegen einen Production-Build per `vite preview` (TD-18)
+
+Zusätzlich bei **jedem Change Request und vor jedem Deployment**: `npm run security` (`npm audit` + `npm audit signatures`, braucht Netzwerk und ist deshalb nicht Teil von `verify`) (AC-13.6).
+
+**Sicherheit & Datenschutz (REQ-13):**
+- **Fonts:** UI5 lädt die Schrift „72“ standardmäßig von `cdn.jsdelivr.net`. `main.tsx` schaltet das mit `setDefaultFontLoading(false)` ab. `styles/fonts.css` enthält dieselben `@font-face`-Regeln wie UI5 (`FontFace.css` aus `@ui5/webcomponents-base`), zeigt aber auf die Dateien aus `@sap-theming/theming-base-content` in der von UI5 verwendeten Version (Vite-Alias `@sap-fonts`). Vite bündelt die Fonts in den Build. Bei UI5-Updates muss `fonts.css` mitgezogen werden; der Test „keine Requests an Dritte“ fällt sonst auf (AC-13.1).
+- **CSP und Referrer-Policy:** Ein kleines Vite-Plugin fügt beide Meta-Tags per `transformIndexHtml` **nur im Build** ein. Der Dev-Server braucht für React Fast Refresh ein Inline-Skript (TD-17).
+- **Security-Tests (`tests/security/*.spec.ts`)** gegen den Production-Build: keine Requests an fremde Hosts bei einem Rundgang durch Seite, Settings und Theme-Wechsel; Meta-Tags vorhanden und keine `securitypolicyviolation`-Events; XSS-Payload in `localStorage`, Query und Hash wird nicht ausgeführt; alle `_blank`-Ziele ohne `window.opener`; keine `.map`-Dateien im Build (AC-13.1–13.5, AC-13.7).
 
 Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 
@@ -233,6 +241,8 @@ Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 | REQ-09 Dark/Light Mode | 7 | Unit + E2E |
 | REQ-10 Benachrichtigungen | 5 | Unit + E2E |
 | REQ-11 Theme-Zeitreise | 4, 5, 6, 7 | Unit + E2E + manuell (Optik der Nachbauten) |
+| REQ-12 Systeminformationen | 4, 5 | Unit + E2E |
+| REQ-13 Sicherheit & Datenschutz | 9 | E2E gegen Production-Build + `npm run security` |
 
 ## 11. Technische Entscheidungen
 | ID | Thema | Entscheidung | Begründung |
@@ -253,6 +263,8 @@ Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 | TD-14 | Overlay über UI5-Dialogen | Overlay als `popover="manual"` im Browser-Top-Layer | UI5-Dialoge liegen im Top Layer; mit `z-index` kommt man nicht darüber (CR-8) |
 | TD-15 | Versionen in Settings › System | Zur Build-Zeit aus `node_modules` per Vite-`define` statt von Hand gepflegt | Stimmen nach jedem Update automatisch; keine zusätzliche Abhängigkeit (CR-12) |
 | TD-16 | Daten für das Transport Log | Zur Build-Zeit per Vite-`define` (`__TRANSPORT_LOG__`): `git log` der Commits `docs(cr-N): …` (Text, Datum); ein späterer `feat`/`fix`-Commit, der `CR-N` oder eine D-/TD-ID aus dem Spec-Commit nennt, setzt den Status auf „Imported“ (REQ-IDs zählen nicht, sie kommen in zu vielen Commits vor) _(präzisiert in T-37)_; erster Commit = DVK900001. Kennzahlen: CRs = Anzahl `docs(cr-N)`-Commits, Tasks = Zeilen mit `[x]` in der Übersicht von `specs/03-tasks.md`, Tests = Vorkommen von `it(`/`test(` in `tests/`, Commits = `git rev-list --count HEAD`. Ohne Git: leere Liste, Kennzahlen 0. | Keine Pflege, keine Abhängigkeit; gleiche Technik wie TD-15. Der Build braucht die volle Git-History (beim Deployment `fetch-depth: 0`). (CR-13) |
+| TD-17 | CSP-Auslieferung | `<meta http-equiv="Content-Security-Policy">` per Vite-Plugin nur im Build | GitHub Pages erlaubt keine HTTP-Header; der Dev-Server braucht ein Inline-Skript für Fast Refresh (CR-17) |
+| TD-18 | Security-Tests | Zweites Playwright-Projekt `security` mit eigenem `webServer` (`vite build` in einen Temp-Ordner, dann `vite preview` auf eigenem Port) | Nur der echte Build zeigt CSP, gebündelte Fonts und fehlende Sourcemaps (CR-17) |
 
 ## 12. Offene Fragen
 _Keine._

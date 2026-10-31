@@ -153,6 +153,17 @@ Eine englischsprachige Portfolio-Website für Dominik Völker, Fullstack-Entwick
 - AC-12.3 Die Angaben sind per Tastatur erreichbar. Auf schmalen Bildschirmen verhält sich System wie Appearance (Vollbild, erst die Kategorienliste).
 - AC-12.4 Der About-Dialog im Avatar-Menü bleibt unverändert (AC-06.9, AC-07.4): About ist der kurze Hinweis für alle, System sind die technischen Details (D-19).
 
+### REQ-13 Sicherheit & Datenschutz
+**Story:** Als Besucher will ich die Seite ansehen, ohne dass meine Daten an Dritte gehen oder ich durch Schwachstellen gefährdet bin. Als Dominik will ich, dass das bei jedem Change automatisch geprüft wird.
+**Akzeptanzkriterien:**
+- AC-13.1 Beim Besuch der Seite gehen **keine Requests an Drittanbieter**; alle Ressourcen inklusive der SAP-Schrift „72“ kommen von der eigenen Domain. Externe Ziele werden nur über Links erreicht, die der Besucher selbst anklickt.
+- AC-13.2 Der Production-Build enthält eine **Content Security Policy** als Meta-Tag: `default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'`. Unter dieser CSP funktioniert die Seite vollständig, ohne CSP-Verstöße.
+- AC-13.3 Der Production-Build enthält die **Referrer-Policy** `strict-origin-when-cross-origin` als Meta-Tag.
+- AC-13.4 Werte von außen (Browser-Speicher, URL-Parameter, URL-Hash) werden nie als HTML oder Code ausgeführt. Ungültige Werte führen zum Default, z. B. das Theme zu „Sunset Coral (Auto)“.
+- AC-13.5 Alle Links und Buttons, die einen neuen Tab öffnen, verhindern den Zugriff auf die Seite (`noopener`, `noreferrer`).
+- AC-13.6 Die Abhängigkeiten haben **keine bekannten Schwachstellen** (`npm audit`) und gültige Registry-Signaturen (`npm audit signatures`). Geprüft wird bei jedem Change Request und vor jedem Deployment.
+- AC-13.7 Der Production-Build enthält **keine Sourcemaps** und keine Geheimnisse.
+
 ## 4. Außerhalb des Scopes (v1)
 CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics, ~~Hosting/~~Deployment. _(Hoster festgelegt in CR-12: GitHub Pages; das Deployment folgt in einem eigenen CR.)_
 
@@ -182,6 +193,7 @@ CMS, Backend, Login, Mehrsprachigkeit (siehe Intent). Außerdem: Blog, Analytics
 | D-21 | Wie wechselt die Projects-Card ihre Seiten? | Automatisch alle 8 Sekunden, angezeigt durch zwei Seitenpunkte unten statt Buttons mit Text – die Card wirkt lebendig, und Besucher sehen beide Seiten, ohne etwas zu suchen. Damit sich niemand gehetzt fühlt, pausiert der Wechsel bei Hover/Fokus und endet, sobald jemand selbst wählt oder eine Liste aufklappt; bei Reduced Motion gibt es ihn nicht (WCAG 2.2.2). (CR-14) |
 | D-22 | Wie wird klarer, dass die Projects-Card eine zweite Seite hat? | Pfeile ‹ › links und rechts der Seitenpunkte, wie beim UI5-`Carousel` mit `arrowsPlacement="Navigation"`: eindeutig klickbar, größeres Ziel als die Punkte, Fiori-konform. Am Rand deaktiviert statt endlos, damit die Pfeile zusätzlich zeigen, auf welcher Seite man ist. (CR-15) |
 | D-23 | Wie bleibt die Projects-Card beim Seitenwechsel ruhig? | Beide Seiten liegen übereinander im selben Bereich, die Card ist so hoch wie die höhere – ohne Messen. Damit die Repositories-Seite dabei nicht leer wirkt, zeigen beide Listen auch auf schmalen Bildschirmen anfangs 3 Einträge mit „Show all“. Die alte Seite blendet aus, die neue ein, statt hart zu wechseln. (CR-16) |
+| D-24 | Wie wird die Seite geschützt, und welche Restrisiken akzeptieren wir? | Fonts selbst hosten, weil die Weitergabe der IP-Adresse an ein CDN datenschutzrechtlich heikel ist (vgl. LG München, Google Fonts, 2022). Eine strenge CSP per Meta-Tag entschärft künftige XSS-Fehler, weil GitHub Pages keine eigenen HTTP-Header erlaubt. Security-Tests laufen in `npm run verify` gegen einen echten Production-Build, `npm audit` bei jedem CR. **Akzeptiertes Restrisiko:** Die Seite lässt sich in fremde iframes einbetten (Clickjacking), denn `frame-ancestors` geht nicht per Meta-Tag. Ohne Login und ohne Formulare gibt es aber nichts, was sich so missbrauchen ließe. (CR-17) |
 
 ## 6. Offene Fragen
 _Keine._
@@ -205,3 +217,4 @@ _Keine._
 | CR-14 | 2026-10-31 | Projects-Card wechselt ihre Seiten automatisch alle 8 s; Seitenpunkte unten statt Segmented Button. | AC-01.3, AC-02.6, AC-02.10, AC-02.11, D-20, D-21 |
 | CR-15 | 2026-10-31 | Pfeile ‹ › neben den Seitenpunkten der Projects-Card, am Rand deaktiviert. | AC-02.10, AC-02.11, D-22 |
 | CR-16 | 2026-10-31 | Projects-Card: gleiche Höhe beider Seiten und echte Überblendung, auch auf dem Smartphone; Listen dort ebenfalls 3 + „Show all“. | AC-02.5, AC-02.9, AC-02.12, D-17, D-23 |
+| CR-17 | 2026-10-31 | Sicherheit & Datenschutz nach Security-Check: Fonts selbst gehostet, CSP und Referrer-Policy, Security-Tests in verify, `npm run security` bei jedem CR. | Intent (Leitplanken), REQ-13, D-24 |
