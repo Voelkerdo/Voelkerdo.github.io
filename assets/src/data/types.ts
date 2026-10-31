@@ -42,6 +42,8 @@ export interface ContactChannel {
   /** UI5 icon name */
   icon: string
   primary?: boolean
+  /** Shown instead of the URL, e.g. for long profile URLs */
+  description?: string
 }
 
 /** Card size in the bento grid (AC-01.6) */

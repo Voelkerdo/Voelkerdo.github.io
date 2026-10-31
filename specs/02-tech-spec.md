@@ -97,7 +97,7 @@ interface Project  { id: string; name: string; description: string; technologies
 type SkillLevel = 'Expert' | 'Advanced' | 'Intermediate' | 'Familiar'
 interface Skill { name: string; level: SkillLevel }
 interface CareerStation { id: string; from: string; to?: string; role: string; company: string; highlights: string[] }
-interface ContactChannel { id: string; label: string; url: string; icon: string; primary?: boolean }
+interface ContactChannel { id: string; label: string; url: string; icon: string; primary?: boolean; description?: string }
 type CardSize = 'large' | 'wide' | 'tall'
 interface CardDef { id: string; title: string; subtitle?: string; icon: string; kpi?: string; size: CardSize }
 type ThemeGroup = 'Today' | 'SAP Fiori' | 'SAP GUI'
@@ -106,6 +106,7 @@ type ThemeId = 'sunset-coral-auto' | 'sunset-coral-light' | 'sunset-coral-dark' 
 interface ThemeDef { id: ThemeId; name: string; year: number; group: ThemeGroup; ui5Theme?: string; emulated?: boolean }
 ```
 - `themes.ts` enthält die 13 Themes aus AC-11.2 in Anzeigereihenfolge. `ui5Theme` ist das UI5-Basis-Theme; bei `sunset-coral-auto` entfällt es, weil es aus dem System-Modus folgt. `DEFAULT_THEME = 'sunset-coral-auto'` (AC-11.3).
+- `ContactChannel.description` ersetzt in der Contact-Card die angezeigte URL, z. B. „Dominik Völker“ statt der langen LinkedIn-Adresse. Ohne `description` wird die URL ohne Protokoll gezeigt. _(ergänzt nach T-31)_
 - Platzhalter-Inhalte (REQ-02/04/05) sind mit `// TODO(content): …` markiert, damit sie per Suche auffindbar sind.
 - Die Balkenlänge je Stufe (AC-03.5) ist eine Konstante `LEVEL_PERCENT` in `data/skills.ts` (Expert 100, Advanced 75, Intermediate 50, Familiar 25).
 - `VISIBLE_PROJECTS = 3` in `data/projects.ts` legt fest, wie viele Projekte auf dem Desktop anfangs sichtbar sind (AC-02.5).

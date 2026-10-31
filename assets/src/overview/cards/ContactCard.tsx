@@ -7,7 +7,7 @@ import type { ContactChannel } from '../../data/types.ts'
 
 /** Readable form of a channel URL, e.g. "github.com/Voelkerdo" */
 function displayUrl(url: string): string {
-  return decodeURI(url)
+  return url
     .replace(/^mailto:/, '')
     .replace(/^https?:\/\/(www\.)?/, '')
     .replace(/\/$/, '')
@@ -33,7 +33,7 @@ export function ContactCard() {
           type="Active"
           icon={channel.icon}
           text={channel.label}
-          description={displayUrl(channel.url)}
+          description={channel.description ?? displayUrl(channel.url)}
           additionalText={channel.primary ? 'Follow me' : undefined}
           onClick={() => openChannel(channel)}
         />

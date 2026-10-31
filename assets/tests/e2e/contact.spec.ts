@@ -35,7 +35,7 @@ test.describe('contact card', () => {
       {
         id: 'linkedin',
         text: 'LinkedIn',
-        description: 'linkedin.com/in/dominik-völker-01714422b',
+        description: 'Dominik Völker',
         primary: false,
         badge: null,
       },
