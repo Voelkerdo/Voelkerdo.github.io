@@ -1,5 +1,17 @@
-import { Button, Icon, Link, List, ListItemCustom, Tag, Text } from '@ui5/webcomponents-react'
+import {
+  Button,
+  type ButtonDomRef,
+  Icon,
+  Link,
+  List,
+  ListItemCustom,
+  Tag,
+  Text,
+} from '@ui5/webcomponents-react'
 import '@ui5/webcomponents-icons/dist/shipping-status.js'
+import '@ui5/webcomponents-icons/dist/slim-arrow-left.js'
+import '@ui5/webcomponents-icons/dist/slim-arrow-right.js'
+import { renderFinished } from '@ui5/webcomponents-base/dist/Render.js'
 import { motion, useReducedMotion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { projects, VISIBLE_PROJECTS } from '../../data/projects.ts'
@@ -202,11 +214,34 @@ function useRotationPaused(ref: React.RefObject<HTMLElement | null>): boolean {
 export function ProjectsCard() {
   const reduceMotion = useReducedMotion() ?? false
   const rootRef = useRef<HTMLDivElement>(null)
+  const prevRef = useRef<ButtonDomRef>(null)
+  const nextRef = useRef<ButtonDomRef>(null)
   const [view, setView] = useState<View>('repositories')
   // Choosing a page or expanding a list ends the rotation until reload (AC-02.11)
   const [stopped, setStopped] = useState(false)
   const paused = useRotationPaused(rootRef)
   const stop = () => setStopped(true)
+  const pageIndex = PAGES.findIndex((page) => page.view === view)
+  const isFirst = pageIndex === 0
+  const isLast = pageIndex === PAGES.length - 1
+
+  // Choosing a page by dot or arrow ends the rotation (AC-02.11)
+  const choose = (target: View) => {
+    setView(target)
+    stop()
+  }
+
+  // The arrow that gets disabled at the end loses the focus: hand it to the other arrow once
+  // React and UI5 have rendered the new page (AC-02.10)
+  const step = (direction: 1 | -1) => {
+    const target = pageIndex + direction
+    const [arrow, other] = direction === 1 ? [nextRef, prevRef] : [prevRef, nextRef]
+    const reachesEnd = target === 0 || target === PAGES.length - 1
+    if (reachesEnd && arrow.current?.matches(':focus-within')) {
+      setTimeout(() => void renderFinished().then(() => other.current?.focus()))
+    }
+    choose(PAGES[target].view)
+  }
 
   // Restarts on every page change and after every pause, so each page shows a full 8 s
   useEffect(() => {
@@ -235,6 +270,17 @@ export function ProjectsCard() {
       </motion.div>
       {/* Page dots at the bottom of the card; the active page is filled (AC-02.10) */}
       <div className="page-dots" role="group" aria-label="Project pages" data-testid="page-dots">
+        <Button
+          ref={prevRef}
+          design="Transparent"
+          icon="slim-arrow-left"
+          accessibleName="Previous page"
+          tooltip="Previous page"
+          className="page-arrow"
+          data-testid="page-prev"
+          disabled={isFirst}
+          onClick={() => step(-1)}
+        />
         {PAGES.map((page) => (
           <button
             key={page.view}
@@ -243,12 +289,20 @@ export function ProjectsCard() {
             data-page={page.view}
             aria-label={page.label}
             aria-current={page.view === view ? 'true' : undefined}
-            onClick={() => {
-              setView(page.view)
-              stop()
-            }}
+            onClick={() => choose(page.view)}
           />
         ))}
+        <Button
+          ref={nextRef}
+          design="Transparent"
+          icon="slim-arrow-right"
+          accessibleName="Next page"
+          tooltip="Next page"
+          className="page-arrow"
+          data-testid="page-next"
+          disabled={isLast}
+          onClick={() => step(1)}
+        />
       </div>
     </div>
   )

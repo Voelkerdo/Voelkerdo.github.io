@@ -145,11 +145,47 @@ test.describe('projects card views', () => {
     })
   }
 
+  test('AC-02.10 arrows page back and forth and are disabled at the ends', async ({ page }) => {
+    const prev = page.getByTestId('page-prev')
+    const next = page.getByTestId('page-next')
+    await page.goto('/')
+    await expect(prev).toHaveAttribute('accessible-name', 'Previous page')
+    await expect(next).toHaveAttribute('accessible-name', 'Next page')
+    await expect(prev).toHaveAttribute('disabled')
+    await expect(next).not.toHaveAttribute('disabled')
+
+    await next.click()
+    await expect(page.getByTestId('build-stats')).toBeVisible()
+    await expect(dot(page, 'transports')).toHaveAttribute('aria-current', 'true')
+    await expect(next).toHaveAttribute('disabled')
+    await expect(prev).not.toHaveAttribute('disabled')
+
+    await prev.click()
+    await expect(card(page).locator('[data-project-id]').first()).toBeVisible()
+    await expect(prev).toHaveAttribute('disabled')
+  })
+
+  test('AC-02.10 with the keyboard the focus moves to the other arrow at the end', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    await page.getByTestId('page-next').focus()
+    await page.keyboard.press('Enter')
+    await expect(page.getByTestId('build-stats')).toBeVisible()
+    // The disabled › handed the focus to ‹
+    await expect(page.getByTestId('page-prev')).toBeFocused()
+    await page.keyboard.press('Enter')
+    await expect(card(page).locator('[data-project-id]').first()).toBeVisible()
+    await expect(page.getByTestId('page-next')).toBeFocused()
+  })
+
   test.describe('automatic page change', () => {
     const activePage = (page: Page) =>
       card(page).locator('[data-active-view]').getAttribute('data-active-view')
     const ready = async (page: Page) => {
-      await page.clock.install()
+      // Paused clock: only runFor() moves time, so a busy machine cannot change the page early
+      await page.clock.install({ time: new Date('2026-10-31T12:00:00') })
+      await page.clock.pauseAt(new Date('2026-10-31T12:00:01'))
       await page.goto('/')
       await expect(dot(page, 'repositories')).toHaveAttribute('aria-current', 'true')
       // Keep the pointer away from the card
@@ -191,6 +227,14 @@ test.describe('projects card views', () => {
       await dot(page, 'transports').click()
       await page.mouse.move(0, 0)
       // Clicking focuses the dot; move the focus out of the card
+      await page.locator('body').click({ position: { x: 5, y: 5 } })
+      await page.clock.runFor(30_000)
+      expect(await activePage(page)).toBe('transports')
+    })
+
+    test('AC-02.11 an arrow click stops the rotation', async ({ page }) => {
+      await ready(page)
+      await page.getByTestId('page-next').click()
       await page.locator('body').click({ position: { x: 5, y: 5 } })
       await page.clock.runFor(30_000)
       expect(await activePage(page)).toBe('transports')

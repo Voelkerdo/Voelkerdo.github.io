@@ -350,10 +350,16 @@ body {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0.625rem;
+  bottom: 0.25rem;
   display: flex;
+  align-items: center;
   justify-content: center;
   gap: 0.25rem;
+}
+
+/* Previous / next page next to the dots, like the UI5 Carousel navigation (AC-02.10, D-22) */
+.page-arrow {
+  color: var(--accent-1);
 }
 
 .page-dot {
