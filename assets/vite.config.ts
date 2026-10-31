@@ -71,6 +71,63 @@ export const CONTENT_SECURITY_POLICY = [
   "form-action 'none'",
 ].join('; ')
 
+// Preloads the regular "72" font, so text switches to it early on phones (AC-08.2)
+function preloadMainFont(): Plugin {
+  return {
+    name: 'preload-main-font',
+    apply: 'build',
+    transformIndexHtml: {
+      order: 'post',
+      handler: (_html, ctx) => {
+        const font = Object.keys(ctx.bundle ?? {}).find((file) =>
+          /\/72-Regular-(?!full)[\w-]+\.woff2$/.test(file),
+        )
+        if (!font) return []
+        return [
+          {
+            tag: 'link',
+            attrs: {
+              rel: 'preload',
+              href: `./${font}`,
+              as: 'font',
+              type: 'font/woff2',
+              crossorigin: '',
+            },
+            injectTo: 'head',
+          },
+        ]
+      },
+    },
+  }
+}
+
+// UI5 loads the theme parameters in a chain of requests before it renders; preloading those of
+// the default theme lets them load in parallel with the app (AC-08.2)
+function preloadDefaultTheme(): Plugin {
+  return {
+    name: 'preload-default-theme',
+    apply: 'build',
+    transformIndexHtml: {
+      order: 'post',
+      handler: (_html, ctx) =>
+        Object.values(ctx.bundle ?? {})
+          .filter(
+            (chunk) =>
+              chunk.type === 'chunk' &&
+              chunk.isDynamicEntry &&
+              chunk.moduleIds.some((id) =>
+                /\/themes\/sap_horizon\/parameters-bundle\.css/.test(id),
+              ),
+          )
+          .map((chunk) => ({
+            tag: 'link',
+            attrs: { rel: 'modulepreload', href: `./${chunk.fileName}`, crossorigin: '' },
+            injectTo: 'head' as const,
+          })),
+    },
+  }
+}
+
 function securityMetaTags(): Plugin {
   return {
     name: 'security-meta-tags',
@@ -108,5 +165,5 @@ export default defineConfig({
     __SYSTEM_INFO__: JSON.stringify(systemInfo),
     __TRANSPORT_LOG__: JSON.stringify(transportLog),
   },
-  plugins: [react(), securityMetaTags()],
+  plugins: [react(), securityMetaTags(), preloadMainFont(), preloadDefaultTheme()],
 })

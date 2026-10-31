@@ -3,8 +3,10 @@
  * Same @font-face rules as FontFace.css of @ui5/webcomponents-base, with the files from
  * @sap-theming/theming-base-content 11.36.4 (alias @sap-fonts in vite.config.ts).
  * Update together with UI5; the security tests fail if UI5 loads fonts from a CDN again.
+ * font-display: swap (added): text shows right away in a fallback font (AC-08.2).
  */
 @font-face {
+  font-display: swap;
   font-family: '72';
   font-style: normal;
   font-weight: 400;
@@ -17,12 +19,14 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72full';
   font-style: normal;
   font-weight: 400;
   src: url(@sap-fonts/72-Regular-full.woff2) format('woff2');
 }
 @font-face {
+  font-display: swap;
   font-family: '72-Bold';
   src:
     url(@sap-fonts/72-Bold.woff2) format('woff2'),
@@ -33,6 +37,7 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72';
   font-style: normal;
   font-weight: 700;
@@ -45,16 +50,19 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72-Boldfull';
   src: url(@sap-fonts/72-Bold-full.woff2) format('woff2');
 }
 @font-face {
+  font-display: swap;
   font-family: '72full';
   font-style: normal;
   font-weight: 700;
   src: url(@sap-fonts/72-Bold-full.woff2) format('woff2');
 }
 @font-face {
+  font-display: swap;
   font-family: '72-Semibold';
   src:
     url(@sap-fonts/72-Semibold.woff2) format('woff2'),
@@ -65,6 +73,7 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72';
   font-style: normal;
   font-weight: 600;
@@ -77,16 +86,19 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72-Semiboldfull';
   src: url(@sap-fonts/72-Semibold-full.woff2) format('woff2');
 }
 @font-face {
+  font-display: swap;
   font-family: '72full';
   font-style: normal;
   font-weight: 600;
   src: url(@sap-fonts/72-Semibold-full.woff2) format('woff2');
 }
 @font-face {
+  font-display: swap;
   font-family: '72-SemiboldDuplex';
   src:
     url(@sap-fonts/72-SemiboldDuplex.woff2) format('woff2'),
@@ -97,10 +109,12 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72-SemiboldDuplexfull';
   src: url(@sap-fonts/72-SemiboldDuplex-full.woff2) format('woff2');
 }
 @font-face {
+  font-display: swap;
   font-family: '72-Light';
   src:
     url(@sap-fonts/72-Light.woff2) format('woff2'),
@@ -111,6 +125,7 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72';
   font-style: normal;
   font-weight: 300;
@@ -123,16 +138,19 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72-Lightfull';
   src: url(@sap-fonts/72-Light-full.woff2) format('woff2');
 }
 @font-face {
+  font-display: swap;
   font-family: '72full';
   font-style: normal;
   font-weight: 300;
   src: url(@sap-fonts/72-Light-full.woff2) format('woff2');
 }
 @font-face {
+  font-display: swap;
   font-family: '72Black';
   src:
     url(@sap-fonts/72-Black.woff2) format('woff2'),
@@ -143,6 +161,7 @@
     U+2026, U+2030, U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72';
   font-style: normal;
   font-weight: 900;
@@ -155,16 +174,19 @@
     U+2026, U+2030, U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72Blackfull';
   src: url(@sap-fonts/72-Black-full.woff2) format('woff2');
 }
 @font-face {
+  font-display: swap;
   font-family: '72full';
   font-style: normal;
   font-weight: 900;
   src: url(@sap-fonts/72-Black-full.woff2) format('woff2');
 }
 @font-face {
+  font-display: swap;
   font-family: '72-BoldItalic';
   src:
     url(@sap-fonts/72-BoldItalic.woff2) format('woff2'),
@@ -175,6 +197,7 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72';
   font-style: italic;
   font-weight: 700;
@@ -187,12 +210,14 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72full';
   font-style: italic;
   font-weight: 700;
   src: url(@sap-fonts/72-BoldItalic-full.woff2) format('woff2');
 }
 @font-face {
+  font-display: swap;
   font-family: '72-Condensed';
   src:
     url(@sap-fonts/72-Condensed.woff2) format('woff2'),
@@ -203,6 +228,7 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72';
   font-style: normal;
   font-weight: 400;
@@ -216,6 +242,7 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72';
   font-style: normal;
   font-weight: 400;
@@ -227,6 +254,7 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72-CondensedBold';
   src:
     url(@sap-fonts/72-CondensedBold.woff2) format('woff2'),
@@ -237,6 +265,7 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72';
   font-style: normal;
   font-weight: 700;
@@ -250,6 +279,7 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72full';
   font-style: normal;
   font-weight: 700;
@@ -257,6 +287,7 @@
   src: url(@sap-fonts/72-CondensedBold-full.woff2) format('woff2');
 }
 @font-face {
+  font-display: swap;
   font-family: '72-Italic';
   src:
     url(@sap-fonts/72-Italic.woff2) format('woff2'),
@@ -267,6 +298,7 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72';
   font-style: italic;
   font-weight: 400;
@@ -279,12 +311,14 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72full';
   font-style: italic;
   font-weight: 400;
   src: url(@sap-fonts/72-Italic-full.woff2) format('woff2');
 }
 @font-face {
+  font-display: swap;
   font-family: '72Mono';
   src:
     url(@sap-fonts/72Mono-Regular.woff2) format('woff2'),
@@ -295,10 +329,12 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72Monofull';
   src: url(@sap-fonts/72Mono-Regular-full.woff2) format('woff2');
 }
 @font-face {
+  font-display: swap;
   font-family: '72Mono-Bold';
   src:
     url(@sap-fonts/72Mono-Bold.woff2) format('woff2'),
@@ -309,6 +345,7 @@
     U+2039-203A, U+2044, U+20AC, U+2122;
 }
 @font-face {
+  font-display: swap;
   font-family: '72Mono-Boldfull';
   src: url(@sap-fonts/72Mono-Bold-full.woff2) format('woff2');
 }

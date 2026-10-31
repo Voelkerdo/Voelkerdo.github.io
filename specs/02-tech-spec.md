@@ -219,13 +219,22 @@ Nach **jeder** Quellcode-Änderung wird in `assets/` ausgeführt:
 Zusätzlich bei **jedem Change Request und vor jedem Deployment**: `npm run security` (`npm audit` + `npm audit signatures`, braucht Netzwerk und ist deshalb nicht Teil von `verify`) (AC-13.6).
 
 **Sicherheit & Datenschutz (REQ-13):**
-- **Fonts:** UI5 lädt die Schrift „72“ standardmäßig von `cdn.jsdelivr.net`. `main.tsx` schaltet das mit `setDefaultFontLoading(false)` ab. `styles/fonts.css` enthält dieselben `@font-face`-Regeln wie UI5 (`FontFace.css` aus `@ui5/webcomponents-base`), zeigt aber auf die Dateien aus `@sap-theming/theming-base-content` in der von UI5 verwendeten Version (Vite-Alias `@sap-fonts`). Vite bündelt die Fonts in den Build. Bei UI5-Updates muss `fonts.css` mitgezogen werden; der Test „keine Requests an Dritte“ fällt sonst auf (AC-13.1).
+- **Fonts:** UI5 lädt die Schrift „72“ standardmäßig von `cdn.jsdelivr.net`. `main.tsx` schaltet das mit `setDefaultFontLoading(false)` ab. `styles/fonts.css` enthält dieselben `@font-face`-Regeln wie UI5 (`FontFace.css` aus `@ui5/webcomponents-base`), zeigt aber auf die Dateien aus `@sap-theming/theming-base-content` in der von UI5 verwendeten Version (Vite-Alias `@sap-fonts`). Vite bündelt die Fonts in den Build. Bei UI5-Updates muss `fonts.css` mitgezogen werden; der Test „keine Requests an Dritte“ fällt sonst auf (AC-13.1). Alle Regeln haben `font-display: swap`; die Regular-Schrift wird per `<link rel="preload">` vorgeladen (Vite-Plugin, nur Build). _(ergänzt in T-46)_
 - **CSP und Referrer-Policy:** Ein kleines Vite-Plugin fügt beide Meta-Tags per `transformIndexHtml` **nur im Build** ein. Der Dev-Server braucht für React Fast Refresh ein Inline-Skript (TD-17).
 - **Security-Tests (`tests/security/*.spec.ts`)** gegen den Production-Build: keine Requests an fremde Hosts bei einem Rundgang durch Seite, Settings und Theme-Wechsel; Meta-Tags vorhanden und keine `securitypolicyviolation`-Events; XSS-Payload in `localStorage`, Query und Hash wird nicht ausgeführt; alle `_blank`-Ziele ohne `window.opener`; keine `.map`-Dateien im Build (AC-13.1–13.5, AC-13.7).
 
 Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 
 **Isolierter Vite-Cache:** Der E2E-Server von Playwright nutzt einen eigenen Dependency-Cache (`node_modules/.vite-e2e`, über `VITE_CACHE_DIR`). So überschreibt ein Testlauf nie den Cache eines parallel laufenden `npm run dev` (sonst Fehler „504 Outdated Optimize Dep“ und weiße Seite). Erkannt nach T-16.
+
+## 9b. Ladezeit auf Mobilgeräten (AC-08.2) _(ergänzt in T-46)_
+Nach der Erstveröffentlichung lag Lighthouse mobil bei 77–81. Umgesetzt:
+- **Nachladen bei Bedarf** (`React.lazy`, erst beim ersten Öffnen gemountet): Benutzermenü (`shell/AvatarMenu.tsx`), Settings mit Zeitreise-Overlay, Benachrichtigungen, About.
+- **Motion schlank:** `LazyMotion` mit `domAnimation` und `m.div` statt `motion.div`.
+- **Fonts:** `font-display: swap`, Preload der Regular-Schrift; das „✓“ im Transport Log ist ein UI5-Icon (`accept`), weil das Zeichen sonst die 57 KB große „72full“ nachlädt.
+- **Theme-Parameter vorladen:** Die nachgeladenen Parameter-Chunks des Default-Themes `sap_horizon` bekommen `<link rel="modulepreload">` (Vite-Plugin, nur Build), statt in einer Kette nacheinander zu laden.
+- **Sprache:** UI5 fest auf Englisch (TD-21); spart zugleich die Sprachpakete des Browsers.
+- Ergebnis lokal: Start-JavaScript 352 → 285 KB (gzip), mobil 83–86. Experimente zeigen: Der verbleibende LCP (≈ 4 s simuliert) kommt vom Grundgewicht aus React und UI5 vor dem ersten Inhalt, nicht von Animation oder versteckter Projects-Seite.
 
 ## 9a. Deployment (REQ-14)
 - **Workflow** `.github/workflows/deploy.yml`, ausgelöst durch `push` auf `main` und `workflow_dispatch`; `concurrency: pages`, laufende Deployments werden nicht abgebrochen.
@@ -276,6 +285,7 @@ Eine Änderung gilt erst als fertig, wenn `npm run verify` grün ist.
 | TD-18 | Security-Tests | Zweites Playwright-Projekt `security` mit eigenem `webServer` (`vite build` in einen Temp-Ordner, dann `vite preview` auf eigenem Port) | Nur der echte Build zeigt CSP, gebündelte Fonts und fehlende Sourcemaps (CR-17) |
 | TD-19 | Ort der Workflows | `.github/` im Repo-Root | GitHub erwartet Workflows und Dependabot-Konfiguration dort; bewusste Ausnahme von „nichts Ausführbares im Root“ (CR-18) |
 | TD-20 | Pinning der Actions | Commit-SHA statt Tag, Updates per Dependabot | Ein verschobenes oder kompromittiertes Tag kann so keinen fremden Code in die Pipeline bringen (CR-18) |
+| TD-21 | Sprache der UI5-Texte | `setLanguage('en')` in `main.tsx` | Die Website ist englisch (Intent); ohne Festlegung folgt UI5 der Browsersprache und zeigt z. B. deutsche Button-Texte und Screenreader-Hinweise (gefunden in T-46) |
 
 ## 12. Offene Fragen
 _Keine._

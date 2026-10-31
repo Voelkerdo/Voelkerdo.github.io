@@ -8,6 +8,7 @@ import {
   Tag,
   Text,
 } from '@ui5/webcomponents-react'
+import '@ui5/webcomponents-icons/dist/accept.js'
 import '@ui5/webcomponents-icons/dist/shipping-status.js'
 import '@ui5/webcomponents-icons/dist/slim-arrow-left.js'
 import '@ui5/webcomponents-icons/dist/slim-arrow-right.js'
@@ -85,7 +86,9 @@ function TransportItem({ transport }: { transport: Transport }) {
         <span className="transport-number">{transport.number}</span>
         <span className="transport-date">{transport.date}</span>
         <span className="transport-status" data-status={transport.status}>
-          {imported ? '✓ Imported' : 'Released'}
+          {/* An icon instead of "✓": the character would load the large "72full" font (AC-08.2) */}
+          {imported && <Icon name="accept" className="transport-status-icon" />}
+          {transport.status}
         </span>
         <span className="transport-text">{transport.text}</span>
       </div>

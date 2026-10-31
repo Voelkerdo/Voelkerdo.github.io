@@ -55,7 +55,7 @@
 | T-43 | CR-17: CSP, Referrer-Policy und Security-Tests gegen den Build | AC-13.1–AC-13.5, AC-13.7 | [x] |
 | T-44 | CR-17: `npm run security` und Regel in CLAUDE.md | AC-13.6 | [x] |
 | T-45 | CR-18: Deploy-Workflow, Dependabot, CLAUDE.md | AC-14.2–AC-14.5 | [x] |
-| T-46 | CR-18: Erstveröffentlichung und Abnahme der Live-Seite | AC-14.1, AC-14.6 | [ ] |
+| T-46 | CR-18: Erstveröffentlichung und Abnahme der Live-Seite | AC-14.1, AC-14.6 | [~] |
 | T-14 | Manuelle Abnahme | AC-01.5, AC-08.2, Intent-Erfolgskriterien | [~] |
 
 ## Details

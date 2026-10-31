@@ -70,6 +70,11 @@ body {
   flex: 1;
 }
 
+.shell-logo::before {
+  /* Initials as CSS content: decoration, not part of the branding's accessible name */
+  content: attr(data-initials);
+}
+
 .shell-logo {
   display: inline-grid;
   place-items: center;
@@ -482,6 +487,14 @@ body {
   grid-column: 4;
   font-size: var(--sapFontSmallSize);
   color: var(--sapInformativeTextColor);
+}
+
+.transport-status-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-right: 0.125rem;
+  vertical-align: -0.0625rem;
+  color: inherit;
 }
 
 .transport-status[data-status='Imported'] {

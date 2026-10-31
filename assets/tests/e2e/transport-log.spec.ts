@@ -60,7 +60,9 @@ test.describe('projects card views', () => {
     const last = transportItems(page).last()
     await expect(last).toHaveAttribute('data-transport', 'DVK900001')
     await expect(last.locator('.transport-text')).toHaveText('Initial release')
-    await expect(last.locator('.transport-status')).toHaveText('✓ Imported')
+    await expect(last.locator('.transport-status')).toHaveText('Imported')
+    // A UI5 icon instead of "✓", which would load the large "72full" font (AC-08.2)
+    await expect(last.locator('.transport-status ui5-icon[name="accept"]')).toHaveCount(1)
     // The repositories page is faded out and hidden
     await expect(card(page).locator('[data-project-id]').first()).toBeHidden()
   })
@@ -236,8 +238,12 @@ test.describe('projects card views', () => {
       await page.clock.install({ time: new Date('2026-10-31T12:00:00') })
       await page.clock.pauseAt(new Date('2026-10-31T12:00:01'))
       await page.goto('/')
+      // UI5 schedules its (re-)rendering with timers: let it render and the cards enter
+      await page.clock.runFor(1_000)
       await expect(dot(page, 'repositories')).toHaveAttribute('aria-current', 'true')
-      // Keep the pointer away from the card
+      await expect(card(page).locator('[data-project-id]').first()).toBeVisible()
+      // A short hover restarts the 8 seconds (AC-02.11), so every test starts from here
+      await card(page).hover()
       await page.mouse.move(0, 0)
     }
 

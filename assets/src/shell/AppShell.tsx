@@ -1,22 +1,23 @@
-import {
-  Avatar,
-  Button,
-  ShellBar,
-  ShellBarBranding,
-  Text,
-  UserMenu,
-  UserMenuAccount,
-  UserMenuItem,
-} from '@ui5/webcomponents-react'
-import '@ui5/webcomponents-icons/dist/hint.js'
-import '@ui5/webcomponents-icons/dist/action-settings.js'
-import { useState, type ReactNode } from 'react'
+import { Avatar, ShellBar, ShellBarBranding, Text } from '@ui5/webcomponents-react'
+import { lazy, Suspense, useState, type ReactNode } from 'react'
 import { profile } from '../data/profile.ts'
 import { notifications } from '../data/notifications.ts'
-import { AboutDialog } from './AboutDialog.tsx'
-import { NotificationsPopover } from './NotificationsPopover.tsx'
-import { SettingsDialog } from './SettingsDialog.tsx'
-import { TimeTravelOverlay } from './TimeTravelOverlay.tsx'
+
+// Rarely used parts load on first use, which keeps the start bundle small on phones (AC-08.2)
+const AvatarMenu = lazy(() => import('./AvatarMenu.tsx').then((m) => ({ default: m.AvatarMenu })))
+const AboutDialog = lazy(() =>
+  import('./AboutDialog.tsx').then((m) => ({ default: m.AboutDialog })),
+)
+const NotificationsPopover = lazy(() =>
+  import('./NotificationsPopover.tsx').then((m) => ({ default: m.NotificationsPopover })),
+)
+const SettingsDialog = lazy(() =>
+  import('./SettingsDialog.tsx').then((m) => ({ default: m.SettingsDialog })),
+)
+// Only settings start a time travel, so the overlay loads together with them
+const TimeTravelOverlay = lazy(() =>
+  import('./TimeTravelOverlay.tsx').then((m) => ({ default: m.TimeTravelOverlay })),
+)
 
 const initials = profile.name
   .split(' ')
@@ -36,6 +37,11 @@ export function AppShell({ children }: { children: ReactNode }) {
   // Only for this visit: opening the list clears the badge, closing it marks the items read (AC-10.3)
   const [badgeVisible, setBadgeVisible] = useState(true)
   const [notificationsRead, setNotificationsRead] = useState(false)
+  // Mounted on first use and kept afterwards, so closing animations still run
+  const [menuUsed, setMenuUsed] = useState(false)
+  const [settingsUsed, setSettingsUsed] = useState(false)
+  const [aboutUsed, setAboutUsed] = useState(false)
+  const [notificationsUsed, setNotificationsUsed] = useState(false)
 
   return (
     <div className="app-shell">
@@ -43,12 +49,9 @@ export function AppShell({ children }: { children: ReactNode }) {
         className="app-shellbar"
         branding={
           <ShellBarBranding
-            logo={
-              <span className="shell-logo" aria-hidden="true">
-                {initials}
-              </span>
-            }
-            accessibleName={`${profile.name} – scroll to top`}
+            logo={<span className="shell-logo" aria-hidden="true" data-initials={initials} />}
+            // Same as the visible text (the initials are CSS content), WCAG 2.5.3
+            accessibleName={profile.name}
             onClick={scrollToTop}
           >
             {profile.name}
@@ -67,62 +70,61 @@ export function AppShell({ children }: { children: ReactNode }) {
             data-testid="shell-avatar"
           />
         }
-        onProfileClick={(event) => setMenuOpener(event.detail.targetRef)}
+        onProfileClick={(event) => {
+          setMenuUsed(true)
+          setMenuOpener(event.detail.targetRef)
+        }}
         showNotifications
         notificationsCount={badgeVisible ? String(notifications.length) : undefined}
         onNotificationsClick={(event) => {
+          setNotificationsUsed(true)
           setNotificationsOpener(event.detail.targetRef)
           setBadgeVisible(false)
         }}
       />
 
-      <UserMenu
-        open={menuOpener !== null}
-        opener={menuOpener}
-        onClose={() => setMenuOpener(null)}
-        accounts={
-          <UserMenuAccount
-            titleText={profile.name}
-            subtitleText={profile.tagline}
-            avatarInitials={initials}
-            avatarColorScheme="Accent1"
-            selected
+      <Suspense fallback={null}>
+        {menuUsed && (
+          <AvatarMenu
+            opener={menuOpener}
+            initials={initials}
+            onClose={() => setMenuOpener(null)}
+            onAction={(action) => {
+              if (action === 'settings') {
+                setSettingsUsed(true)
+                setSettingsOpen(true)
+              }
+              if (action === 'about') {
+                setAboutUsed(true)
+                setAboutOpen(true)
+              }
+            }}
           />
-        }
-        onItemClick={(event) => {
-          const action = event.detail.item.dataset.action
-          if (action === 'settings') setSettingsOpen(true)
-          if (action === 'about') setAboutOpen(true)
-          setMenuOpener(null)
-        }}
-        footer={
-          <Button
-            design="Transparent"
-            onClick={() => window.open(profile.githubUrl, '_blank', 'noopener')}
-          >
-            Visit GitHub
-          </Button>
-        }
-      >
-        {/* Theme choice lives in Settings › Appearance, as in the Fiori launchpad (D-15) */}
-        <UserMenuItem data-action="settings" icon="action-settings" text="Settings" />
-        <UserMenuItem data-action="about" icon="hint" text="About" />
-      </UserMenu>
+        )}
+      </Suspense>
 
-      <SettingsDialog open={settingsOpen} onClose={() => setSettingsOpen(false)} />
-      {/* After the dialog, so it opens above it in the top layer (TD-14) */}
-      <TimeTravelOverlay />
+      <Suspense fallback={null}>
+        {settingsUsed && (
+          <>
+            <SettingsDialog open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+            {/* After the dialog, so it opens above it in the top layer (TD-14) */}
+            <TimeTravelOverlay />
+          </>
+        )}
 
-      <AboutDialog open={aboutOpen} onClose={() => setAboutOpen(false)} />
+        {aboutUsed && <AboutDialog open={aboutOpen} onClose={() => setAboutOpen(false)} />}
 
-      <NotificationsPopover
-        opener={notificationsOpener}
-        read={notificationsRead}
-        onClose={() => {
-          setNotificationsOpener(null)
-          setNotificationsRead(true)
-        }}
-      />
+        {notificationsUsed && (
+          <NotificationsPopover
+            opener={notificationsOpener}
+            read={notificationsRead}
+            onClose={() => {
+              setNotificationsOpener(null)
+              setNotificationsRead(true)
+            }}
+          />
+        )}
+      </Suspense>
 
       <div className="app-content">{children}</div>
     </div>
