@@ -3,7 +3,7 @@ import { expect, test, type Page } from '@playwright/test'
 const items = (page: Page) => page.locator('[data-card-id="contact"] ui5-li')
 
 test.describe('contact card', () => {
-  test('AC-05.1 contact card lists the channels with GitHub first and highlighted', async ({
+  test('AC-05.1 AC-05.3 contact card lists GitHub, LinkedIn and buy me a coffee with only GitHub highlighted', async ({
     page,
   }) => {
     await page.goto('/')
@@ -39,6 +39,13 @@ test.describe('contact card', () => {
         primary: false,
         badge: null,
       },
+      {
+        id: 'coffee',
+        text: 'Buy me a coffee',
+        description: 'Support my work',
+        primary: false,
+        badge: null,
+      },
     ])
   })
 
@@ -56,6 +63,18 @@ test.describe('contact card', () => {
     const popup = await popupPromise
     // Only the requested URL matters; LinkedIn itself may redirect to its login page
     expect(decodeURI(popup.url())).toContain('linkedin.com/in/dominik-völker-01714422b')
+  })
+
+  test('AC-05.3 buy me a coffee opens in a new tab without access to the site', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    await expect(page.locator('[data-channel-id="coffee"]')).toHaveAttribute('icon', 'meal')
+    const popupPromise = page.waitForEvent('popup')
+    await page.locator('[data-channel-id="coffee"]').click()
+    const popup = await popupPromise
+    expect(popup.url()).toContain('buymeacoffee.com')
+    expect(await popup.evaluate(() => window.opener).catch(() => null)).toBeNull()
   })
 
   test('AC-05.2 there is no contact form', async ({ page }) => {

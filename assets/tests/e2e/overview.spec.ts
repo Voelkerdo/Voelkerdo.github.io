@@ -67,7 +67,7 @@ test.describe('overview page', () => {
     expect(await headerProps(page, 'projects')).toEqual({ title: 'Projects', kpi: '5' })
     expect(await headerProps(page, 'skills')).toEqual({ title: 'Skills', kpi: '7' })
     expect((await headerProps(page, 'career')).title).toBe('Career')
-    expect(await headerProps(page, 'contact')).toEqual({ title: 'Contact', kpi: '2' })
+    expect(await headerProps(page, 'contact')).toEqual({ title: 'Contact', kpi: '3' })
     await expect(card(page, 'github')).toHaveCount(0)
   })
 

@@ -1,6 +1,7 @@
 import { List, ListItemStandard } from '@ui5/webcomponents-react'
 import '@ui5/webcomponents-icons/dist/business-card.js'
 import '@ui5/webcomponents-icons/dist/email.js'
+import '@ui5/webcomponents-icons/dist/meal.js'
 import '@ui5/webcomponents-icons/dist/source-code.js'
 import { contactChannels } from '../../data/contact.ts'
 import type { ContactChannel } from '../../data/types.ts'

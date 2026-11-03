@@ -20,6 +20,7 @@ Nebenziel: Das Projekt dient als Testfeld für den Spec-Driven-Development-Workf
 ## Was sollen Besucher danach denken / tun?
 - **Gefühl:** „Wow, coole Website!“ – Besucher sollen staunen. Die Website selbst ist das wichtigste Showcase-Projekt.
 - **Handlung:** Besucher schauen auf Dominiks GitHub-Profil vorbei (primärer Call-to-Action).
+- **Sekundäre Handlung:** Wer Dominik unterstützen möchte, kann ihm über „Buy me a coffee“ einen Kaffee spendieren. GitHub bleibt der hervorgehobene Call-to-Action. _(ergänzt in CR-20)_
 
 ## Kerninhalte
 - Git-Projekte
